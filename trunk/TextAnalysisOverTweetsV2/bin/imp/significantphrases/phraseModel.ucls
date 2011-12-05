@@ -1,0 +1,142 @@
+<class-diagram version="1.0.4" icons="true" always-add-relationships="false" generalizations="true" realizations="true" 
+  associations="true" dependencies="true" nesting-relationships="true">  
+  <package id="1" language="java" name="imp.significantphrases" project="newtreet" 
+    file="/newtreet/src/imp/significantphrases" binary="false">    
+    <position x="60" y="311" width="-1" height="-1"/>  
+  </package>  
+  <class id="2" corner="BOTTOM_RIGHT" language="java" 
+    name="imp.significantphrases.AnalyzerTokenizerFactory.TokenStreamTokenizer" project="newtreet" 
+    file="/newtreet/src/imp/significantphrases/AnalyzerTokenizerFactory.java" binary="false">    
+    <position x="403" y="457" width="-1" height="-1"/>    
+    <display autosize="true" package="true" initial-value="true" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="3" corner="BOTTOM_RIGHT" language="java" name="imp.significantphrases.AnalyzerTokenizerFactory" 
+    project="newtreet" file="/newtreet/src/imp/significantphrases/AnalyzerTokenizerFactory.java" binary="false">    
+    <position x="688" y="351" width="-1" height="-1"/>    
+    <display autosize="true" package="true" initial-value="true" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="4" corner="BOTTOM_RIGHT" language="java" name="imp.significantphrases.AnalyzerTokenizerFactory.Serializer" 
+    project="newtreet" file="/newtreet/src/imp/significantphrases/AnalyzerTokenizerFactory.java" binary="false">    
+    <position x="613" y="58" width="-1" height="-1"/>    
+    <display autosize="true" package="true" initial-value="true" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <interface id="5" corner="BOTTOM_RIGHT" language="java" name="com.aliasi.tokenizer.TokenizerFactory" 
+    project="newtreet" file="C:/lingpipe-4.1.0/lingpipe-4.1.0.jar" binary="true">    
+    <position x="273" y="318" width="-1" height="-1"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </interface>  
+  <class id="6" corner="BOTTOM_RIGHT" language="java" name="org.apache.lucene.analysis.Analyzer" project="newtreet" 
+    file="C:/ling/lucene-3-tutorial-code-0.5/lucene-3-tutorial-code-0.5/lib/lucene-core-3.0.2.jar" binary="true">    
+    <position x="218" y="128" width="-1" height="-1"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <interface id="7" corner="BOTTOM_RIGHT" language="java" 
+    name="org.apache.lucene.analysis.tokenattributes.OffsetAttribute" project="newtreet" 
+    file="C:/ling/lucene-3-tutorial-code-0.5/lucene-3-tutorial-code-0.5/lib/lucene-core-3.0.2.jar" binary="true">    
+    <position x="51" y="455" width="-1" height="-1"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </interface>  
+  <class id="8" corner="BOTTOM_RIGHT" language="java" name="imp.significantphrases.DisplayTokenization" 
+    project="newtreet" file="/newtreet/src/imp/significantphrases/DisplayTokenization.java" binary="false">    
+    <position x="301" y="803" width="-1" height="-1"/>    
+    <display autosize="true" package="true" initial-value="true" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="9" corner="BOTTOM_RIGHT" language="java" name="imp.significantphrases.DisplayTokens" project="newtreet" 
+    file="/newtreet/src/imp/significantphrases/DisplayTokens.java" binary="false">    
+    <position x="129" y="640" width="-1" height="-1"/>    
+    <display autosize="true" package="true" initial-value="true" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <dependency>    
+    <end type="SOURCE" nodeId="8"/>    
+    <end type="TARGET" nodeId="3"/>  
+  </dependency>  
+  <nesting>    
+    <end type="SOURCE" nodeId="3"/>    
+    <end type="TARGET" nodeId="2"/>  
+  </nesting>  
+  <dependency>    
+    <end type="SOURCE" nodeId="1"/>    
+    <end type="TARGET" nodeId="5"/>  
+  </dependency>  
+  <nesting>    
+    <end type="SOURCE" nodeId="3"/>    
+    <end type="TARGET" nodeId="4"/>  
+  </nesting>  
+  <realization>    
+    <end type="SOURCE" nodeId="3"/>    
+    <end type="TARGET" nodeId="5"/>  
+  </realization>  
+  <association>    
+    <end type="SOURCE" nodeId="3" navigable="false">      
+      <attribute name="mAnalyzer"/>      
+      <multiplicity minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" nodeId="6" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association>    
+    <end type="SOURCE" nodeId="4" navigable="false">      
+      <attribute name="mFactory"/>      
+      <multiplicity minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" nodeId="3" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency>    
+    <end type="SOURCE" nodeId="4"/>    
+    <end type="TARGET" nodeId="6"/>  
+  </dependency>  
+  <dependency>    
+    <end type="SOURCE" nodeId="1"/>    
+    <end type="TARGET" nodeId="7"/>  
+  </dependency>  
+  <association>    
+    <end type="SOURCE" nodeId="2" navigable="false">      
+      <attribute name="mOffsetAttribute"/>      
+      <multiplicity minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" nodeId="7" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency>    
+    <end type="SOURCE" nodeId="8"/>    
+    <end type="TARGET" nodeId="5"/>  
+  </dependency>  
+  <dependency>    
+    <end type="SOURCE" nodeId="1"/>    
+    <end type="TARGET" nodeId="6"/>  
+  </dependency>  
+  <dependency>    
+    <end type="SOURCE" nodeId="9"/>    
+    <end type="TARGET" nodeId="5"/>  
+  </dependency>  
+  <classifier-display autosize="true" package="true" initial-value="true" signature="true" visibility="true">    
+    <attributes public="true" package="true" protected="true" private="true"/>    
+    <operations public="true" package="true" protected="true" private="true"/>  
+  </classifier-display>  
+  <association-display labels="true" multiplicity="true"/>
+</class-diagram>
