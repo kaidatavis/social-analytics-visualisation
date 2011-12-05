@@ -17,7 +17,7 @@ Available in the 'Downloads' section.
 
 There are more than 3 million tweets collected during the summer of 2011. Most of these are within the general London, UK area.
 
-These are MySQL table dump. Due to the large size, the whole dataset is split into 5 files, which are compressed.
+These are MySQL table dump. Due to the large size, the whole dataset is split into 5 files, which are compressed (using RAR format). It should just work if you import them into a MySQL database. The only change is to add the command for selecting MySQL schema.
 
 Below is the table schema:
 
@@ -40,4 +40,3 @@ Below is the table schema:
 || annotations || text ||
 || sentiscore || double ||
 || phrases || varchar(200) ||
-
