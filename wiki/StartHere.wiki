@@ -6,21 +6,21 @@ Currently there are *two sets of code* and *one dataset* available.
 
 ==Code==
 
-Available in the 'Source' section.
+Available in the *'Source'* section.
 
 *Prototype3*
 
-This is the Java code for the visual front end. It is a !NetBeans project and can't be (easily) used in Eclipse because of usage of NetBeans templates/libraries. Below is a screenshot:
+This is the Java code for the visual front end. It is a !NetBeans project and can't be (easily) used in Eclipse because of usage of !NetBeans templates/libraries. Below is a screenshot:
 
 https://social-analytics-visualisation.googlecode.com/svn/trunk/Images/Prototype3-screenshot.png
 
 *!TextAnalysisOverTweetsV2*
 
-This is the Java code for processing the collected tweets. It is a Eclipse project and uses a few external libraries (see the 'lib' directory). The dataset available for download already contains the processing results, so you don't need to run this unless you want to re-process the data.
+This is the Java code for processing the collected tweets. It is a Eclipse project. The dataset available for download already contains the processing results, so you don't need to run this unless you want to re-process the data.
 
 ==Data==
 
-Available in the 'Downloads' section.
+Available in the *'Downloads'* section.
 
 There are more than 3 million tweets collected during the summer of 2011. Most of these are within the general London, UK area.
 
