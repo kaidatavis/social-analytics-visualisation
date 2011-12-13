@@ -1,0 +1,7 @@
+Steps to Run the Project:
+
+1. Install Xampp and Run the mySql Server by executing 'xampp_start'.
+2. Open 'localhost' in a web browser and click on myPHPadmin.
+2. Create a database named - 'tweet_db'
+3. Import the SQL file - 'dataextraction.sql' (available in the folder - Implementation_0.1)
+4. Execute the project SAVI_Project
