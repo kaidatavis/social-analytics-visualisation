@@ -1,2 +1,3 @@
 #summary How the new GUI will look like
 
+https://social-analytics-visualisation.googlecode.com/svn/trunk/Images/new-gui.png
