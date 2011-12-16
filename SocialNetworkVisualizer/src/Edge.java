@@ -1,5 +1,5 @@
 
-public class Edge extends SAVI{
+public class Edge extends SocialNetworkVisualizer{
 	
 	int id;
 	double weight; // should be private for good practice
@@ -18,8 +18,8 @@ public class Edge extends SAVI{
 	
 	public static String getEdgeId(){
 		
-		SAVI.edgeCount++;
-		return "E" + Integer.toString(SAVI.edgeCount);
+		GraphPlotter.edgeCount++;
+		return "E" + Integer.toString(GraphPlotter.edgeCount);
 		
 	}
 
