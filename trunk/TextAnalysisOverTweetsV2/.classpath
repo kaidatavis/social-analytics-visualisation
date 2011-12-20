@@ -2,18 +2,18 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
-	<classpathentry kind="lib" path="C:/Users/Kai Xu/Workspace/Eclipse-workspace/TextAnalysisOverTweetsV2/lib/commons-codec-1.4.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Kai Xu/Workspace/Eclipse-workspace/TextAnalysisOverTweetsV2/lib/httpclient-4.1.2.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Kai Xu/Workspace/Eclipse-workspace/TextAnalysisOverTweetsV2/lib/jgeocoder-0.4.1-jar-with-dependencies.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Kai Xu/Workspace/Eclipse-workspace/TextAnalysisOverTweetsV2/lib/lingpipe-4.1.0.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Kai Xu/Workspace/Eclipse-workspace/TextAnalysisOverTweetsV2/lib/lucene-core-3.3.0.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Kai Xu/Workspace/Eclipse-workspace/TextAnalysisOverTweetsV2/lib/mysql-connector-java-5.1.16-bin.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Kai Xu/Workspace/Eclipse-workspace/TextAnalysisOverTweetsV2/lib/stanford-ner.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Kai Xu/Workspace/Eclipse-workspace/TextAnalysisOverTweetsV2/lib/stanford-ner-2011-09-14.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Kai Xu/Workspace/Eclipse-workspace/TextAnalysisOverTweetsV2/lib/twitter4j-async-2.2.5.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Kai Xu/Workspace/Eclipse-workspace/TextAnalysisOverTweetsV2/lib/twitter4j-core-2.2.5.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Kai Xu/Workspace/Eclipse-workspace/TextAnalysisOverTweetsV2/lib/twitter4j-examples-2.2.5.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Kai Xu/Workspace/Eclipse-workspace/TextAnalysisOverTweetsV2/lib/twitter4j-media-support-2.2.5.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Kai Xu/Workspace/Eclipse-workspace/TextAnalysisOverTweetsV2/lib/twitter4j-stream-2.2.5.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Kai Xu/Workspace/Eclipse-workspace/SaviTweetTextAnalysis/lib/commons-codec-1.4.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Kai Xu/Workspace/Eclipse-workspace/SaviTweetTextAnalysis/lib/httpclient-4.1.2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Kai Xu/Workspace/Eclipse-workspace/SaviTweetTextAnalysis/lib/jgeocoder-0.4.1-jar-with-dependencies.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Kai Xu/Workspace/Eclipse-workspace/SaviTweetTextAnalysis/lib/lingpipe-4.1.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Kai Xu/Workspace/Eclipse-workspace/SaviTweetTextAnalysis/lib/lucene-core-3.3.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Kai Xu/Workspace/Eclipse-workspace/SaviTweetTextAnalysis/lib/mysql-connector-java-5.1.16-bin.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Kai Xu/Workspace/Eclipse-workspace/SaviTweetTextAnalysis/lib/stanford-ner.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Kai Xu/Workspace/Eclipse-workspace/SaviTweetTextAnalysis/lib/stanford-ner-2011-09-14.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Kai Xu/Workspace/Eclipse-workspace/SaviTweetTextAnalysis/lib/twitter4j-async-2.2.5.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Kai Xu/Workspace/Eclipse-workspace/SaviTweetTextAnalysis/lib/twitter4j-core-2.2.5.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Kai Xu/Workspace/Eclipse-workspace/SaviTweetTextAnalysis/lib/twitter4j-examples-2.2.5.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Kai Xu/Workspace/Eclipse-workspace/SaviTweetTextAnalysis/lib/twitter4j-media-support-2.2.5.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Kai Xu/Workspace/Eclipse-workspace/SaviTweetTextAnalysis/lib/twitter4j-stream-2.2.5.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
