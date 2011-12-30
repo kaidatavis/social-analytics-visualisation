@@ -66,11 +66,11 @@ public class myList {
         containedDate = new ArrayList<String>();
         containedUser = new ArrayList<String>();
         
-        Prototype3View.jLabel6.setText(null);
-        Prototype3View.jLabel8.setText(null);
-        Prototype3View.jLabel10.setText(null);
-        Prototype3View.jLabel11.setText(null);
-        Prototype3View.jLabel11.setIcon(null);
+//        Prototype3View.jLabel6.setText(null);
+//        Prototype3View.jLabel8.setText(null);
+//        Prototype3View.jLabel10.setText(null);
+//        Prototype3View.jLabel11.setText(null);
+//        Prototype3View.jLabel11.setIcon(null);
         
         if (proGraph.myMonth != 0 && proGraph.myDay == 0 && proGraph.myHour == 0){
             for (int i=0; i<myDetails.length; i++){
@@ -131,11 +131,11 @@ public class myList {
                 int mapZoom = map.getZoom();
                     
                 model.clear();
-                Prototype3View.jLabel6.setText(null);
-                Prototype3View.jLabel8.setText(null);
-                Prototype3View.jLabel10.setText(null);
-                Prototype3View.jLabel11.setText(null);
-                Prototype3View.jLabel11.setIcon(null);
+//                Prototype3View.jLabel6.setText(null);
+//                Prototype3View.jLabel8.setText(null);
+//                Prototype3View.jLabel10.setText(null);
+//                Prototype3View.jLabel11.setText(null);
+//                Prototype3View.jLabel11.setIcon(null);
 
                 System.out.println("1. " + myPoints.length);
                 for (int i=0; i<myPoints.length; i++){
@@ -178,11 +178,11 @@ class SharedListSelectionHandler implements ListSelectionListener{
             String Time;
             String myUrl;
             int dLength;
-            Prototype3View.jLabel6.setText(null);
-            Prototype3View.jLabel8.setText(null);
-            Prototype3View.jLabel10.setText(null);
-            Prototype3View.jLabel11.setText(null);
-            Prototype3View.jLabel11.setIcon(null);
+//            Prototype3View.jLabel6.setText(null);
+//            Prototype3View.jLabel8.setText(null);
+//            Prototype3View.jLabel10.setText(null);
+//            Prototype3View.jLabel11.setText(null);
+//            Prototype3View.jLabel11.setIcon(null);
             if (!(lsm.isSelectionEmpty())) {
                 int minIndex = lsm.getMinSelectionIndex();
                 int maxIndex = lsm.getMaxSelectionIndex();
@@ -192,19 +192,19 @@ class SharedListSelectionHandler implements ListSelectionListener{
                             dLength = myList.containedDate.get(i).length();
                             Date = myList.containedDate.get(i).substring(0,10);
                             Time = myList.containedDate.get(i).substring(10,dLength-2);
-                            Prototype3View.jLabel6.setText(myList.containedUser.get(i));
-                            Prototype3View.jLabel8.setText(Date);
-                            Prototype3View.jLabel10.setText(Time);
+//                            Prototype3View.jLabel6.setText(myList.containedUser.get(i));
+//                            Prototype3View.jLabel8.setText(Date);
+//                            Prototype3View.jLabel10.setText(Time);
                             myUrl = myList.containedPictures.get(i);
                             URL where = new URL(myUrl);
                             myList.icon = ImageIO.read(where);
                             myList.myIcon = new ImageIcon(myList.icon);
-                            Prototype3View.jLabel11.setIcon(myList.myIcon);
+//                            Prototype3View.jLabel11.setIcon(myList.myIcon);
                         } catch (IOException  u){
                             System.out.println("Error: " + u);
                         } catch (CMMException cm){
                             System.out.println("Error: " + cm);
-                            Prototype3View.jLabel11.setText("N/A");
+//                            Prototype3View.jLabel11.setText("N/A");
                         }
                     }
                 }

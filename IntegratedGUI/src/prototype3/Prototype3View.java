@@ -67,20 +67,20 @@ public class Prototype3View extends FrameView {
         getFrame().setTitle("VisualThoughts Visualization Tool"); 
         
         jSlider1.setMajorTickSpacing(3);
-        jSlider2.setMajorTickSpacing(5);
+//        jSlider2.setMajorTickSpacing(5);
         jSlider1.setMinorTickSpacing(1);
-        jSlider2.setMinorTickSpacing(1);
+//        jSlider2.setMinorTickSpacing(1);
         jSlider1.setPaintTicks(true);
-        jSlider2.setPaintTicks(true);
+//        jSlider2.setPaintTicks(true);
         jSlider1.setPaintLabels(true);
-        jSlider2.setPaintLabels(true);
+//        jSlider2.setPaintLabels(true);
         jSlider1.setVisible(true);
-        jSlider2.setVisible(false);
+//        jSlider2.setVisible(false);
         jLabel3.setVisible(true);
         jLabel3.setText("Tweet Date Selection:");
        // jLabel4.setVisible(false);
-        jPanel5.setVisible(false);
-        jList1.setVisible(false);
+//        jPanel5.setVisible(false);
+//        jList1.setVisible(false);
        // jScrollPane1.setVisible(false);
         
         try{
@@ -89,20 +89,20 @@ public class Prototype3View extends FrameView {
             if(popularWords.length < 10){
                 myRadio(popularWords);
             } else {
-                jRadioButton1.setText(popularWords[0]);
-                jRadioButton2.setText(popularWords[1]);
-                jRadioButton3.setText(popularWords[2]);
-                jRadioButton4.setText(popularWords[3]);
-                jRadioButton5.setText(popularWords[4]);
-                jRadioButton6.setText(popularWords[5]);
-                jRadioButton7.setText(popularWords[6]);
-                jRadioButton8.setText(popularWords[7]);
-                jRadioButton9.setText(popularWords[8]);
-                jRadioButton10.setText(popularWords[9]);
+//                jRadioButton1.setText(popularWords[0]);
+//                jRadioButton2.setText(popularWords[1]);
+//                jRadioButton3.setText(popularWords[2]);
+//                jRadioButton4.setText(popularWords[3]);
+//                jRadioButton5.setText(popularWords[4]);
+//                jRadioButton6.setText(popularWords[5]);
+//                jRadioButton7.setText(popularWords[6]);
+//                jRadioButton8.setText(popularWords[7]);
+//                jRadioButton9.setText(popularWords[8]);
+//                jRadioButton10.setText(popularWords[9]);
             }
             
-            jRadioButton1.addActionListener(new mySelection());
-            jRadioButton2.addActionListener(new mySelection());
+//            jRadioButton1.addActionListener(new mySelection());
+//            jRadioButton2.addActionListener(new mySelection());
             
         } catch (SQLException s){
             System.out.println("SQL Error: " + s.toString() + " " + s.getErrorCode() + " " + s.getSQLState());
@@ -115,7 +115,7 @@ public class Prototype3View extends FrameView {
         int messageTimeout = resourceMap.getInteger("StatusBar.messageTimeout");
         messageTimer = new Timer(messageTimeout, new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                statusMessageLabel.setText("");
+//                statusMessageLabel.setText("");
             }
         });
         messageTimer.setRepeats(false);
@@ -126,12 +126,12 @@ public class Prototype3View extends FrameView {
         busyIconTimer = new Timer(busyAnimationRate, new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 busyIconIndex = (busyIconIndex + 1) % busyIcons.length;
-                statusAnimationLabel.setIcon(busyIcons[busyIconIndex]);
+//                statusAnimationLabel.setIcon(busyIcons[busyIconIndex]);
             }
         });
         idleIcon = resourceMap.getIcon("StatusBar.idleIcon");
-        statusAnimationLabel.setIcon(idleIcon);
-        progressBar.setVisible(false);
+//        statusAnimationLabel.setIcon(idleIcon);
+//        progressBar.setVisible(false);
 
         // connecting action tasks to status bar via TaskMonitor
         TaskMonitor taskMonitor = new TaskMonitor(getApplication().getContext());
@@ -140,26 +140,26 @@ public class Prototype3View extends FrameView {
                 String propertyName = evt.getPropertyName();
                 if ("started".equals(propertyName)) {
                     if (!busyIconTimer.isRunning()) {
-                        statusAnimationLabel.setIcon(busyIcons[0]);
+//                        statusAnimationLabel.setIcon(busyIcons[0]);
                         busyIconIndex = 0;
                         busyIconTimer.start();
                     }
-                    progressBar.setVisible(true);
-                    progressBar.setIndeterminate(true);
+//                    progressBar.setVisible(true);
+//                    progressBar.setIndeterminate(true);
                 } else if ("done".equals(propertyName)) {
                     busyIconTimer.stop();
-                    statusAnimationLabel.setIcon(idleIcon);
-                    progressBar.setVisible(false);
-                    progressBar.setValue(0);
+//                    statusAnimationLabel.setIcon(idleIcon);
+//                    progressBar.setVisible(false);
+//                    progressBar.setValue(0);
                 } else if ("message".equals(propertyName)) {
                     String text = (String)(evt.getNewValue());
-                    statusMessageLabel.setText((text == null) ? "" : text);
+//                    statusMessageLabel.setText((text == null) ? "" : text);
                     messageTimer.restart();
                 } else if ("progress".equals(propertyName)) {
                     int value = (Integer)(evt.getNewValue());
-                    progressBar.setVisible(true);
-                    progressBar.setIndeterminate(false);
-                    progressBar.setValue(value);
+//                    progressBar.setVisible(true);
+//                    progressBar.setIndeterminate(false);
+//                    progressBar.setValue(value);
                 }
             }
         });
@@ -192,57 +192,27 @@ public class Prototype3View extends FrameView {
         jPanel3 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
         jSlider1 = new javax.swing.JSlider(0,12,0);
         jLabel3 = new javax.swing.JLabel();
-        jPanel6 = new javax.swing.JPanel();
-        jRadioButton1 = new javax.swing.JRadioButton();
-        jRadioButton2 = new javax.swing.JRadioButton();
-        jRadioButton3 = new javax.swing.JRadioButton();
-        jRadioButton4 = new javax.swing.JRadioButton();
-        jRadioButton5 = new javax.swing.JRadioButton();
-        jLabel13 = new javax.swing.JLabel();
         jComboBox2 = new javax.swing.JComboBox();
+        jButton1 = new javax.swing.JButton();
         jScroll_network = new javax.swing.JScrollPane();
-        jPanel5 = new javax.swing.JPanel();
-        jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
-        jLabel9 = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
-        jLabel11 = new javax.swing.JLabel();
-        jSlider2 = new javax.swing.JSlider(0,31,0);
-        jPanel7 = new javax.swing.JPanel();
-        jRadioButton6 = new javax.swing.JRadioButton();
-        jRadioButton7 = new javax.swing.JRadioButton();
-        jRadioButton8 = new javax.swing.JRadioButton();
-        jRadioButton9 = new javax.swing.JRadioButton();
-        jRadioButton10 = new javax.swing.JRadioButton();
-        jComboBox1 = new javax.swing.JComboBox();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList();
         menuBar = new javax.swing.JMenuBar();
         javax.swing.JMenu fileMenu = new javax.swing.JMenu();
         javax.swing.JMenuItem exitMenuItem = new javax.swing.JMenuItem();
         javax.swing.JMenu helpMenu = new javax.swing.JMenu();
         javax.swing.JMenuItem aboutMenuItem = new javax.swing.JMenuItem();
-        statusPanel = new javax.swing.JPanel();
-        javax.swing.JSeparator statusPanelSeparator = new javax.swing.JSeparator();
-        statusMessageLabel = new javax.swing.JLabel();
-        statusAnimationLabel = new javax.swing.JLabel();
-        progressBar = new javax.swing.JProgressBar();
-        buttonGroup1 = new javax.swing.ButtonGroup();
 
+        mainPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         mainPanel.setName("mainPanel"); // NOI18N
-        mainPanel.setPreferredSize(new java.awt.Dimension(2000, 3000));
+        mainPanel.setPreferredSize(new java.awt.Dimension(1280, 750));
 
         jPanel4.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         jPanel4.setName("jPanel4"); // NOI18N
+        jPanel4.setPreferredSize(new java.awt.Dimension(1280, 768));
 
         jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         jPanel1.setName("jPanel1"); // NOI18N
-        jPanel1.setPreferredSize(new java.awt.Dimension(850, 400));
 
         jXMapKit1.setDefaultProvider(org.jdesktop.swingx.JXMapKit.DefaultProviders.OpenStreetMaps);
         jXMapKit1.setMaximumSize(new java.awt.Dimension(850, 300));
@@ -253,11 +223,11 @@ public class Prototype3View extends FrameView {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jXMapKit1, javax.swing.GroupLayout.DEFAULT_SIZE, 691, Short.MAX_VALUE)
+            .addComponent(jXMapKit1, javax.swing.GroupLayout.DEFAULT_SIZE, 675, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jXMapKit1, javax.swing.GroupLayout.PREFERRED_SIZE, 598, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jXMapKit1, javax.swing.GroupLayout.DEFAULT_SIZE, 349, Short.MAX_VALUE)
         );
 
         scrollPane1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -275,14 +245,6 @@ public class Prototype3View extends FrameView {
         jTextField1.setText(resourceMap.getString("jTextField1.text")); // NOI18N
         jTextField1.setName("jTextField1"); // NOI18N
 
-        jButton1.setText(resourceMap.getString("jButton1.text")); // NOI18N
-        jButton1.setName("jButton1"); // NOI18N
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-
         jSlider1.setEnabled(false);
         jSlider1.setName("jSlider1"); // NOI18N
 
@@ -291,62 +253,16 @@ public class Prototype3View extends FrameView {
         jLabel3.setText(resourceMap.getString("jLabel3.text")); // NOI18N
         jLabel3.setName("jLabel3"); // NOI18N
 
-        jPanel6.setName("jPanel6"); // NOI18N
-
-        jRadioButton1.setText(resourceMap.getString("jRadioButton1.text")); // NOI18N
-        jRadioButton1.setName("jRadioButton1"); // NOI18N
-
-        jRadioButton2.setText(resourceMap.getString("jRadioButton2.text")); // NOI18N
-        jRadioButton2.setName("jRadioButton2"); // NOI18N
-
-        jRadioButton3.setText(resourceMap.getString("jRadioButton3.text")); // NOI18N
-        jRadioButton3.setName("jRadioButton3"); // NOI18N
-
-        jRadioButton4.setText(resourceMap.getString("jRadioButton4.text")); // NOI18N
-        jRadioButton4.setName("jRadioButton4"); // NOI18N
-
-        jRadioButton5.setText(resourceMap.getString("jRadioButton5.text")); // NOI18N
-        jRadioButton5.setName("jRadioButton5"); // NOI18N
-
-        jLabel13.setForeground(resourceMap.getColor("jLabel13.foreground")); // NOI18N
-        jLabel13.setText(resourceMap.getString("jLabel13.text")); // NOI18N
-        jLabel13.setName("jLabel13"); // NOI18N
-
-        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
-        jPanel6.setLayout(jPanel6Layout);
-        jPanel6Layout.setHorizontalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel6Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jRadioButton4)
-                    .addComponent(jRadioButton2)
-                    .addComponent(jRadioButton3)
-                    .addComponent(jRadioButton5)
-                    .addComponent(jRadioButton1)
-                    .addComponent(jLabel13))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        jPanel6Layout.setVerticalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel6Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel13)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jRadioButton1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jRadioButton2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jRadioButton3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jRadioButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jRadioButton5)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
         jComboBox2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Lombardi", "Layout 1", "Layout 2", "Layout 3" }));
         jComboBox2.setName("jComboBox_layouts"); // NOI18N
+
+        jButton1.setText(resourceMap.getString("jButton1.text")); // NOI18N
+        jButton1.setName("jButton1"); // NOI18N
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -360,38 +276,28 @@ public class Prototype3View extends FrameView {
                 .addGap(26, 26, 26)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jSlider1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(47, 47, 47)
-                        .addComponent(jButton1))
                     .addComponent(jTextField1))
-                .addGap(400, 400, 400))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap(732, Short.MAX_VALUE)
-                .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addGap(94, 94, 94)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(230, 230, 230))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+            .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(27, 27, 27)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(27, 27, 27)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3)
-                            .addComponent(jSlider1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(29, 29, 29)
-                        .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, 9, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(47, 47, 47)
-                        .addComponent(jButton1)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel3)
+                        .addComponent(jButton1))
+                    .addComponent(jSlider1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(51, Short.MAX_VALUE))
         );
 
         jScroll_network.setName("jScroll_network"); // NOI18N
@@ -402,219 +308,45 @@ public class Prototype3View extends FrameView {
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(scrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 695, Short.MAX_VALUE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 695, Short.MAX_VALUE))
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(scrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 679, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.TRAILING, 0, 659, Short.MAX_VALUE)
-                    .addComponent(jScroll_network, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 659, Short.MAX_VALUE))
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScroll_network, javax.swing.GroupLayout.DEFAULT_SIZE, 673, Short.MAX_VALUE)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 673, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addComponent(jScroll_network, javax.swing.GroupLayout.PREFERRED_SIZE, 691, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jScroll_network, javax.swing.GroupLayout.PREFERRED_SIZE, 455, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 602, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(scrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)))
-                .addContainerGap(146, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(scrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(37, Short.MAX_VALUE))
         );
-
-        jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder(null, resourceMap.getString("jPanel5.border.title"), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, resourceMap.getFont("jPanel5.border.titleFont"), resourceMap.getColor("jPanel5.border.titleColor"))); // NOI18N
-        jPanel5.setName("jPanel5"); // NOI18N
-
-        jLabel5.setFont(resourceMap.getFont("jLabel1.font")); // NOI18N
-        jLabel5.setForeground(resourceMap.getColor("jLabel5.foreground")); // NOI18N
-        jLabel5.setText(resourceMap.getString("jLabel5.text")); // NOI18N
-        jLabel5.setName("jLabel5"); // NOI18N
-
-        jLabel6.setText(resourceMap.getString("jLabel6.text")); // NOI18N
-        jLabel6.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        jLabel6.setName("jLabel6"); // NOI18N
-
-        jLabel7.setFont(resourceMap.getFont("jLabel1.font")); // NOI18N
-        jLabel7.setForeground(resourceMap.getColor("jLabel7.foreground")); // NOI18N
-        jLabel7.setText(resourceMap.getString("jLabel7.text")); // NOI18N
-        jLabel7.setName("jLabel7"); // NOI18N
-
-        jLabel8.setText(resourceMap.getString("jLabel8.text")); // NOI18N
-        jLabel8.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        jLabel8.setName("jLabel8"); // NOI18N
-
-        jLabel9.setFont(resourceMap.getFont("jLabel1.font")); // NOI18N
-        jLabel9.setForeground(resourceMap.getColor("jLabel9.foreground")); // NOI18N
-        jLabel9.setText(resourceMap.getString("jLabel9.text")); // NOI18N
-        jLabel9.setName("jLabel9"); // NOI18N
-
-        jLabel10.setText(resourceMap.getString("jLabel10.text")); // NOI18N
-        jLabel10.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        jLabel10.setName("jLabel10"); // NOI18N
-
-        jLabel11.setFont(resourceMap.getFont("jLabel1.font")); // NOI18N
-        jLabel11.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel11.setText(resourceMap.getString("jLabel11.text")); // NOI18N
-        jLabel11.setBorder(javax.swing.BorderFactory.createTitledBorder(null, resourceMap.getString("jLabel11.border.title"), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, resourceMap.getFont("jLabel11.border.titleFont"), resourceMap.getColor("jLabel11.border.titleColor"))); // NOI18N
-        jLabel11.setName("jLabel11"); // NOI18N
-
-        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
-        jPanel5.setLayout(jPanel5Layout);
-        jPanel5Layout.setHorizontalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel5Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel5)
-                    .addComponent(jLabel7)
-                    .addComponent(jLabel9))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel10, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(35, 35, 35)
-                .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-        );
-        jPanel5Layout.setVerticalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel5Layout.createSequentialGroup()
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addGap(11, 11, 11)
-                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel5)
-                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel7)
-                            .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel9)
-                            .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        jSlider2.setName("jSlider2"); // NOI18N
-
-        jPanel7.setName("jPanel7"); // NOI18N
-
-        jRadioButton6.setText(resourceMap.getString("jRadioButton6.text")); // NOI18N
-        jRadioButton6.setName("jRadioButton6"); // NOI18N
-
-        jRadioButton7.setText(resourceMap.getString("jRadioButton7.text")); // NOI18N
-        jRadioButton7.setName("jRadioButton7"); // NOI18N
-
-        jRadioButton8.setText(resourceMap.getString("jRadioButton8.text")); // NOI18N
-        jRadioButton8.setName("jRadioButton8"); // NOI18N
-
-        jRadioButton9.setText(resourceMap.getString("jRadioButton9.text")); // NOI18N
-        jRadioButton9.setName("jRadioButton9"); // NOI18N
-
-        jRadioButton10.setText(resourceMap.getString("jRadioButton10.text")); // NOI18N
-        jRadioButton10.setName("jRadioButton10"); // NOI18N
-
-        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
-        jPanel7.setLayout(jPanel7Layout);
-        jPanel7Layout.setHorizontalGroup(
-            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel7Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jRadioButton8)
-                    .addComponent(jRadioButton9)
-                    .addComponent(jRadioButton10))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jRadioButton7)
-                .addContainerGap())
-            .addGroup(jPanel7Layout.createSequentialGroup()
-                .addGap(22, 22, 22)
-                .addComponent(jRadioButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        jPanel7Layout.setVerticalGroup(
-            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel7Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jRadioButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jRadioButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel7Layout.createSequentialGroup()
-                        .addGap(23, 23, 23)
-                        .addComponent(jRadioButton9))
-                    .addComponent(jRadioButton8))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jRadioButton10)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Both Graphs", "WorldView Graph", "RiverTheme Graph" }));
-        jComboBox1.setBorder(null);
-        jComboBox1.setEnabled(false);
-        jComboBox1.setFocusable(false);
-        jComboBox1.setName("jComboBox1"); // NOI18N
-
-        jScrollPane1.setName("jScrollPane1"); // NOI18N
-
-        jList1.setMaximumSize(new java.awt.Dimension(850, 100));
-        jList1.setName("jList1"); // NOI18N
-        jScrollPane1.setViewportView(jList1);
-        jList1.setModel(myList.model);
 
         javax.swing.GroupLayout mainPanelLayout = new javax.swing.GroupLayout(mainPanel);
         mainPanel.setLayout(mainPanelLayout);
         mainPanelLayout.setHorizontalGroup(
             mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(mainPanelLayout.createSequentialGroup()
-                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(mainPanelLayout.createSequentialGroup()
-                        .addGap(482, 482, 482)
-                        .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(mainPanelLayout.createSequentialGroup()
-                                .addGap(58, 58, 58)
-                                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(54, 54, 54)
-                                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(122, 122, 122)
-                                .addComponent(jSlider2, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(mainPanelLayout.createSequentialGroup()
-                                .addGap(70, 70, 70)
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(72, 72, 72)
-                                .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addGroup(mainPanelLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addContainerGap()
+                .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, 1386, Short.MAX_VALUE)
                 .addContainerGap())
         );
         mainPanelLayout.setVerticalGroup(
             mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(mainPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(65, 65, 65)
-                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jSlider2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(mainPanelLayout.createSequentialGroup()
-                        .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, 8, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 696, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -639,47 +371,8 @@ public class Prototype3View extends FrameView {
 
         menuBar.add(helpMenu);
 
-        statusPanel.setName("statusPanel"); // NOI18N
-
-        statusMessageLabel.setName("statusMessageLabel"); // NOI18N
-
-        statusAnimationLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        statusAnimationLabel.setName("statusAnimationLabel"); // NOI18N
-
-        progressBar.setName("progressBar"); // NOI18N
-
-        javax.swing.GroupLayout statusPanelLayout = new javax.swing.GroupLayout(statusPanel);
-        statusPanel.setLayout(statusPanelLayout);
-        statusPanelLayout.setHorizontalGroup(
-            statusPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(statusPanelSeparator, javax.swing.GroupLayout.DEFAULT_SIZE, 1408, Short.MAX_VALUE)
-            .addGroup(statusPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(statusMessageLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 1388, Short.MAX_VALUE)
-                .addComponent(statusAnimationLabel)
-                .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, statusPanelLayout.createSequentialGroup()
-                .addContainerGap(1147, Short.MAX_VALUE)
-                .addComponent(progressBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(115, 115, 115))
-        );
-        statusPanelLayout.setVerticalGroup(
-            statusPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(statusPanelLayout.createSequentialGroup()
-                .addComponent(statusPanelSeparator, javax.swing.GroupLayout.PREFERRED_SIZE, 2, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(statusPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(statusPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(statusMessageLabel)
-                        .addComponent(statusAnimationLabel))
-                    .addComponent(progressBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(3, 3, 3))
-        );
-
         setComponent(mainPanel);
         setMenuBar(menuBar);
-        setStatusBar(statusPanel);
     }// </editor-fold>//GEN-END:initComponents
 
 private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -705,25 +398,25 @@ private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
     monthPoints = new ArrayList<Integer>();
     
     count1 = 0;
-    
-    if (jComboBox1.getSelectedIndex() == 1){
-                
-//        jPanel2.setVisible(false);
-        jPanel1.setVisible(true);
-        scrollPane1.setVisible(true);
-                        
-    } else if (jComboBox1.getSelectedIndex() == 2){
-      
-        jPanel1.setVisible(false);        
-        scrollPane1.setVisible(false);
-    } else {
-      
-        jPanel1.setVisible(true);
-        scrollPane1.setVisible(true);
-    }
-    
+//    
+//    if (jComboBox1.getSelectedIndex() == 1){
+//                
+////        jPanel2.setVisible(false);
+//        jPanel1.setVisible(true);
+//        scrollPane1.setVisible(true);
+//                        
+//    } else if (jComboBox1.getSelectedIndex() == 2){
+//      
+//        jPanel1.setVisible(false);        
+//        scrollPane1.setVisible(false);
+//    } else {
+//      
+//        jPanel1.setVisible(true);
+//        scrollPane1.setVisible(true);
+//    }
+//    
     mySelection = getSel();
-    jcombo = jComboBox1.getSelectedIndex();
+//    jcombo = jComboBox1.getSelectedIndex();
     myInput = jTextField1.getText();
     if (myInput.equals("") && mySelection == null){
         JOptionPane.showMessageDialog(jLabel1, "No search word was input");
@@ -733,12 +426,12 @@ private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
         
     } else {
         jSlider1.setVisible(true);
-        jSlider2.setVisible(true);
+//        jSlider2.setVisible(true);
         jLabel3.setVisible(true);
         //jLabel4.setVisible(true);
-        jPanel5.setVisible(true);
+//        jPanel5.setVisible(true);
 //        jList1.setVisible(true);
-        jScrollPane1.setVisible(true);
+//        jScrollPane1.setVisible(true);
         mySelection = getSel();
         if (myInput.equals("")){
             wordIn = getWords1();
@@ -771,11 +464,11 @@ private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
                 test.setPopular(wordIn.get(i));
             }
 
-            if (jComboBox1.getSelectedIndex() == 1){
+            if (false){
                 
                 paintMap(points, myTweets);
                 
-            } else if (jComboBox1.getSelectedIndex() == 2){
+            } else if (false){
                 
                 Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_33);
                 IndexWriter writer = new IndexWriter(idx, analyzer, IndexWriter.MaxFieldLength.UNLIMITED);
@@ -940,11 +633,11 @@ private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
 
                     
                     myList.model.clear();
-                    jLabel6.setText(null);
-                    jLabel8.setText(null);
-                    jLabel10.setText(null);
-                    jLabel11.setText(null);
-                    jLabel11.setIcon(null);
+//                    jLabel6.setText(null);
+//                    jLabel8.setText(null);
+//                    jLabel10.setText(null);
+//                    jLabel11.setText(null);
+//                    jLabel11.setIcon(null);
 //                    jPanel2.removeAll();
                     scrollPane1.removeAll();
 
@@ -1176,189 +869,189 @@ private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
                 
             });
 
-            jSlider2.addChangeListener(new ChangeListener(){
-                public void stateChanged (ChangeEvent evt) {
-                    if (iValue != 0 ){
-                    JSlider jSlider1 = (JSlider)evt.getSource(); 
-                    iValue1 = jSlider1.getValue(); 
-
-                    myList.model.clear();
-                    jLabel6.setText(null);
-                    jLabel8.setText(null);
-                    jLabel10.setText(null);
-                    jLabel11.setText(null);
-                    jLabel11.setIcon(null);                    
-//                    jPanel2.removeAll();
-                    scrollPane1.removeAll();
-
-                    if (jcombo == 1){
-                        if (iValue1 == 0){
-                            monthMap(iValue,myTweets,points);
-                        } else {
-                            dayMap(iValue, iValue1, myTweets,points);
-                        }
-                    } else if (jcombo == 2){
-                        if(iValue1 == 0){
-                            myResults1 = new Integer[31][wordIn.size()];
-
-                            for (int i=0; i<wordIn.size(); i++){
-                                try {
-                                    date = new ArrayList<String>();
-                                    myDays = null;
-                                    myResults = null;
-                                    monthPoints = new ArrayList<Integer>();
-
-
-                                    Searcher searcher = new IndexSearcher(idx);
-                                    myResults = search(searcher, wordIn.get(i), myTweets.length);
-                                    searcher.close();
-                                    for (int k=0; k<myResults.length; k++){
-                                        date.add(myResults[k][3]);
-                                    }
-                                    myDays = dayPoints(date, iValue);
-                                    for (int k=0; k<myDays.length; k++){
-                                        int monPon = myDays[k];
-                                        myResults1[k][i] = monPon;
-                                    }
-                                } catch (ParseException ex) {
-                                    Logger.getLogger(Prototype3View.class.getName()).log(Level.SEVERE, null, ex);
-                                } catch (CorruptIndexException ex) {
-                                    Logger.getLogger(Prototype3View.class.getName()).log(Level.SEVERE, null, ex);
-                                } catch (IOException ex) {
-                                    Logger.getLogger(Prototype3View.class.getName()).log(Level.SEVERE, null, ex);
-                                }
-                            }
-
-
-                            proGraph myGraph1 = new proGraph(col, wordIn, myResults1, myTweets, iValue, 0);
-                            myGraph1.init();
-                            //jPanel2.add(myGraph1);
-                            myGraph1.setPreferredSize(new Dimension(2000,2000));
-                            scrollPane1.add(myGraph1);
-//                            ScrollPane1.setViewportView(myGraph1);
-                        }else {
-                            myResults1 = new Integer[24][wordIn.size()];
-
-                            for (int i=0; i<wordIn.size(); i++){
-                                try {
-                                    date = new ArrayList<String>();
-                                    myHours = null;
-                                    myResults = null;
-                                    monthPoints = new ArrayList<Integer>();
-
-
-                                    Searcher searcher = new IndexSearcher(idx);
-                                    myResults = search(searcher, wordIn.get(i), myTweets.length);
-                                    searcher.close();
-                                    for (int k=0; k<myResults.length; k++){
-                                        date.add(myResults[k][3]);
-                                    }
-                                    myHours = hourPoints(date, iValue, iValue1);
-                                    for (int k=0; k<myHours.length; k++){
-                                        int monPon = myHours[k];
-                                        myResults1[k][i] = monPon;
-                                    }
-                                } catch (ParseException ex) {
-                                    Logger.getLogger(Prototype3View.class.getName()).log(Level.SEVERE, null, ex);
-                                } catch (CorruptIndexException ex) {
-                                    Logger.getLogger(Prototype3View.class.getName()).log(Level.SEVERE, null, ex);
-                                } catch (IOException ex) {
-                                    Logger.getLogger(Prototype3View.class.getName()).log(Level.SEVERE, null, ex);
-                                }
-                            }
-
-                            proGraph myGraph1 = new proGraph(col, wordIn, myResults1, myTweets, iValue, iValue1);
-                            myGraph1.init();
-                           // jPanel2.add(myGraph1);
-                            myGraph1.setPreferredSize(new Dimension(2000,2000));
-                           scrollPane1.add(myGraph1);
-//                            ScrollPane1.setViewportView(myGraph1);
-                        }
-                    } else {
-                        if (iValue1 == 0){
-                            monthMap(iValue,myTweets,points);
-
-                            myResults1 = new Integer[31][wordIn.size()];
-
-                            for (int i=0; i<wordIn.size(); i++){
-                                try {
-                                    date = new ArrayList<String>();
-                                    myDays = null;
-                                    myResults = null;
-                                    monthPoints = new ArrayList<Integer>();
-
-
-                                    Searcher searcher = new IndexSearcher(idx);
-                                    myResults = search(searcher, wordIn.get(i), myTweets.length);
-                                    searcher.close();
-                                    for (int k=0; k<myResults.length; k++){
-                                        date.add(myResults[k][3]);
-                                    }
-                                    myDays = dayPoints(date, iValue);
-                                    for (int k=0; k<myDays.length; k++){
-                                        int monPon = myDays[k];
-                                        myResults1[k][i] = monPon;
-                                    }
-                                } catch (ParseException ex) {
-                                    Logger.getLogger(Prototype3View.class.getName()).log(Level.SEVERE, null, ex);
-                                } catch (CorruptIndexException ex) {
-                                    Logger.getLogger(Prototype3View.class.getName()).log(Level.SEVERE, null, ex);
-                                } catch (IOException ex) {
-                                    Logger.getLogger(Prototype3View.class.getName()).log(Level.SEVERE, null, ex);
-                                }
-                            }
-
-
-                            proGraph myGraph1 = new proGraph(col, wordIn, myResults1, myTweets, iValue, 0);
-                            myGraph1.init();
-                            //jPanel2.add(myGraph1);
-                            myGraph1.setPreferredSize(new Dimension(2000,2000));
-                            scrollPane1.add(myGraph1);
-//                            ScrollPane1.setViewportView(myGraph1);
-                        } else {
-                            myResults1 = new Integer[24][wordIn.size()];
-
-                            for (int i=0; i<wordIn.size(); i++){
-                                try {
-                                    date = new ArrayList<String>();
-                                    myHours = null;
-                                    myResults = null;
-                                    monthPoints = new ArrayList<Integer>();
-
-
-                                    Searcher searcher = new IndexSearcher(idx);
-                                    myResults = search(searcher, wordIn.get(i), myTweets.length);
-                                    searcher.close();
-                                    for (int k=0; k<myResults.length; k++){
-                                        date.add(myResults[k][3]);
-                                    }
-                                    myHours = hourPoints(date, iValue, iValue1);
-                                    for (int k=0; k<myHours.length; k++){
-                                        int monPon = myHours[k];
-                                        myResults1[k][i] = monPon;
-                                    }
-                                } catch (ParseException ex) {
-                                    Logger.getLogger(Prototype3View.class.getName()).log(Level.SEVERE, null, ex);
-                                } catch (CorruptIndexException ex) {
-                                    Logger.getLogger(Prototype3View.class.getName()).log(Level.SEVERE, null, ex);
-                                } catch (IOException ex) {
-                                    Logger.getLogger(Prototype3View.class.getName()).log(Level.SEVERE, null, ex);
-                                }
-                            }
-
-                            proGraph myGraph1 = new proGraph(col, wordIn, myResults1, myTweets, iValue, iValue1);
-                            myGraph1.init();
-                           // jPanel2.add(myGraph1);
-                            myGraph1.setPreferredSize(new Dimension(2000,2000));
-                            scrollPane1.add(myGraph1);
-//                            ScrollPane1.setViewportView(myGraph1);
-
-                            dayMap(iValue, iValue1, myTweets,points);
-                        }
-                    }
-                    }
-                }
-            });
+//            jSlider2.addChangeListener(new ChangeListener(){
+//                public void stateChanged (ChangeEvent evt) {
+//                    if (iValue != 0 ){
+//                    JSlider jSlider1 = (JSlider)evt.getSource(); 
+//                    iValue1 = jSlider1.getValue(); 
+//
+//                    myList.model.clear();
+//                    jLabel6.setText(null);
+//                    jLabel8.setText(null);
+//                    jLabel10.setText(null);
+//                    jLabel11.setText(null);
+//                    jLabel11.setIcon(null);                    
+////                    jPanel2.removeAll();
+//                    scrollPane1.removeAll();
+//
+//                    if (jcombo == 1){
+//                        if (iValue1 == 0){
+//                            monthMap(iValue,myTweets,points);
+//                        } else {
+//                            dayMap(iValue, iValue1, myTweets,points);
+//                        }
+//                    } else if (jcombo == 2){
+//                        if(iValue1 == 0){
+//                            myResults1 = new Integer[31][wordIn.size()];
+//
+//                            for (int i=0; i<wordIn.size(); i++){
+//                                try {
+//                                    date = new ArrayList<String>();
+//                                    myDays = null;
+//                                    myResults = null;
+//                                    monthPoints = new ArrayList<Integer>();
+//
+//
+//                                    Searcher searcher = new IndexSearcher(idx);
+//                                    myResults = search(searcher, wordIn.get(i), myTweets.length);
+//                                    searcher.close();
+//                                    for (int k=0; k<myResults.length; k++){
+//                                        date.add(myResults[k][3]);
+//                                    }
+//                                    myDays = dayPoints(date, iValue);
+//                                    for (int k=0; k<myDays.length; k++){
+//                                        int monPon = myDays[k];
+//                                        myResults1[k][i] = monPon;
+//                                    }
+//                                } catch (ParseException ex) {
+//                                    Logger.getLogger(Prototype3View.class.getName()).log(Level.SEVERE, null, ex);
+//                                } catch (CorruptIndexException ex) {
+//                                    Logger.getLogger(Prototype3View.class.getName()).log(Level.SEVERE, null, ex);
+//                                } catch (IOException ex) {
+//                                    Logger.getLogger(Prototype3View.class.getName()).log(Level.SEVERE, null, ex);
+//                                }
+//                            }
+//
+//
+//                            proGraph myGraph1 = new proGraph(col, wordIn, myResults1, myTweets, iValue, 0);
+//                            myGraph1.init();
+//                            //jPanel2.add(myGraph1);
+//                            myGraph1.setPreferredSize(new Dimension(2000,2000));
+//                            scrollPane1.add(myGraph1);
+////                            ScrollPane1.setViewportView(myGraph1);
+//                        }else {
+//                            myResults1 = new Integer[24][wordIn.size()];
+//
+//                            for (int i=0; i<wordIn.size(); i++){
+//                                try {
+//                                    date = new ArrayList<String>();
+//                                    myHours = null;
+//                                    myResults = null;
+//                                    monthPoints = new ArrayList<Integer>();
+//
+//
+//                                    Searcher searcher = new IndexSearcher(idx);
+//                                    myResults = search(searcher, wordIn.get(i), myTweets.length);
+//                                    searcher.close();
+//                                    for (int k=0; k<myResults.length; k++){
+//                                        date.add(myResults[k][3]);
+//                                    }
+//                                    myHours = hourPoints(date, iValue, iValue1);
+//                                    for (int k=0; k<myHours.length; k++){
+//                                        int monPon = myHours[k];
+//                                        myResults1[k][i] = monPon;
+//                                    }
+//                                } catch (ParseException ex) {
+//                                    Logger.getLogger(Prototype3View.class.getName()).log(Level.SEVERE, null, ex);
+//                                } catch (CorruptIndexException ex) {
+//                                    Logger.getLogger(Prototype3View.class.getName()).log(Level.SEVERE, null, ex);
+//                                } catch (IOException ex) {
+//                                    Logger.getLogger(Prototype3View.class.getName()).log(Level.SEVERE, null, ex);
+//                                }
+//                            }
+//
+//                            proGraph myGraph1 = new proGraph(col, wordIn, myResults1, myTweets, iValue, iValue1);
+//                            myGraph1.init();
+//                           // jPanel2.add(myGraph1);
+//                            myGraph1.setPreferredSize(new Dimension(2000,2000));
+//                           scrollPane1.add(myGraph1);
+////                            ScrollPane1.setViewportView(myGraph1);
+//                        }
+//                    } else {
+//                        if (iValue1 == 0){
+//                            monthMap(iValue,myTweets,points);
+//
+//                            myResults1 = new Integer[31][wordIn.size()];
+//
+//                            for (int i=0; i<wordIn.size(); i++){
+//                                try {
+//                                    date = new ArrayList<String>();
+//                                    myDays = null;
+//                                    myResults = null;
+//                                    monthPoints = new ArrayList<Integer>();
+//
+//
+//                                    Searcher searcher = new IndexSearcher(idx);
+//                                    myResults = search(searcher, wordIn.get(i), myTweets.length);
+//                                    searcher.close();
+//                                    for (int k=0; k<myResults.length; k++){
+//                                        date.add(myResults[k][3]);
+//                                    }
+//                                    myDays = dayPoints(date, iValue);
+//                                    for (int k=0; k<myDays.length; k++){
+//                                        int monPon = myDays[k];
+//                                        myResults1[k][i] = monPon;
+//                                    }
+//                                } catch (ParseException ex) {
+//                                    Logger.getLogger(Prototype3View.class.getName()).log(Level.SEVERE, null, ex);
+//                                } catch (CorruptIndexException ex) {
+//                                    Logger.getLogger(Prototype3View.class.getName()).log(Level.SEVERE, null, ex);
+//                                } catch (IOException ex) {
+//                                    Logger.getLogger(Prototype3View.class.getName()).log(Level.SEVERE, null, ex);
+//                                }
+//                            }
+//
+//
+//                            proGraph myGraph1 = new proGraph(col, wordIn, myResults1, myTweets, iValue, 0);
+//                            myGraph1.init();
+//                            //jPanel2.add(myGraph1);
+//                            myGraph1.setPreferredSize(new Dimension(2000,2000));
+//                            scrollPane1.add(myGraph1);
+////                            ScrollPane1.setViewportView(myGraph1);
+//                        } else {
+//                            myResults1 = new Integer[24][wordIn.size()];
+//
+//                            for (int i=0; i<wordIn.size(); i++){
+//                                try {
+//                                    date = new ArrayList<String>();
+//                                    myHours = null;
+//                                    myResults = null;
+//                                    monthPoints = new ArrayList<Integer>();
+//
+//
+//                                    Searcher searcher = new IndexSearcher(idx);
+//                                    myResults = search(searcher, wordIn.get(i), myTweets.length);
+//                                    searcher.close();
+//                                    for (int k=0; k<myResults.length; k++){
+//                                        date.add(myResults[k][3]);
+//                                    }
+//                                    myHours = hourPoints(date, iValue, iValue1);
+//                                    for (int k=0; k<myHours.length; k++){
+//                                        int monPon = myHours[k];
+//                                        myResults1[k][i] = monPon;
+//                                    }
+//                                } catch (ParseException ex) {
+//                                    Logger.getLogger(Prototype3View.class.getName()).log(Level.SEVERE, null, ex);
+//                                } catch (CorruptIndexException ex) {
+//                                    Logger.getLogger(Prototype3View.class.getName()).log(Level.SEVERE, null, ex);
+//                                } catch (IOException ex) {
+//                                    Logger.getLogger(Prototype3View.class.getName()).log(Level.SEVERE, null, ex);
+//                                }
+//                            }
+//
+//                            proGraph myGraph1 = new proGraph(col, wordIn, myResults1, myTweets, iValue, iValue1);
+//                            myGraph1.init();
+//                           // jPanel2.add(myGraph1);
+//                            myGraph1.setPreferredSize(new Dimension(2000,2000));
+//                            scrollPane1.add(myGraph1);
+////                            ScrollPane1.setViewportView(myGraph1);
+//
+//                            dayMap(iValue, iValue1, myTweets,points);
+//                        }
+//                    }
+//                    }
+//                }
+//            });
             
             myList newList = new myList(myTweets, points, jcombo);          
 
@@ -1377,193 +1070,193 @@ private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
 
     private void myInit(){
         jSlider1.setValue(0);
-        jSlider2.setValue(0);
+//        jSlider2.setValue(0);
         myList.model.clear();
-        jLabel6.setText(null);
-        jLabel8.setText(null);
-        jLabel10.setText(null);
-        jLabel11.setText(null);
-        jLabel11.setIcon(null);
-        jComboBox1.setSelectedIndex(0);
+//        jLabel6.setText(null);
+//        jLabel8.setText(null);
+//        jLabel10.setText(null);
+//        jLabel11.setText(null);
+//        jLabel11.setIcon(null);
+//        jComboBox1.setSelectedIndex(0);
     }
     
     private void myRadio(String[] mPopular){
         if (mPopular.length<1){
-            jRadioButton1.setVisible(false);
-            jRadioButton2.setVisible(false);
-            jRadioButton3.setVisible(false);
-            jRadioButton4.setVisible(false);
-            jRadioButton5.setVisible(false);
-            jRadioButton6.setVisible(false);
-            jRadioButton7.setVisible(false);
-            jRadioButton8.setVisible(false);
-            jRadioButton9.setVisible(false);
-            jRadioButton10.setVisible(false);
+//            jRadioButton1.setVisible(false);
+//            jRadioButton2.setVisible(false);
+//            jRadioButton3.setVisible(false);
+//            jRadioButton4.setVisible(false);
+//            jRadioButton5.setVisible(false);
+//            jRadioButton6.setVisible(false);
+//            jRadioButton7.setVisible(false);
+//            jRadioButton8.setVisible(false);
+//            jRadioButton9.setVisible(false);
+//            jRadioButton10.setVisible(false);
         } else if (mPopular.length == 1){
-            jRadioButton1.setVisible(true);
-            jRadioButton1.setText(mPopular[0]);
-            jRadioButton2.setVisible(false);
-            jRadioButton3.setVisible(false);
-            jRadioButton4.setVisible(false);
-            jRadioButton5.setVisible(false);
-            jRadioButton6.setVisible(false);
-            jRadioButton7.setVisible(false);
-            jRadioButton8.setVisible(false);
-            jRadioButton9.setVisible(false);
-            jRadioButton10.setVisible(false);
+//            jRadioButton1.setVisible(true);
+//            jRadioButton1.setText(mPopular[0]);
+//            jRadioButton2.setVisible(false);
+//            jRadioButton3.setVisible(false);
+//            jRadioButton4.setVisible(false);
+//            jRadioButton5.setVisible(false);
+//            jRadioButton6.setVisible(false);
+//            jRadioButton7.setVisible(false);
+//            jRadioButton8.setVisible(false);
+//            jRadioButton9.setVisible(false);
+//            jRadioButton10.setVisible(false);
         } else if (mPopular.length == 2){
-            jRadioButton1.setVisible(true);
-            jRadioButton1.setText(mPopular[0]);
-            jRadioButton2.setVisible(true);
-            jRadioButton2.setText(mPopular[1]);
-            jRadioButton3.setVisible(false);
-            jRadioButton4.setVisible(false);
-            jRadioButton5.setVisible(false);
-            jRadioButton6.setVisible(false);
-            jRadioButton7.setVisible(false);
-            jRadioButton8.setVisible(false);
-            jRadioButton9.setVisible(false);
-            jRadioButton10.setVisible(false);
+//            jRadioButton1.setVisible(true);
+//            jRadioButton1.setText(mPopular[0]);
+//            jRadioButton2.setVisible(true);
+//            jRadioButton2.setText(mPopular[1]);
+//            jRadioButton3.setVisible(false);
+//            jRadioButton4.setVisible(false);
+//            jRadioButton5.setVisible(false);
+//            jRadioButton6.setVisible(false);
+//            jRadioButton7.setVisible(false);
+//            jRadioButton8.setVisible(false);
+//            jRadioButton9.setVisible(false);
+//            jRadioButton10.setVisible(false);
         } else if (mPopular.length == 3){
-            jRadioButton1.setVisible(true);
-            jRadioButton1.setText(mPopular[0]);
-            jRadioButton2.setVisible(true);
-            jRadioButton2.setText(mPopular[1]);
-            jRadioButton3.setVisible(true);
-            jRadioButton3.setText(mPopular[2]);
-            jRadioButton4.setVisible(false);
-            jRadioButton5.setVisible(false);
-            jRadioButton6.setVisible(false);
-            jRadioButton7.setVisible(false);
-            jRadioButton8.setVisible(false);
-            jRadioButton9.setVisible(false);
-            jRadioButton10.setVisible(false);
+//            jRadioButton1.setVisible(true);
+//            jRadioButton1.setText(mPopular[0]);
+//            jRadioButton2.setVisible(true);
+//            jRadioButton2.setText(mPopular[1]);
+//            jRadioButton3.setVisible(true);
+//            jRadioButton3.setText(mPopular[2]);
+//            jRadioButton4.setVisible(false);
+//            jRadioButton5.setVisible(false);
+//            jRadioButton6.setVisible(false);
+//            jRadioButton7.setVisible(false);
+//            jRadioButton8.setVisible(false);
+//            jRadioButton9.setVisible(false);
+//            jRadioButton10.setVisible(false);
         } else if (mPopular.length == 4){
-            jRadioButton1.setVisible(true);
-            jRadioButton1.setText(mPopular[0]);
-            jRadioButton2.setVisible(true);
-            jRadioButton2.setText(mPopular[1]);
-            jRadioButton3.setVisible(true);
-            jRadioButton3.setText(mPopular[2]);
-            jRadioButton4.setVisible(true);
-            jRadioButton4.setText(mPopular[3]);
-            jRadioButton5.setVisible(false);
-            jRadioButton6.setVisible(false);
-            jRadioButton7.setVisible(false);
-            jRadioButton8.setVisible(false);
-            jRadioButton9.setVisible(false);
-            jRadioButton10.setVisible(false);
+//            jRadioButton1.setVisible(true);
+//            jRadioButton1.setText(mPopular[0]);
+//            jRadioButton2.setVisible(true);
+//            jRadioButton2.setText(mPopular[1]);
+//            jRadioButton3.setVisible(true);
+//            jRadioButton3.setText(mPopular[2]);
+//            jRadioButton4.setVisible(true);
+//            jRadioButton4.setText(mPopular[3]);
+//            jRadioButton5.setVisible(false);
+//            jRadioButton6.setVisible(false);
+//            jRadioButton7.setVisible(false);
+//            jRadioButton8.setVisible(false);
+//            jRadioButton9.setVisible(false);
+//            jRadioButton10.setVisible(false);
         }  else if (mPopular.length == 5){
-            jRadioButton1.setVisible(true);
-            jRadioButton1.setText(mPopular[0]);
-            jRadioButton2.setVisible(true);
-            jRadioButton2.setText(mPopular[1]);
-            jRadioButton3.setVisible(true);
-            jRadioButton3.setText(mPopular[2]);
-            jRadioButton4.setVisible(true);
-            jRadioButton4.setText(mPopular[3]);
-            jRadioButton5.setVisible(true);
-            jRadioButton5.setText(mPopular[4]);
-            jRadioButton6.setVisible(false);
-            jRadioButton7.setVisible(false);
-            jRadioButton8.setVisible(false);
-            jRadioButton9.setVisible(false);
-            jRadioButton10.setVisible(false);
+//            jRadioButton1.setVisible(true);
+//            jRadioButton1.setText(mPopular[0]);
+//            jRadioButton2.setVisible(true);
+//            jRadioButton2.setText(mPopular[1]);
+//            jRadioButton3.setVisible(true);
+//            jRadioButton3.setText(mPopular[2]);
+//            jRadioButton4.setVisible(true);
+//            jRadioButton4.setText(mPopular[3]);
+//            jRadioButton5.setVisible(true);
+//            jRadioButton5.setText(mPopular[4]);
+//            jRadioButton6.setVisible(false);
+//            jRadioButton7.setVisible(false);
+//            jRadioButton8.setVisible(false);
+//            jRadioButton9.setVisible(false);
+//            jRadioButton10.setVisible(false);
         }   else if (mPopular.length == 6){
-            jRadioButton1.setVisible(true);
-            jRadioButton1.setText(mPopular[0]);
-            jRadioButton2.setVisible(true);
-            jRadioButton2.setText(mPopular[1]);
-            jRadioButton3.setVisible(true);
-            jRadioButton3.setText(mPopular[2]);
-            jRadioButton4.setVisible(true);
-            jRadioButton4.setText(mPopular[3]);
-            jRadioButton5.setVisible(true);
-            jRadioButton5.setText(mPopular[4]);
-            jRadioButton6.setVisible(true);
-            jRadioButton6.setText(mPopular[5]);
-            jRadioButton7.setVisible(false);
-            jRadioButton8.setVisible(false);
-            jRadioButton9.setVisible(false);
-            jRadioButton10.setVisible(false);
+//            jRadioButton1.setVisible(true);
+//            jRadioButton1.setText(mPopular[0]);
+//            jRadioButton2.setVisible(true);
+//            jRadioButton2.setText(mPopular[1]);
+//            jRadioButton3.setVisible(true);
+//            jRadioButton3.setText(mPopular[2]);
+//            jRadioButton4.setVisible(true);
+//            jRadioButton4.setText(mPopular[3]);
+//            jRadioButton5.setVisible(true);
+//            jRadioButton5.setText(mPopular[4]);
+//            jRadioButton6.setVisible(true);
+//            jRadioButton6.setText(mPopular[5]);
+//            jRadioButton7.setVisible(false);
+//            jRadioButton8.setVisible(false);
+//            jRadioButton9.setVisible(false);
+//            jRadioButton10.setVisible(false);
         }   else if (mPopular.length == 7){
-            jRadioButton1.setVisible(true);
-            jRadioButton1.setText(mPopular[0]);
-            jRadioButton2.setVisible(true);
-            jRadioButton2.setText(mPopular[1]);
-            jRadioButton3.setVisible(true);
-            jRadioButton3.setText(mPopular[2]);
-            jRadioButton4.setVisible(true);
-            jRadioButton4.setText(mPopular[3]);
-            jRadioButton5.setVisible(true);
-            jRadioButton5.setText(mPopular[4]);
-            jRadioButton6.setVisible(true);
-            jRadioButton6.setText(mPopular[5]);
-            jRadioButton7.setVisible(true);
-            jRadioButton7.setText(mPopular[6]);
-            jRadioButton8.setVisible(false);
-            jRadioButton9.setVisible(false);
-            jRadioButton10.setVisible(false);
+//            jRadioButton1.setVisible(true);
+//            jRadioButton1.setText(mPopular[0]);
+//            jRadioButton2.setVisible(true);
+//            jRadioButton2.setText(mPopular[1]);
+//            jRadioButton3.setVisible(true);
+//            jRadioButton3.setText(mPopular[2]);
+//            jRadioButton4.setVisible(true);
+//            jRadioButton4.setText(mPopular[3]);
+//            jRadioButton5.setVisible(true);
+//            jRadioButton5.setText(mPopular[4]);
+//            jRadioButton6.setVisible(true);
+//            jRadioButton6.setText(mPopular[5]);
+//            jRadioButton7.setVisible(true);
+//            jRadioButton7.setText(mPopular[6]);
+//            jRadioButton8.setVisible(false);
+//            jRadioButton9.setVisible(false);
+//            jRadioButton10.setVisible(false);
         }   else if (mPopular.length == 8){
-            jRadioButton1.setVisible(true);
-            jRadioButton1.setText(mPopular[0]);
-            jRadioButton2.setVisible(true);
-            jRadioButton2.setText(mPopular[1]);
-            jRadioButton3.setVisible(true);
-            jRadioButton3.setText(mPopular[2]);
-            jRadioButton4.setVisible(true);
-            jRadioButton4.setText(mPopular[3]);
-            jRadioButton5.setVisible(true);
-            jRadioButton5.setText(mPopular[4]);
-            jRadioButton6.setVisible(true);
-            jRadioButton6.setText(mPopular[5]);
-            jRadioButton7.setVisible(true);
-            jRadioButton7.setText(mPopular[6]);
-            jRadioButton8.setVisible(true);
-            jRadioButton8.setText(mPopular[7]);
-            jRadioButton9.setVisible(false);
-            jRadioButton10.setVisible(false);
+//            jRadioButton1.setVisible(true);
+//            jRadioButton1.setText(mPopular[0]);
+//            jRadioButton2.setVisible(true);
+//            jRadioButton2.setText(mPopular[1]);
+//            jRadioButton3.setVisible(true);
+//            jRadioButton3.setText(mPopular[2]);
+//            jRadioButton4.setVisible(true);
+//            jRadioButton4.setText(mPopular[3]);
+//            jRadioButton5.setVisible(true);
+//            jRadioButton5.setText(mPopular[4]);
+//            jRadioButton6.setVisible(true);
+//            jRadioButton6.setText(mPopular[5]);
+//            jRadioButton7.setVisible(true);
+//            jRadioButton7.setText(mPopular[6]);
+//            jRadioButton8.setVisible(true);
+//            jRadioButton8.setText(mPopular[7]);
+//            jRadioButton9.setVisible(false);
+//            jRadioButton10.setVisible(false);
         }   else if (mPopular.length == 9){
-            jRadioButton1.setVisible(true);
-            jRadioButton1.setText(mPopular[0]);
-            jRadioButton2.setVisible(true);
-            jRadioButton2.setText(mPopular[1]);
-            jRadioButton3.setVisible(true);
-            jRadioButton3.setText(mPopular[2]);
-            jRadioButton4.setVisible(true);
-            jRadioButton4.setText(mPopular[3]);
-            jRadioButton5.setVisible(true);
-            jRadioButton5.setText(mPopular[4]);
-            jRadioButton6.setVisible(true);
-            jRadioButton6.setText(mPopular[5]);
-            jRadioButton7.setVisible(true);
-            jRadioButton7.setText(mPopular[6]);
-            jRadioButton8.setVisible(true);
-            jRadioButton8.setText(mPopular[7]);
-            jRadioButton9.setVisible(true);
-            jRadioButton9.setText(mPopular[8]);
-            jRadioButton10.setVisible(false);
+//            jRadioButton1.setVisible(true);
+//            jRadioButton1.setText(mPopular[0]);
+//            jRadioButton2.setVisible(true);
+//            jRadioButton2.setText(mPopular[1]);
+//            jRadioButton3.setVisible(true);
+//            jRadioButton3.setText(mPopular[2]);
+//            jRadioButton4.setVisible(true);
+//            jRadioButton4.setText(mPopular[3]);
+//            jRadioButton5.setVisible(true);
+//            jRadioButton5.setText(mPopular[4]);
+//            jRadioButton6.setVisible(true);
+//            jRadioButton6.setText(mPopular[5]);
+//            jRadioButton7.setVisible(true);
+//            jRadioButton7.setText(mPopular[6]);
+//            jRadioButton8.setVisible(true);
+//            jRadioButton8.setText(mPopular[7]);
+//            jRadioButton9.setVisible(true);
+//            jRadioButton9.setText(mPopular[8]);
+//            jRadioButton10.setVisible(false);
         }   else if (mPopular.length == 10){
-            jRadioButton1.setVisible(true);
-            jRadioButton1.setText(mPopular[0]);
-            jRadioButton2.setVisible(true);
-            jRadioButton2.setText(mPopular[1]);
-            jRadioButton3.setVisible(true);
-            jRadioButton3.setText(mPopular[2]);
-            jRadioButton4.setVisible(true);
-            jRadioButton4.setText(mPopular[3]);
-            jRadioButton5.setVisible(true);
-            jRadioButton5.setText(mPopular[4]);
-            jRadioButton6.setVisible(true);
-            jRadioButton6.setText(mPopular[5]);
-            jRadioButton7.setVisible(true);
-            jRadioButton7.setText(mPopular[6]);
-            jRadioButton8.setVisible(true);
-            jRadioButton8.setText(mPopular[7]);
-            jRadioButton9.setVisible(true);
-            jRadioButton9.setText(mPopular[8]);
-            jRadioButton10.setVisible(true);
-            jRadioButton10.setText(mPopular[9]);
+//            jRadioButton1.setVisible(true);
+//            jRadioButton1.setText(mPopular[0]);
+//            jRadioButton2.setVisible(true);
+//            jRadioButton2.setText(mPopular[1]);
+//            jRadioButton3.setVisible(true);
+//            jRadioButton3.setText(mPopular[2]);
+//            jRadioButton4.setVisible(true);
+//            jRadioButton4.setText(mPopular[3]);
+//            jRadioButton5.setVisible(true);
+//            jRadioButton5.setText(mPopular[4]);
+//            jRadioButton6.setVisible(true);
+//            jRadioButton6.setText(mPopular[5]);
+//            jRadioButton7.setVisible(true);
+//            jRadioButton7.setText(mPopular[6]);
+//            jRadioButton8.setVisible(true);
+//            jRadioButton8.setText(mPopular[7]);
+//            jRadioButton9.setVisible(true);
+//            jRadioButton9.setText(mPopular[8]);
+//            jRadioButton10.setVisible(true);
+//            jRadioButton10.setText(mPopular[9]);
         }
     }
 
@@ -1571,36 +1264,36 @@ private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
         String mySel = null;
         mySel1 = new ArrayList<String>();
         
-        if(jRadioButton1.isSelected()){
-            mySel1.add(jRadioButton1.getActionCommand());
-        }
-        if(jRadioButton2.isSelected()){
-            mySel1.add(jRadioButton2.getActionCommand());
-        }
-        if(jRadioButton3.isSelected()){
-            mySel1.add(jRadioButton3.getActionCommand());
-        }
-        if(jRadioButton4.isSelected()){
-            mySel1.add(jRadioButton4.getActionCommand());
-        }
-        if(jRadioButton5.isSelected()){
-            mySel1.add(jRadioButton5.getActionCommand());
-        }
-        if(jRadioButton6.isSelected()){
-            mySel1.add(jRadioButton6.getActionCommand());
-        }
-        if(jRadioButton7.isSelected()){
-            mySel1.add(jRadioButton7.getActionCommand());
-        }
-        if(jRadioButton8.isSelected()){
-            mySel1.add(jRadioButton8.getActionCommand());
-        }
-        if(jRadioButton9.isSelected()){
-            mySel1.add(jRadioButton9.getActionCommand());
-        }
-        if(jRadioButton10.isSelected()){
-            mySel1.add(jRadioButton10.getActionCommand());
-        }
+//        if(jRadioButton1.isSelected()){
+//            mySel1.add(jRadioButton1.getActionCommand());
+//        }
+//        if(jRadioButton2.isSelected()){
+//            mySel1.add(jRadioButton2.getActionCommand());
+//        }
+//        if(jRadioButton3.isSelected()){
+//            mySel1.add(jRadioButton3.getActionCommand());
+//        }
+//        if(jRadioButton4.isSelected()){
+//            mySel1.add(jRadioButton4.getActionCommand());
+//        }
+//        if(jRadioButton5.isSelected()){
+//            mySel1.add(jRadioButton5.getActionCommand());
+//        }
+//        if(jRadioButton6.isSelected()){
+//            mySel1.add(jRadioButton6.getActionCommand());
+//        }
+//        if(jRadioButton7.isSelected()){
+//            mySel1.add(jRadioButton7.getActionCommand());
+//        }
+//        if(jRadioButton8.isSelected()){
+//            mySel1.add(jRadioButton8.getActionCommand());
+//        }
+//        if(jRadioButton9.isSelected()){
+//            mySel1.add(jRadioButton9.getActionCommand());
+//        }
+//        if(jRadioButton10.isSelected()){
+//            mySel1.add(jRadioButton10.getActionCommand());
+//        }
         
         if(!mySel1.isEmpty()){
             mySel = "tweettext LIKE '%" + mySel1.get(0) + "%'"; 
@@ -1663,38 +1356,38 @@ private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
     
     private ArrayList<String> getWords1(){
         ArrayList<String> myWords = new ArrayList<String>();
-        
-        if(jRadioButton1.isSelected()){
-            myWords.add(jRadioButton1.getActionCommand());
-        }
-        if(jRadioButton2.isSelected()){
-            myWords.add(jRadioButton2.getActionCommand());
-        }
-        if(jRadioButton3.isSelected()){
-            myWords.add(jRadioButton3.getActionCommand());
-        }
-        if(jRadioButton4.isSelected()){
-            myWords.add(jRadioButton4.getActionCommand());
-        }
-        if(jRadioButton5.isSelected()){
-            myWords.add(jRadioButton5.getActionCommand());
-        }
-        if(jRadioButton6.isSelected()){
-            myWords.add(jRadioButton6.getActionCommand());
-        }
-        if(jRadioButton7.isSelected()){
-            myWords.add(jRadioButton7.getActionCommand());
-        }
-        if(jRadioButton8.isSelected()){
-            myWords.add(jRadioButton8.getActionCommand());
-        }
-        if(jRadioButton9.isSelected()){
-            myWords.add(jRadioButton9.getActionCommand());
-        }
-        if(jRadioButton10.isSelected()){
-            myWords.add(jRadioButton10.getActionCommand());
-        }
-        
+//        
+//        if(jRadioButton1.isSelected()){
+//            myWords.add(jRadioButton1.getActionCommand());
+//        }
+//        if(jRadioButton2.isSelected()){
+//            myWords.add(jRadioButton2.getActionCommand());
+//        }
+//        if(jRadioButton3.isSelected()){
+//            myWords.add(jRadioButton3.getActionCommand());
+//        }
+//        if(jRadioButton4.isSelected()){
+//            myWords.add(jRadioButton4.getActionCommand());
+//        }
+//        if(jRadioButton5.isSelected()){
+//            myWords.add(jRadioButton5.getActionCommand());
+//        }
+//        if(jRadioButton6.isSelected()){
+//            myWords.add(jRadioButton6.getActionCommand());
+//        }
+//        if(jRadioButton7.isSelected()){
+//            myWords.add(jRadioButton7.getActionCommand());
+//        }
+//        if(jRadioButton8.isSelected()){
+//            myWords.add(jRadioButton8.getActionCommand());
+//        }
+//        if(jRadioButton9.isSelected()){
+//            myWords.add(jRadioButton9.getActionCommand());
+//        }
+//        if(jRadioButton10.isSelected()){
+//            myWords.add(jRadioButton10.getActionCommand());
+//        }
+//        
         return myWords;
     }
     
@@ -2602,50 +2295,20 @@ private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JButton jButton1;
-    public static javax.swing.JComboBox jComboBox1;
     private javax.swing.JComboBox jComboBox2;
     private javax.swing.JLabel jLabel1;
-    protected static javax.swing.JLabel jLabel10;
-    public static javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel5;
-    public static javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    protected static javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
-    public static javax.swing.JList jList1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
-    private javax.swing.JPanel jPanel6;
-    private javax.swing.JPanel jPanel7;
-    public static javax.swing.JRadioButton jRadioButton1;
-    private javax.swing.JRadioButton jRadioButton10;
-    public static javax.swing.JRadioButton jRadioButton2;
-    public static javax.swing.JRadioButton jRadioButton3;
-    public static javax.swing.JRadioButton jRadioButton4;
-    public static javax.swing.JRadioButton jRadioButton5;
-    public static javax.swing.JRadioButton jRadioButton6;
-    private javax.swing.JRadioButton jRadioButton7;
-    private javax.swing.JRadioButton jRadioButton8;
-    private javax.swing.JRadioButton jRadioButton9;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScroll_network;
     private javax.swing.JSlider jSlider1;
-    private javax.swing.JSlider jSlider2;
     private javax.swing.JTextField jTextField1;
     public static org.jdesktop.swingx.JXMapKit jXMapKit1;
     private javax.swing.JPanel mainPanel;
     private javax.swing.JMenuBar menuBar;
-    private javax.swing.JProgressBar progressBar;
     private java.awt.ScrollPane scrollPane1;
-    private javax.swing.JLabel statusAnimationLabel;
-    private javax.swing.JLabel statusMessageLabel;
-    private javax.swing.JPanel statusPanel;
     // End of variables declaration//GEN-END:variables
 
     private final Timer messageTimer;
