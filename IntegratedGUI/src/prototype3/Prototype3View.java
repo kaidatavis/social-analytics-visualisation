@@ -34,6 +34,7 @@ import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import lombardi.LombardiView;
+import JungLayouts.SocialNetworkVisualizer;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
@@ -68,8 +69,8 @@ public class Prototype3View extends FrameView {
         
         jSlider1.setMajorTickSpacing(3);
         jSlider2.setMaximum(400);
-        jSlider2.setMinimum(0);
-        jSlider2.setValue(1);
+        jSlider2.setMinimum(5);
+        jSlider2.setValue(20);
         jSlider2.setMajorTickSpacing(25);
         jSlider1.setMinorTickSpacing(1);
         jSlider2.setMinorTickSpacing(1);
@@ -258,7 +259,7 @@ public class Prototype3View extends FrameView {
         jLabel3.setText(resourceMap.getString("jLabel3.text")); // NOI18N
         jLabel3.setName("jLabel3"); // NOI18N
 
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Lombardi", "Layout 1", "Layout 2", "Layout 3" }));
+        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Lombardi", "ISOM Layout", "KK Layout", "FR Layout", "Circle Layout" }));
         jComboBox2.setName("jComboBox_layouts"); // NOI18N
 
         jButton1.setText(resourceMap.getString("jButton1.text")); // NOI18N
@@ -441,6 +442,7 @@ private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
     mySelection = getSel();
 //    jcombo = jComboBox1.getSelectedIndex();
     myInput = jTextField1.getText();
+    SocialNetworkVisualizer.searchKey = myInput;
     if (myInput.equals("") && mySelection == null){
         JOptionPane.showMessageDialog(jLabel1, "No search word was input");
 //        jPanel2.setVisible(true);
@@ -449,7 +451,7 @@ private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
         
     } else {
         jSlider1.setVisible(true);
-//        jSlider2.setVisible(true);
+        jSlider2.setVisible(true);
         jLabel3.setVisible(true);
         //jLabel4.setVisible(true);
 //        jPanel5.setVisible(true);
@@ -537,6 +539,10 @@ private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
 
                final LombardiView lombardiView = new LombardiView(jScroll_network, true);
                 lombardiView.setSearchTweet(myInput);
+                
+                final SocialNetworkVisualizer JungLayouts = new SocialNetworkVisualizer(jScroll_network, true);
+                SocialNetworkVisualizer.searchKey = myInput;
+                SocialNetworkVisualizer.userInputTweetCount =  jSlider2.getValue();
 
 
 
@@ -610,12 +616,32 @@ private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
                                 }
                             } // Layout 1
                             else if (jComboBox2.getSelectedIndex() == 1) {
-                                // TO -DO 
-//                            Nakuls code goes here for Layouts followed els ifs
+                                SocialNetworkVisualizer.userInputLayout = 1;
+                                JungLayouts.start();
+                                if (JungLayouts.isAlive()) {
+                                    JungLayouts.join();
+                                }
                             } // Layout 2
                             else if (jComboBox2.getSelectedIndex() == 2) {
-                                // TO -DO 
-//                            Nakuls code goes here for Layouts followed els ifs
+                                SocialNetworkVisualizer.userInputLayout = 2;
+                                JungLayouts.start();
+                                if (JungLayouts.isAlive()) {
+                                    JungLayouts.join();
+                                }
+                            }
+                            else if (jComboBox2.getSelectedIndex() == 3) {
+                                SocialNetworkVisualizer.userInputLayout = 3;
+                                JungLayouts.start();
+                                if (JungLayouts.isAlive()) {
+                                    JungLayouts.join();
+                                }
+                            }
+                            else if (jComboBox2.getSelectedIndex() == 4) {
+                                SocialNetworkVisualizer.userInputLayout = 4;
+                                JungLayouts.start();
+                                if (JungLayouts.isAlive()) {
+                                    JungLayouts.join();
+                                }
                             }
 
                             
@@ -652,6 +678,12 @@ private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
                    final LombardiView lombardiView = new LombardiView(jScroll_network, false);
                    lombardiView.setSearchTweet(myInput);
                    lombardiView.setSearchMonth(iValue);
+                  
+                   //Shall be enabled if JSlider1 is Mapped with Jung Layouts, currently they are not
+                   /**
+                final SocialNetworkVisualizer JungLayouts = new SocialNetworkVisualizer(jScroll_network, true);
+                SocialNetworkVisualizer.searchKey = myInput;
+                    **/
                    
 
                     
@@ -862,15 +894,36 @@ private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
                                     lombardiView.join();
                                 }
                             } // Layout 1
+                            /*
                             else if (jComboBox2.getSelectedIndex() == 1) {
-                                // TO -DO 
-//                            Nakuls code goes here for Layouts followed els ifs
+                                SocialNetworkVisualizer.userInputLayout = 1;
+                                JungLayouts.start();
+                                if (JungLayouts.isAlive()) {
+                                    JungLayouts.join();
+                                }
                             } // Layout 2
                             else if (jComboBox2.getSelectedIndex() == 2) {
-                                // TO -DO 
-//                            Nakuls code goes here for Layouts followed els ifs
+                                SocialNetworkVisualizer.userInputLayout = 2;
+                                JungLayouts.start();
+                                if (JungLayouts.isAlive()) {
+                                    JungLayouts.join();
+                                }
                             }
-
+                            else if (jComboBox2.getSelectedIndex() == 3) {
+                                SocialNetworkVisualizer.userInputLayout = 3;
+                                JungLayouts.start();
+                                if (JungLayouts.isAlive()) {
+                                    JungLayouts.join();
+                                }
+                            } // Layout 2
+                            else if (jComboBox2.getSelectedIndex() == 4) {
+                                SocialNetworkVisualizer.userInputLayout = 4;
+                                JungLayouts.start();
+                                if (JungLayouts.isAlive()) {
+                                    JungLayouts.join();
+                                }
+                            }
+                             */
                             
                             if (river.isAlive()) {
                                 river.join();
@@ -891,6 +944,85 @@ private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
 
                 
             });
+            
+            
+            jSlider2.addChangeListener(new ChangeListener(){
+                public void stateChanged (ChangeEvent evt1) { 
+                     
+                 
+                if(jSlider2.getValueIsAdjusting())
+                        return;
+                
+                JSlider jSlider = (JSlider)evt1.getSource(); 
+                    iValue1 = jSlider.getValue(); 
+                    //jSlider2.setValue(iValue);
+                    
+                final SocialNetworkVisualizer JungLayouts = new SocialNetworkVisualizer(jScroll_network, true);
+                SocialNetworkVisualizer.searchKey = myInput;
+                SocialNetworkVisualizer.userInputTweetCount = iValue1; 
+                
+                Thread mainThread = new Thread() {
+                    public void run() {
+                        enableControls(false);
+                    
+                    if (jComboBox2.getSelectedIndex() == 0) {
+
+                            } // Layout 1
+                            
+                            else if (jComboBox2.getSelectedIndex() == 1) {
+                                SocialNetworkVisualizer.userInputLayout = 1;
+                                JungLayouts.start();
+                                if (JungLayouts.isAlive()) {
+                                        try {
+                                            JungLayouts.join();
+                                        } catch (InterruptedException ex) {
+                                            Logger.getLogger(Prototype3View.class.getName()).log(Level.SEVERE, null, ex);
+                                        }
+                                }
+                            } // Layout 2
+                            else if (jComboBox2.getSelectedIndex() == 2) {
+                                SocialNetworkVisualizer.userInputLayout = 2;
+                                JungLayouts.start();
+                                if (JungLayouts.isAlive()) {
+                                        try {
+                                            JungLayouts.join();
+                                        } catch (InterruptedException ex) {
+                                            Logger.getLogger(Prototype3View.class.getName()).log(Level.SEVERE, null, ex);
+                                        }
+                                }
+                            }
+                            else if (jComboBox2.getSelectedIndex() == 3) {
+                                SocialNetworkVisualizer.userInputLayout = 3;
+                                JungLayouts.start();
+                                if (JungLayouts.isAlive()) {
+                                        try {
+                                            JungLayouts.join();
+                                        } catch (InterruptedException ex) {
+                                            Logger.getLogger(Prototype3View.class.getName()).log(Level.SEVERE, null, ex);
+                                        }
+                                }
+                            } // Layout 2
+                            else if (jComboBox2.getSelectedIndex() == 4) {
+                                SocialNetworkVisualizer.userInputLayout = 4;
+                                JungLayouts.start();
+                                if (JungLayouts.isAlive()) {
+                                        try {
+                                            JungLayouts.join();
+                                        } catch (InterruptedException ex) {
+                                            Logger.getLogger(Prototype3View.class.getName()).log(Level.SEVERE, null, ex);
+                                        }
+                                }
+                            }
+                             
+                };
+                    
+                    
+                
+                };
+                        }
+            });
+            
+
 
 //            jSlider2.addChangeListener(new ChangeListener(){
 //                public void stateChanged (ChangeEvent evt) {
@@ -1093,7 +1225,7 @@ private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
 
     private void myInit(){
         jSlider1.setValue(0);
-        jSlider2.setValue(1);
+        //jSlider2.setValue(20);
         myList.model.clear();
 //        jLabel6.setText(null);
 //        jLabel8.setText(null);
