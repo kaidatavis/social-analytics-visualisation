@@ -1,9 +1,9 @@
 
 /********************************************************************************
  *   File Name:		dbConnector.java
- *   File Version:	2
+ *   File Version:	3
  *   Created by:	Nakul Sharma
- *   Date Created:	Tue Jan 3, 2012
+ *   Date Created:	Tue Jan 13, 2012
  *********************************************************************************/
 
 /*********************************************************************************
@@ -72,9 +72,12 @@ public class dbConnector {
 		        
 		    //Resetting the Counter
 		    countUser = 0;
-		        
+		    
+                    GraphPlotter.LUserList.clear();
+                    GraphPlotter.LtoUserList.clear();
+                    
 		    //Fetching the User Names
-		    while (resultUser.next () & countUser <= SocialNetworkVisualizer.userInputTweetCount-1)
+		    while (resultUser.next () & (getNodeCount(GraphPlotter.LUserList, GraphPlotter.LtoUserList) <= SocialNetworkVisualizer.userInputTweetCount-1))
 		    {
 		    	UserNames = resultUser.getString ("username");
 		    	toUserNames = resultUser.getString ("touser");
@@ -112,7 +115,7 @@ public class dbConnector {
 		    User.close ();
 		    resultUser.close ();
 		      
-		    System.out.println (countUser + " Users were retrieved.");
+		    System.out.println (SocialNetworkVisualizer.userInputTweetCount + " Users were retrieved.");
 		    
 		    //Removing the Duplicates
 		    returnImageLinks = ProcessData.newUniquify(allreturnImageLinks);
@@ -127,4 +130,42 @@ public class dbConnector {
 			System.out.println("Problem: can not connect to the Database");
 		}
 	}
+	
+	int getNodeCount( List<String> LUserList,  List<String> LtoUserList){
+	
+		int totalCount = 0;
+		List<String> tempLUserList, tempLtoUserList;
+		
+		//tempLUserList = ProcessData.newUniquify(LUserList);
+		//tempLtoUserList = ProcessData.newUniquify(LtoUserList);
+		
+		totalCount = LUserList.size() + LtoUserList.size();
+	
+		return totalCount;
+	}
+
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
