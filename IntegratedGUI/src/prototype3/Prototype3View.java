@@ -68,12 +68,12 @@ public class Prototype3View extends FrameView {
         getFrame().setTitle("VisualThoughts Visualization Tool"); 
         
         jSlider1.setMajorTickSpacing(3);
-        jSlider2.setMaximum(400);
-        jSlider2.setMinimum(5);
-        jSlider2.setValue(20);
-        jSlider2.setMajorTickSpacing(25);
+        jSlider2.setMaximum(100);
+        jSlider2.setMinimum(2);
+        jSlider2.setValue(2);
+        jSlider2.setMajorTickSpacing(4);
         jSlider1.setMinorTickSpacing(1);
-        jSlider2.setMinorTickSpacing(1);
+        jSlider2.setMinorTickSpacing(4);
         jSlider1.setPaintTicks(true);
         jSlider2.setPaintTicks(true);
         jSlider1.setPaintLabels(true);
