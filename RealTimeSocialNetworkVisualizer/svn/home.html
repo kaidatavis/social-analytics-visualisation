@@ -1,0 +1,111 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=places&sensor=true"></script>
+<title>Visualisation of Social Media</title>
+
+
+<!-- Library File's included -->
+<script type="text/javascript" src="lib/jit.js"></script>
+<script type="text/javascript" src="lib/moment.js"></script>
+<script type="text/javascript" src="lib/jquery-1.4.2.min.js"></script>
+
+<!-- Javascript Source File -->
+<script type="text/javascript" src="visualize.js"></script>
+<script type="text/javascript" src="gmap.js"></script>
+<script type="text/javascript" src="twitter.js"></script>
+<script type="text/javascript" src="graph.js"></script>
+
+
+<script type="text/javascript">
+var map;
+var $jq=jQuery.noConflict();
+var loc_arr=new Array();
+var tweet_arr=new Array();
+var setmap_pos=new Array();
+//var tw=new Array();
+var temp_arr=new Array();
+var res=new Array();
+//var res=new Array();
+var temp_tweet;
+
+//function to load more than one function on intialization of page
+function addLoadEvent(func) {
+  var oldonload = window.onload;
+  if (typeof window.onload != 'function') {
+    window.onload = func;
+  } else {
+    window.onload = function() {
+      if (oldonload) {
+        oldonload();
+		
+      }
+      func();
+    }
+  }
+}
+
+
+
+addLoadEvent(init);
+//addLoadEvent(getTweets);
+//addLoadEvent(ben);
+addLoadEvent(function() {
+  /* more code to run on page load */
+  //getTweets();
+});
+
+
+
+</script>
+
+
+<style type="text/css">
+<!--
+body {
+	background-color: #000;
+}
+-->
+</style></head>
+
+<body background="../vp/Aqua-Silver-Mac-apple-1280x800.jpg">
+ 
+<div id="locate" style="position:absolute; left: 1095px; top: 243px; width: 157px; height: 1233px;"></div>
+ <div style="position:absolute; left: 7px; top: 308px; width: 991px; height: 556px;" ><div>
+    <ul id="id-list"></ul>
+        
+
+
+</div>
+
+<div id="center-container">
+    <div id="infovis" style="position:absolute; width: 832px; height: 379px; left: 83px; top: 73px; background-color:#000">
+   
+    </div>    
+
+</div>
+
+<div id="right-container">
+
+<div id="inner-details"></div>
+
+</div>
+
+<div id="log"></div></div>
+
+<div id="map_canvas" style="position:absolute; border:inset; left: 3px; top: 11px; width: 824px; height: 269px;">
+
+</div>
+<input type="text" id="txt_search" name="txt_search" value="twitter" style="position:absolute; left: 878px; top: 49px;"/>
+<input type="text" id="loc_search" name="loc_search" value="London" style="position:absolute; left: 878px; top: 90px;"/>
+<input type="button" value="Search" onclick="getLatLng()" style="position:absolute; left: 1045px; top: 48px;"/>
+<ul id="tweet_list" style=" visibility:visible;position:absolute; left: 1022px; top: 190px; width: 254px; height: 528px;"></ul>
+
+<input type="button" value="View" onclick="view_data()" style="position:absolute; left: 878px; top: 135px;"/>
+<input type="button" value="refresh" onclick="location.href='test_core.html'" style="position:absolute; left: 939px; top: 134px;"/>
+<input type="button" id="uchart" value="Update Chart" onclick="cjson()" style="position:absolute; left: 1042px; top: 88px;"/>
+<div style='position:absolute; left: 872px; top: 189px; width: 653px; height: 174px; visibility: visible;'><p style='position:absolute; color:#FFF; left: -855px; top: 367px; width: 51px; height: 56px;'>No. of Tweets</p><p style='position:absolute; color:#FFF; left: -505px; top: 607px;'>Time stamp in seconds</p></div>
+</div>
+</body>
+</html>
