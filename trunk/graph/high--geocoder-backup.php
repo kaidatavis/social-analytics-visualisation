@@ -20,14 +20,14 @@ $.getJSON("http://search.twitter.com/search.json?callback=?&q=olympics&rpp=5",
   function(data){
 
 $.each(data.results, function(i, item){
-  var user=item.from_user;
-  var user_id=item.from_user_id;
-  var date=item.created_at;
-  var created_at=new Date(item.created_at);
-  var month = created_at.getMonth();
-  var day = created_at.getDate();
-  var year = created_at.getFullYear();
-  var created= day +'/'+ month+ '/'+ year;
+var user=item.from_user;
+var user_id=item.from_user_id;
+var date=item.created_at;
+var created_at=new Date(item.created_at);
+var month = created_at.getMonth();
+var day = created_at.getDate();
+var year = created_at.getFullYear();
+var created= day +'/'+ month+ '/'+ year;
 create_array(date,user,user_id);
  });
 				  
@@ -52,7 +52,7 @@ for (var i in array) {
 highchart(dateArray);
 });
 function lookup_locations(user_ids){
-	$.getJSON("http://api.twitter.com/1/users/lookup.json?user_id="+user_ids+"&callback=?",
+$.getJSON("http://api.twitter.com/1/users/lookup.json?user_id="+user_ids+"&callback=?",
   function(data){
 
 $.each(data, function(i, item){
@@ -145,13 +145,12 @@ var user_id=item.from_user_id;
 var date=item.created_at;
 var profile_img=item.profile_image_url;
 var text=item.text;
+var contentString=text;
 var url=(item.entities.urls.length > 0 ? item.entities.urls[0].url : '');
-	if ((url).length==''){
-		
-}
-create_array(user,user_id,date,profile_img,url);
+search_location(user,user_id,date,profile_img,text,url,contentString);
+//create_array(user,user_id,date,profile_img,url);
  });
-function create_array(a,b,c,d,e){
+/*function create_array(a,b,c,d,e){
 	array.push({user:a,user_id:b,date:c,profile_img:d,url:e});
 				}//console.log(array);
 
@@ -159,9 +158,9 @@ for (var i in array) {
     user_ids.push(array[i].user_id); 
   // console.log(array[i].user_id);
 				}
-		ids=user_ids.join();	  
-
-
+ids=user_ids.join();  
+*/});
+function search_location(user,user_id,date,profile_img,text,url,contentString){
 //console.log(ids);	
 var geocoder = new google.maps.Geocoder();;
 var mapOptions = {
@@ -174,51 +173,56 @@ var bounds = new google.maps.LatLngBounds();
 // create the map
 var map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
 
-$.getJSON("http://api.twitter.com/1/users/lookup.json?user_id="+ids+"&callback=?", function (data) {
-  $.each(data, function (i, item) {
-    var screen_name = item.screen_name;
-    var img = item.profile_image_url;
-    var location = item.location;
-	var contentString = screen_name;
-    geocoder.geocode({
-      address: location
-    }, function (response, status) {
-      if (status == google.maps.GeocoderStatus.OK) {
-        var x = response[0].geometry.location.lat(),
-          y = response[0].geometry.location.lng(); 
-        var myLatLng = new google.maps.LatLng(x, y);
-        var marker = new google.maps.Marker({
-          icon: img,
-          title: screen_name,
-          map: map,
-          position: myLatLng
-        });
-		
-		var infowindow = new google.maps.InfoWindow({
-    	content: contentString
-			});
-		google.maps.event.addListener(marker, 'click', function() {
-  		infowindow.open(map,marker);
-			});
-        bounds.extend(myLatLng);
-      } /*else if (status === google.maps.GeocoderStatus.OVER_QUERY_LIMIT) {    
-            setTimeout(function() {
-                geocoder.geocode({address:location});
-            }, 200);}*/else {
-        console.log("Geocode was not successful for the following reason: " + status);
-      }
-    });
-  });
- // map.fitBounds(bounds);
+$.getJSON("http://api.twitter.com/1/users/lookup.json?user_id=159213724&callback=?", function (data) {
+$.each(data, function (i, item) {
+var location = item.location;
+var profile_img=item.profile_image_url;
+var user=item.screen_name;
+var contentString=user;
+geocode(user,profile_img,location,contentString);
+				});
 });
-});//get.JSON+query=euronews
+function geocode(user,profile_img,location,contentString){
+geocoder.geocode({
+address: location
+}, function (response, status) {
+if (status == google.maps.GeocoderStatus.OK) {
+var x = response[0].geometry.location.lat(),
+  y = response[0].geometry.location.lng(); 
+var myLatLng = new google.maps.LatLng(x, y);
+var marker = new google.maps.Marker({
+  icon: profile_img,
+  title: user,
+  map: map,
+  position: myLatLng
+});
+
+var infowindow = new google.maps.InfoWindow({
+content: contentString
+	});
+google.maps.event.addListener(marker, 'click', function() {
+infowindow.open(map,marker);
+	});
+bounds.extend(myLatLng);
+}else if (status === google.maps.GeocoderStatus.OVER_QUERY_LIMIT) {    
+	setTimeout(function() {
+		geocode(user,profile_img,location,contentString);
+	}, 500);}else { 
+console.log("Geocode was not successful for the following reason: " + status);
 }
+});
+}//function geocode
+
+// map.fitBounds(bounds);
+
+//});//get.JSON+query=euronews
+}}
 </script>
 </head>
 <body>
 <div id="container" style="width: 50%; height: 500px; float:left; border:solid #FCF 1px;"></div>
 <div id="map_canvas" style="width:40%; float:left; margin-left:10px; border:solid #FCF 1px; height:500px"></div>
-<div style="clear:both"><input type="button" value="Get" onclick="all(); codeAddress();"></div>
+<div style="clear:both"><input type="button" value="Get" onclick=" codeAddress();"></div>
 
 </body>
 </html>
