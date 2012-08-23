@@ -141,46 +141,59 @@ return value === 'london';
         }
 
         function codeAddress() {
-            var user_ids = [],
-                array = [];
+            user_ids = [];
+            array = [];
             text_array = [];
+            full_array = [];
             var ids;
-            $.getJSON("http://search.twitter.com/search.json?q=%23euronews&rpp=100&include_entities=true&result_type=mixed&callback=?",
+            first();
 
-            function (data) {
-                $.each(data.results, function (i, item) {
-                    var user = item.from_user;
-                    var user_id = item.from_user_id;
-                    var date = item.created_at;
-                    var profile_img = item.profile_image_url;
-                    var text = item.text;
-                    var contentString = text;
-                    var url = (item.entities.urls.length > 0 ? item.entities.urls[0].url : '');
-                    create_array(user, user_id, date, profile_img, text, contentString, url);
-                });
+            function first() {
+                $.getJSON("http://search.twitter.com/search.json?q=%23euronews&rpp=10&include_entities=true&result_type=mixed&callback=?",
 
-                function create_array(a, b, c, d, e, f, g) {
-                    array.push({
-                        user: a,
-                        user_id: b,
-                        date: c,
-                        profile_img: d,
-                        text: e,
-                        contentString: f,
-                        url: g
+                function (data) {
+                    $.each(data.results, function (i, item) {
+                        var user = item.from_user;
+                        var user_id = item.from_user_id;
+                        var date = item.created_at;
+                        var profile_img = item.profile_image_url;
+                        var text = item.text;
+                        var contentString = text;
+                        var url = (item.entities.urls.length > 0 ? item.entities.urls[0].url : '');
+                        create_array(user, user_id, date, profile_img, text, contentString, url);
                     });
-                }
-                console.log(array);
 
-                for (var i in array) {
-                    user_ids.push(array[i].user_id);
-                    // console.log(array[i].user_id);
-                }
-                ids = user_ids.join();
-                //console.log(ids);
+                    function create_array(a, b, c, d, e, f, g) {
+                        array.push({
+                            user: a,
+                            user_id: b,
+                            date: c,
+                            profile_img: d,
+                            text: e,
+                            contentString: f,
+                            url: g
+
+                        });
+                    }
+                    //console.log(array);
+
+                    for (var i in array) {
+                        user_ids.push(array[i].user_id);
+                        // console.log(array[i].user_id);
+                    }
+                    ids = user_ids.join();
+
+                    //console.log(ids);
+                    search_location(ids, array);
+                });
+            }
+
+            function search_location(ids, array) {
+                //console.log(array);
                 $.getJSON("http://api.twitter.com/1/users/lookup.json?user_id=" + ids + "&callback=?", function (data) { //first attempt to find locations
                     $.each(data, function (i, item) {
                         var location = item.location;
+
                         array[i].location = location; //locations are added but some are empty
 
                     });
@@ -196,46 +209,88 @@ return value === 'london';
                             array[i].location = userLocationMap[array[i].user];
                         }
                     }
-                    for (var i = 0; i < array.length; i++) { //second attempt to find locations with Yahoo's text placemaker
-                        if (array[i].location.length == 0) { //search for users where there locations are either empty or non-existing in array
-                            var text = array[i].text;
-                            var user_name = array[i].user;
-                            Placemaker.getPlaces(text, function (o) {
-                                console.log(o);
+                    find_undefined(array);
+                });
+
+console.log(array);
+            }
+
+            function find_undefined(array) {
+                for (i = 0, l = array.length; i < l; i++) {
+                    if (array[i].location == undefined) {
+                        var location = array[i].location;
+                        var user = array[i].user;
+                        var user_id = array[i].user_id;
+                        var date = array[i].date;
+                        var profile_img = array[i].profile_img;
+                        var text = array[i].text;
+                        var contentString = array[i].contnetString;
+                        var url = array[i].url;
+                        create_text_array(user, user_id, date, location, profile_img, text, contentString, url);
+                    } //function replace
+                }
+
+                function create_text_array(user, user_id, date, location, profile_img, text, contentString, url) {
+                    text_array.push({
+                        user: user,
+                        user_id: user_id,
+                        date: date,
+                        profile_img: profile_img,
+                        text: text,
+                        contentString: contentString,
+                        url: url,
+                        location: location
+
+                    });
+                }
+                console.log(text_array);
+            replace_undefined(array,text_array);
+			}
+			
+			function replace_undefined(array,text_array){
+				var userLocationText = {};
+                for ( i = 0, l =text_array.length; i < l; i++){
+						console.log(text_array[i].user);
+						     userLocationText[text_array[i].user] = text_array[i].text;
+							 var text=userLocationText[text_array[i].user];
+                            Placemaker.getPlaces(text, function (i) {
+								var z=text;
+								 return function (o) { 
+                                var i=z;
                                 if ($.isArray(o.match)) {
-                                    if (o.match[0].place.name == "Europe") {
-                                        var location_name = o.match[1].place.name
-                                        text_array.push({
-                                            user_name: user_name,
-                                            loc1: location_name
-                                        }); //console.log(text_array);}//create another array to save both locations of the user
+                                    if (o.match[0].place.name == "Europe"||o.match[0].place.name == "United States") {
+										var location=o.match[1].place.name;
+										 userLocationText[text_array[i].user]=location;
                                     }
                                     if ($.isArray(o.match)) {
                                         if (o.match[0].place.name !== "Europe") {
-                                            var location_name1 = o.match[0].place.name
-                                            var location_name2 = o.match[1].place.name
-                                            text_array.push({
-                                                user_name: user_name,
-                                                loc1: location_name,
-                                                loc2: location_name2
-                                            });
+											var location= o.match[0].place.name;
+											userLocationText[text_array[i].user]=location;									
                                         }
-                                    } //console.log(text_array);
+                                    }
                                 } else if (!$.isArray(o.match)) {
-                                    latitude = o.match.place.name, longitude = o.match.place.name;
-                                    //console.log(latitude, longitude);
+									var location=o.match.place.name;
+									userLocationText[text_array[i].user]=location;
                                 }
-                            });
-                        } else {
-                            return false
-                        }
-                    }
+                           
+							};});
+					}console.log(text_array);
+					}
 
+            /*				function map(array){
+					console.log(array);
+				
 
-
-                });
-                //console.log(ids);	
-                var geocoder = new google.maps.Geocoder();
+					
+				var location=array[i].location; console.log("location "+location);
+					var user = array[i].user; console.log("user"+user);
+                    var date = array[i].date;
+                    var profile_img = array[i].profile_img;
+                    var text = array[i].text;
+                    var contentString = text;
+					geocode(user,date, profile_img, text, contentString,location);
+				
+					}
                 var mapOptions = {
                     center: new google.maps.LatLng(35.74651, - 39.46289),
                     zoom: 2,
@@ -245,16 +300,10 @@ return value === 'london';
                 var bounds = new google.maps.LatLngBounds();
                 // create the map
                 var map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
-                $.getJSON("http://api.twitter.com/1/users/lookup.json?user_id=" + user_id + "&callback=?", function (data) {
-                    $.each(data, function (i, item) {
-                        var location = item.location;
 
-                        geocode(user, user_id, date, profile_img, text, url, contentString, location);
-                    });
-                });
-
-                function geocode(user, user_id, date, profile_img, text, url, contentString, location) {
-                    geocoder.geocode({
+				function geocode(user,date, profile_img, text, contentString,location){
+					var geocoder = new google.maps.Geocoder();
+				  geocoder.geocode({
                         address: location
                     }, function (response, status) {
                         if (status == google.maps.GeocoderStatus.OK) {
@@ -277,15 +326,14 @@ return value === 'london';
                             bounds.extend(myLatLng);
                         } else if (status === google.maps.GeocoderStatus.OVER_QUERY_LIMIT) {
                             setTimeout(function () {
-                                geocode(user, profile_img, location, contentString);
+                                geocode(user,date, profile_img, text, contentString,location);
                             }, 500);
                         } else {
                             console.log("Geocode was not successful for the following reason: " + status);
                         }
                     });
                 }
-
-            });
+*/
         }
     </script>
 </head>
