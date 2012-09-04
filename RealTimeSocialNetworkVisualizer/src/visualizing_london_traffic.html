@@ -13,20 +13,14 @@
 
 <script type="text/javascript">
 var map;
-var x=0;
-
-var num_main_tweets=0;
-var num_new_tweets=0;
 var new_tweet_id=1000;
 var $jq=jQuery.noConflict();
 var tw_txt=new Array();
 var unique_tw_txt=new Array();
 var tot_related=new Array();
 var unique_tot_related=new Array();
-var reload_arr=new Array();
 var marker_array=new Array();
 var similar_tweets=new Array();
-var main_array=new Array();
 
 function display(flag)
 {
@@ -51,11 +45,9 @@ function display(flag)
 				var diff=hoursBetween(convertTime(time),dt);
 				if(diff<=24)
 				{
-					num_main_tweets++;
 					var res=tweet_text;
 					res=res.replace(/[^0-9a-zA-Z ]/g, "");
 					res=res.replace(/([a-z])?([A-Z])/g, "$1 $2");
-					//res = res.replace(/^\s/g,'');
 					res = res.replace(/\s+/g,'+');
 					res=res+"+London";
 					
@@ -812,10 +804,6 @@ google.maps.event.addDomListener(window, 'load', initialize);
 </head>
 
 <body bgcolor="#000000">
-<input type="button" onclick="addDiv()"/>
-<input type="button" value="remove all" onclick="removeAll()"/>
-<input type="button" value="display" onclick="display(0)"/>
-<input type="button" value="Check for reload" onclick="reloadCheck()"/>
 <div id="win" style="height:300px; width:1400px; widows:inherit; ">
   
   <div id="map_canvas" style="border:inset; left: 0px; top: 0px;"></div>
