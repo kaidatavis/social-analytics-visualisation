@@ -1,4 +1,4 @@
-<!--Code for categorizing main tweets under similar hash tags-->
+<!--Last updated 6.50pm 4th sep 2012-->
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -52,7 +52,7 @@ function display(flag)
 					res=res+"+London";
 					
 					var hash=retrieveHashtags(tweet_text);
-					console.log(hash);
+					console.log("Hash tag:"+hash);
 					tw_txt.push([res,tweet_text,time,hash,id]);
 					id++;
 				}
@@ -593,50 +593,50 @@ function timeDiff(date1, date2)
 function retrieveHashtags(str)
 {
 	var out;	
-	
-	var i=str.search('#');
-	str=str.replace( /\./g, '' );
 
-	if(i>-1)
-	{
-		if(str.search('Tf')>0)
-		{
-		}
-		else
-		{
-			var j=i;
-			j++;
-			while(j<str.length)
-			{
-				if(str[j]==' ')
-				{
-					out=str.substring(i+1,j);
-					break;
-				}
-				j++;
-			}
-		}
-	}
-	else
-	{
 		str=str.toLowerCase();
-		str=str.replace(/[^0-9a-zA-Z ]/g, "");
+		str = str.replace(/[&\/\\#,+()$~%.'":*?<>{}]/g,'');
+		str = str.replace(/,/g,'');
+		str = str.replace(/-/g,'');
 		var words = str.split(' ');
 		for(var k=0;k<words.length;k++)
 		{
-  			if(words[k].search("sonia")>=0||words[k].search("dan")>=0||words[k].search("http")>=0||words[k].search("good morning")>=0||words[k].search("good afternoon")>=0||words[k].search("good evening")>=0||words[k].search("charlie")>=0||words[k].search("matt")>=0)
+  			if(words[k].search("sonia")>=0||words[k].search("dan")>=0||words[k].search("http")>=0||words[k].search("good")>=0||words[k].search("good evening")>=0||words[k].search("charlie")>=0||words[k].search("matt")>=0)
 			{
+				out=null;
 				break;
 			}
 			else if(words[k].search(/([a-z])?([0-9])/)>=0)
 			{
 				out=words[k].toUpperCase();
-				break;
+					
+					
+					if(out.search("LON")>=0)
+					{
+						var z=out.search("LON");
+						out=out.slice(0, z) + " " + out.slice(z,out.length);
+						break;
+					}
+					else if(out.search("M")>=0||out.search("J")>=0)
+					{
+						out=null;
+					}
+					else if(parseInt(out))
+					{
+						out=null;
+					}
+					else if(out.search("LON")<0)
+					{
+						out=out+" LONDON";
+						break;
+					}
+					
+				
 			}
 	
    
 		}
-	}
+	
 	return out;
 }
 function removeAll()
@@ -675,11 +675,12 @@ function reloadCheck()
 	window.setTimeout(function()
 	{
 		new_tweet_count=tweetsReturned();
-		console.log("New tweets:"+new_tweet_count);
 		if(new_tweet_count>old_tweet_count)
 		{
 			removeAll();
 			display(1);
+			console.log("New tweets:"+old_tweet_count);
+			console.log("New tweets:"+new_tweet_count);
 			console.log("updated successfully!--------------------------------------------------->"); 
 		}
 		else
