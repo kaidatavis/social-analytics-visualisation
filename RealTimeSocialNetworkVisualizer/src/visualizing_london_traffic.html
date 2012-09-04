@@ -1,0 +1,826 @@
+<!--Code for categorizing main tweets under similar hash tags-->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Traffic in London</title>
+<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=places&sensor=true"></script>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.min.js"></script>
+<script type="text/javascript" src="../lib/jquery.doubleScroll.js"></script>
+<script type="text/javascript" src="../lib/moment.js"></script>
+
+<script type="text/javascript">
+var map;
+var x=0;
+
+var num_main_tweets=0;
+var num_new_tweets=0;
+var new_tweet_id=1000;
+var $jq=jQuery.noConflict();
+var tw_txt=new Array();
+var unique_tw_txt=new Array();
+var tot_related=new Array();
+var unique_tot_related=new Array();
+var reload_arr=new Array();
+var marker_array=new Array();
+var similar_tweets=new Array();
+var main_array=new Array();
+
+function display(flag)
+{
+	var id=0;
+	var len=0;
+	$jq.ajax
+	({
+		type: 'GET',
+			
+ 		dataType:'jsonp',
+		url: 'https://api.twitter.com/1/statuses/user_timeline.json?screen_name=TflTrafficNews&count=200',
+			 
+		success:function(_json)
+		{
+			$jq.each(_json,function(key)
+			{
+				len++;
+				var tweet_text=_json[key].text;
+				var time=_json[key].created_at;
+				var now = moment().utc();
+				var dt=new Date(now);
+				var diff=hoursBetween(convertTime(time),dt);
+				if(diff<=24)
+				{
+					num_main_tweets++;
+					var res=tweet_text;
+					res=res.replace(/[^0-9a-zA-Z ]/g, "");
+					res=res.replace(/([a-z])?([A-Z])/g, "$1 $2");
+					//res = res.replace(/^\s/g,'');
+					res = res.replace(/\s+/g,'+');
+					res=res+"+London";
+					
+					var hash=retrieveHashtags(tweet_text);
+					console.log(hash);
+					tw_txt.push([res,tweet_text,time,hash,id]);
+					id++;
+				}
+				
+			});
+			
+			uniqueMaintweets();
+			if(flag==1)
+			{
+				setTimeout(function()
+				{
+					addDiv();
+				},40*1000);
+			}
+			
+		}
+			
+		 
+	});
+		
+}
+
+function uniqueMaintweets()
+{
+	unique_tw_txt=remDup(tw_txt,1);
+	var flag=0;
+	var timer=0;
+	for(var k=0;k<unique_tw_txt.length;k++)
+	{
+		flag=0;
+		if(k>0)
+		{
+			//Loop for checking already existing hash tags
+			for(var l=0;l<k;l++)
+			{
+				if(unique_tw_txt[l][3]==unique_tw_txt[k][3])
+				{
+					flag=1;
+					var time_diff=timeDiff(convertTime(unique_tw_txt[l][2]),convertTime(unique_tw_txt[k][2]));
+					similar_tweets.push([unique_tw_txt[l][5],unique_tw_txt[l][6],unique_tw_txt[k][1],unique_tw_txt[l][2],unique_tw_txt[k][2],1,time_diff,unique_tw_txt[l][4]]);
+					break;
+				}
+			}
+		}
+		if(flag==0)
+		{
+			if(unique_tw_txt[k][3]!=null)
+			{
+				timer++;
+				googleSearch(unique_tw_txt[k][0],unique_tw_txt[k][1],unique_tw_txt[k][2],unique_tw_txt[k][3],unique_tw_txt[k][4],k,timer);
+			}
+		}
+		
+	}
+	
+}
+
+
+function createDiv(str,hash,time,id)
+{
+
+	$jq('#myTable').append('<td style="border:inset;table-layout:fixed;white-space:nowrap;"><div style="height:300px;overflow:scroll"><table id='+id+' style="border:inset;table-layout:fixed;word-wrap:break-word;"></table></div></td>');
+	$jq('#'+id).append('<thead><tr style="background-color:#FF9999;text-align:center;white-space:nowrap;color:#000;border:inset;overflow:scroll" onclick="clickRow(this.id)" onmouseover="mouseOver(this.id)" onmouseout="mouseOut(this.id)" id='+id+'><td><div style="width:500px;overflow:scroll">'+id+'<h4>'+str+'</h4><h6>Created at:'+time+'</h6></div></td></tr><thead>');
+
+
+
+}
+function clickRow(row_id)
+{
+	for(var k=0;k<marker_array.length;k++)
+	{
+		
+		marker_array[k].info.close();
+	}
+	for(var k=0;k<marker_array.length;k++)
+	{
+		if(marker_array[k].get("id")==row_id)
+		{
+			google.maps.event.trigger(marker_array[k], 'click');
+		}
+	}
+}
+function mouseOver(row_id)
+{
+	for(var k=0;k<marker_array.length;k++)
+	{
+		if(marker_array[k].get("id")==row_id)
+		{
+			google.maps.event.trigger(marker_array[k], 'click');
+		}
+	}
+}
+function mouseOut(row_id)
+{
+	for(var k=0;k<marker_array.length;k++)
+	{
+		
+		marker_array[k].info.close();
+	}
+}
+function createSub(str,hash,time,id,unique_id)
+{
+	
+	$jq('#'+id).prepend('<tbody><tr height="2%" id='+unique_id+' onclick="clickRow(this.id)" onmouseover="mouseOver(this.id)" onmouseout="mouseOut(this.id)" style="width:10px;background-color:#0C3;top:0px;color:#000;border:inset;white-space:nowrap;overflow:scroll;text-align:center;"><td><div style="width:500px;overflow:scroll">'+unique_id+'<h4>'+str+'</h4><h6>Created at:'+time+'</h6></div></td></tr></tbody>');
+}
+
+
+function googleSearch(txt,tweet_text,time,hash,id,index,timer)
+{
+	var lat,long;
+	var geocoder = new google.maps.Geocoder();
+	window.setTimeout(function()
+	{
+							  
+		geocoder.geocode( { 'address': txt,'region':'gb'}, function(results, status) 
+		{
+	
+    		if (status == google.maps.GeocoderStatus.OK) 
+			{
+   				lat = results[0].geometry.location.lat();
+    			long = results[0].geometry.location.lng();
+				console.log(lat+","+long);
+				if(lat==51.5073346 && long==-0.12768310000001293)
+				{
+				  
+					yahooSearch(txt,tweet_text,time,hash,id,index);
+				   
+				}
+				else if(lat>=51.11 && lat<=51.75)
+				{
+					if(long>=-0.59 && long<=1.75)
+					{
+						unique_tw_txt[index][5]=lat;
+						unique_tw_txt[index][6]=long;
+						unique_tw_txt[index][7]=1;
+						console.log("hash from google:"+hash);
+					}
+						
+				}
+				else
+				{
+					unique_tw_txt[index][5]=0;
+					unique_tw_txt[index][6]=0;
+					unique_tw_txt[index][7]=0;
+				}
+			  
+			}
+		});
+																 
+	}, timer*1500);
+	
+}
+function geo(txt,index)
+{
+	 var lat,long;
+	 
+	 var geocoder = new google.maps.Geocoder();
+	 var sw = new google.maps.LatLng(50.064192, -9.711914)
+	var ne = new google.maps.LatLng(61.015725, 3.691406)
+	var viewport = new google.maps.LatLngBounds(sw, ne);
+	 geocoder.geocode( { 'address': txt,'region':'GB','bounds': viewport}, function(results, status) {
+
+              if (status == google.maps.GeocoderStatus.OK) {
+   			 lat = results[0].geometry.location.lat();
+    		long = results[0].geometry.location.lng();
+			console.log(lat+","+long);
+			  if(lat>=51.11 && lat<=51.75)
+				{
+						if(long>=-0.59 && long<=1.75)
+						{
+							unique_tw_txt[index][5]=lat;
+							unique_tw_txt[index][6]=long;
+							unique_tw_txt[index][7]=1;
+							
+						}
+						
+					}
+					else
+					{
+						unique_tw_txt[index][5]=0;
+						unique_tw_txt[index][6]=0;
+						unique_tw_txt[index][7]=0;
+					}
+			  }
+		});
+}
+function yahooSearch(txt,tweet_text,time,hash,id,index)
+{
+	
+	
+	$jq.ajax
+	({
+		type: 'GET',
+		dataType:'json',
+		url: 'http://where.yahooapis.com/geocode?q='+txt+'&flags=J&appid=nUPJhHrV34EyYHWLEglxZXUmZTZUgHLiA7Ig0OmdkCa0cuk7cBvLIRnKiz5vSpG7QgL--',
+		success:function(test)
+		{
+			try
+			{
+				console.log("Length:"+test.ResultSet.Results.length);
+				var lat=test.ResultSet.Results[0].offsetlat;
+				var long=test.ResultSet.Results[0].offsetlon;
+				console.log(lat+" "+long);
+				if(lat==51.506321 && long==-0.12714)
+				{
+					geo(hash,index);
+				}
+				else if(lat>=51.11 && lat<=51.75)
+				{
+					if(long>=-0.59 && long<=1.75)
+					{
+						unique_tw_txt[index][5]=lat;
+						unique_tw_txt[index][6]=long;
+						unique_tw_txt[index][7]=1;
+						console.log("yahoo accessed");
+					}
+						
+				}
+				else
+				{
+					unique_tw_txt[index][5]=0;
+					unique_tw_txt[index][6]=0;
+					unique_tw_txt[index][7]=0;
+				}
+			}
+			catch(err)
+			{
+				unique_tw_txt[index][5]=0;
+				unique_tw_txt[index][6]=0;
+				unique_tw_txt[index][7]=0;
+				console.log("No points on the map to plot:Exception loop");
+			}
+				
+		}
+		,error:function (xhr, ajaxOptions, thrownError)
+		{
+               console.log("No points on the map to plot:Ajax exception");
+        } 
+	});
+			
+}
+function addDiv()
+{
+	var now = moment().utc();
+	var dt=new Date(now);
+	for(var l=0;l<unique_tw_txt.length;l++)
+	{
+		if(unique_tw_txt[l][7]==1)
+		{
+			var diff=timeDiff(convertTime(unique_tw_txt[l][2]),dt);
+			unique_tw_txt[l][8]=diff;
+		}
+	}
+	unique_tw_txt.sort(function(a,b)
+	{
+    	return a[4] - b[4];
+	});	
+	for(var l=0;l<unique_tw_txt.length;l++)
+	{
+		if(unique_tw_txt[l][7]==1)
+		{
+			createDiv(unique_tw_txt[l][1],unique_tw_txt[l][3],unique_tw_txt[l][2],unique_tw_txt[l][4]);
+			setMarker(unique_tw_txt[l][5],unique_tw_txt[l][6],unique_tw_txt[l][1],unique_tw_txt[l][2],0,unique_tw_txt[l][4]);
+			relatedTweets(unique_tw_txt[l][0],unique_tw_txt[l][1],unique_tw_txt[l][2],unique_tw_txt[l][3],unique_tw_txt[l][5],unique_tw_txt[l][6],unique_tw_txt[l][4]);
+		}
+	}
+	
+}
+function remDup(arrayName,z)
+{
+	var newArray=new Array();
+	label:for(var i=0; i<arrayName.length;i++ )
+	{  
+		for(var j=0; j<newArray.length;j++ )
+		{
+			
+  			if(newArray[j][z]==arrayName[i][z]) 
+  			continue label;
+  
+		}
+  		newArray[newArray.length] = arrayName[i];
+  	}
+ return newArray;
+}
+function Dup(arrayName)
+{
+	var newArray1=new Array();
+	label:for(var i=0; i<arrayName.length;i++ )
+	{  
+		for(var j=0; j<newArray1.length;j++ )
+		{
+			
+  			if(newArray1[j][2]==arrayName[i][2]) 
+  			continue label;
+  
+		}
+  		newArray1[newArray1.length] = arrayName[i];
+  	}
+ return newArray1;
+}
+
+function relatedTweets(txt,tweet_text,tweet_time,hash,lat,long,id)
+{
+	
+	var related_tweet_text,related_tweet_time;
+	console.log("Hash:"+hash);
+	var identifier=id;
+	var len=0;
+	var now = moment().utc();
+	var dt=new Date(now);
+	if(hash!==null)
+	{
+	$jq.ajax
+	({
+		type: 'GET',
+			
+ 		dataType:'jsonp',
+		url: 'http://search.twitter.com/search.json?q='+hash+'&lang=en&geocode='+lat+','+long+',10km',
+			 
+		success:function(_json)
+		{
+			$jq.each(_json.results,function(key)
+			{
+				len++;	
+				related_tweet_text=_json.results[key].text;
+				related_tweet_time=_json.results[key].created_at;
+				
+				if(tweet_text!=related_tweet_text && identifier==id)
+				{
+					console.log("diff"+hoursBetween(convertTime(related_tweet_time),dt));
+					if(hoursBetween(convertTime(related_tweet_time),dt)<=24)
+					{
+						var count=0;
+						var related_txt="";
+						related_txt=related_tweet_text.toString();
+						
+						var temp=related_txt.split(" ");
+						var i=related_tweet_text.search("#");
+						if(i>=0)
+						{
+							for(var k=0;k<temp.length;k++)
+							{
+								if(temp[k].search("#")>=0)
+								{
+									count++;
+								}
+							
+							}
+						
+							if(count>2)
+							{
+							
+							}
+							else
+							{
+								var time_diff=timeDiff(convertTime(tweet_time),convertTime(related_tweet_time));
+								unique_tot_related.push([lat,long,related_tweet_text,hash,related_tweet_time,1,time_diff,id]);
+							}
+						
+						}
+						else
+						{
+							var time_diff=timeDiff(convertTime(tweet_time),convertTime(related_tweet_time));
+							unique_tot_related.push([lat,long,related_tweet_text,hash,related_tweet_time,1,time_diff,id]);
+						}
+					}
+				}
+				
+			});
+					
+			if(unique_tot_related.length>=0)
+			{
+				console.log("Related tweets:"+unique_tot_related.length);
+			 	sortrelatedTweets(lat,long,id);	
+			}
+			
+		}
+		 
+		
+	 });
+	
+	}
+	
+}
+function sortrelatedTweets(lat,long,id)
+{
+	console.log("id is returned:"+id);
+	var index=unique_tot_related.length-1;
+	console.log("Similar main tweets"+similar_tweets.length);
+	for(var k=0;k<similar_tweets.length;k++)
+	{
+		
+		if(similar_tweets[k][7]==id)
+		{
+			index++;
+			unique_tot_related[index]=similar_tweets[k];
+		}
+		
+	}
+	tot_related=Dup(unique_tot_related);
+	
+	tot_related.sort(function(a,b)
+	{
+    	return a[6] - b[6];
+	});
+	
+	var lt,lg;
+	var j=0;
+	var z=1000;
+	var unique_id=parseInt(id.toString()+z.toString());
+	console.log("Unique related tweets:"+tot_related.length);
+	var arr=new Array(0.01,0.02,0.03,0.04,0.05,0.06,0.07,0.08,0.09,0.1,0.2,0.3,0.4,0.5);
+	for(var k=0;k<tot_related.length;k++)
+	{
+		console.log("spiral loop:"+tot_related[k][7]+"id:"+id);
+		
+		if(k>=8)
+	   	{
+	   		if(k>(parseInt(tot_related.length/8)*8))
+			{
+				j=arr[parseInt(k/8)];
+			}
+	  		else if(k>parseInt(tot_related.length/8))
+			{
+				j=arr[parseInt(k/8)];
+			}
+	   	}
+	   	else
+	   	{
+	   		j=0;
+	   	}
+		
+	   	if((k+1)%8==1)
+		{
+			lt=parseFloat(lat)+0.01+j;
+			lg=parseFloat(long)+0.01+j;
+			createSub(tot_related[k][2],tot_related[k][3],tot_related[k][4],tot_related[k][7],unique_id);
+			setMarker(lt,lg,tot_related[k][2],tot_related[k][4],1,unique_id);
+			unique_id++;
+		}
+		else if((k+1)%8==2)
+		{
+			lt=parseFloat(lat);
+			lg=parseFloat(long)+0.01+j;
+			createSub(tot_related[k][2],tot_related[k][3],tot_related[k][4],tot_related[k][7],unique_id);
+			setMarker(lt,lg,tot_related[k][2],tot_related[k][4],1,unique_id);
+			unique_id++;
+		}
+		else if((k+1)%8==3)
+		{
+			lt=parseFloat(lat)-0.01-j;
+			lg=parseFloat(long)+0.01+j;
+			createSub(tot_related[k][2],tot_related[k][3],tot_related[k][4],tot_related[k][7],unique_id);
+			setMarker(lt,lg,tot_related[k][2],tot_related[k][4],1,unique_id);
+			unique_id++;
+		}
+		else if((k+1)%8==4)
+		{
+			lt=parseFloat(lat)-0.01-j;
+			lg=parseFloat(long);
+			createSub(tot_related[k][2],tot_related[k][3],tot_related[k][4],tot_related[k][7],unique_id);
+			setMarker(lt,lg,tot_related[k][2],tot_related[k][4],1,unique_id);
+			unique_id++;
+		}
+		else if((k+1)%8==5)
+		{
+			lt=parseFloat(lat)-0.01-j;
+			lg=parseFloat(long)-0.01-j;
+			createSub(tot_related[k][2],tot_related[k][3],tot_related[k][4],tot_related[k][7],unique_id);
+			setMarker(lt,lg,tot_related[k][2],tot_related[k][4],1,unique_id);
+			unique_id++;
+		}
+		else if((k+1)%8==6)
+		{
+			lt=parseFloat(lat);
+			lg=parseFloat(long)-0.01-j;
+			createSub(tot_related[k][2],tot_related[k][3],tot_related[k][4],tot_related[k][7],unique_id);
+			setMarker(lt,lg,tot_related[k][2],tot_related[k][4],1,unique_id);
+			unique_id++;
+		}
+		else if((k+1)%8==7)
+		{
+			lt=parseFloat(lat)+0.01+j;
+			lg=parseFloat(long)-0.01-j;
+			createSub(tot_related[k][2],tot_related[k][3],tot_related[k][4],tot_related[k][7],unique_id);
+			setMarker(lt,lg,tot_related[k][2],tot_related[k][4],1,unique_id);
+			unique_id++;
+		}
+		else if((k+1)%8==0)
+		{
+			lt=parseFloat(lat)+0.01+j;
+			lg=parseFloat(long);
+			createSub(tot_related[k][2],tot_related[k][3],tot_related[k][4],tot_related[k][7],unique_id);
+			setMarker(lt,lg,tot_related[k][2],tot_related[k][4],1,unique_id);
+			unique_id++;
+		}
+		console.log(unique_id);
+		
+	}
+	unique_id=0;
+	id=0;
+	tot_related.splice(0,tot_related.length);
+	unique_tot_related.splice(0,unique_tot_related.length);
+}
+function convertTime(f)
+{
+	var tmp=new moment(f);
+	var tmp1=tmp.utc();
+	var z=new Date(tmp1);
+	return z;
+}
+function hoursBetween(date1, date2) 
+{
+    var one_day = 60*60*1000;
+
+    var date1_ms = date1.getTime();
+    var date2_ms = date2.getTime();
+
+    // Calculate the difference in milliseconds
+    var difference_ms = date2_ms - date1_ms;
+
+    return Math.round(difference_ms / one_day);
+}
+function timeDiff(date1, date2) 
+{
+    //Get 1 second in milliseconds
+    var one_msec = 1000;
+
+    var date1_ms = date1.getTime();
+    var date2_ms = date2.getTime();
+
+    // Calculate the difference in milliseconds
+    var difference_ms = date2_ms - date1_ms;
+
+    // Convert back to seconds
+    return Math.round(difference_ms / one_msec);
+}
+function retrieveHashtags(str)
+{
+	var out;	
+	
+	var i=str.search('#');
+	str=str.replace( /\./g, '' );
+
+	if(i>-1)
+	{
+		if(str.search('Tf')>0)
+		{
+		}
+		else
+		{
+			var j=i;
+			j++;
+			while(j<str.length)
+			{
+				if(str[j]==' ')
+				{
+					out=str.substring(i+1,j);
+					break;
+				}
+				j++;
+			}
+		}
+	}
+	else
+	{
+		str=str.toLowerCase();
+		str=str.replace(/[^0-9a-zA-Z ]/g, "");
+		var words = str.split(' ');
+		for(var k=0;k<words.length;k++)
+		{
+  			if(words[k].search("sonia")>=0||words[k].search("dan")>=0||words[k].search("http")>=0||words[k].search("good morning")>=0||words[k].search("good afternoon")>=0||words[k].search("good evening")>=0||words[k].search("charlie")>=0||words[k].search("matt")>=0)
+			{
+				break;
+			}
+			else if(words[k].search(/([a-z])?([0-9])/)>=0)
+			{
+				out=words[k].toUpperCase();
+				break;
+			}
+	
+   
+		}
+	}
+	return out;
+}
+function removeAll()
+{
+	for(var k=0;k<marker_array.length;k++)
+	{
+		marker_array[k].setMap(null);
+
+		
+	}
+	for(var k=0;k<unique_tw_txt.length;k++)
+	{
+		if(unique_tw_txt[k][7]==1)
+		{
+			$jq('#'+unique_tw_txt[k][4]).remove();
+		}
+	}
+	marker_array.splice(0,marker_array.length);
+	$jq('#myTable td').remove();
+	clearArray();
+}
+function clearArray()
+{
+	tw_txt.splice(0,tw_txt.length);
+	unique_tw_txt.splice(0,unique_tw_txt.length);
+	similar_tweets.splice(0,similar_tweets.length);
+	unique_tot_related.splice(0,unique_tot_related.length);
+	tot_related.splice(0,tot_related.length);
+}
+function reloadCheck()
+{
+	var new_tweet_count;
+	var old_tweet_count=tweetsReturned();
+	display(0);
+	
+	window.setTimeout(function()
+	{
+		new_tweet_count=tweetsReturned();
+		console.log("New tweets:"+new_tweet_count);
+		if(new_tweet_count>old_tweet_count)
+		{
+			removeAll();
+			display(1);
+			console.log("updated successfully!--------------------------------------------------->"); 
+		}
+		else
+		{
+			console.log("nothing updated--------------------------------------------------------->");
+		}
+	},60000);
+}
+
+function tweetsReturned()
+{
+	var count=0;
+	try
+	{
+	for(var z=0;unique_tw_txt.length;z++)
+	{
+		if(unique_tw_txt[z][7]==1)
+		{
+			count++;
+		}
+	}
+	}catch(err)
+	{
+	}
+	return count;
+}
+
+//Initialize the google map
+function initialize() 
+{
+	var latlng = new google.maps.LatLng(51.517, -0.106);
+	var myOptions = {
+        zoom: 10,
+        center: latlng,
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+
+ 	 map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+   
+}
+
+function setMarker(lat1,lng1,txt,val,flag,unique_id)
+{
+	if(flag==1)
+	{
+		var marker2 = new google.maps.Marker
+		({
+             position: new google.maps.LatLng(lat1,lng1),
+             map: map,
+			 title:txt+" "+val
+		});
+		iconFile = 'http://maps.google.com/mapfiles/ms/icons/green-dot.png';
+		marker2.setIcon(iconFile);
+		marker2.info = new google.maps.InfoWindow({
+  		content: '<b>'+txt+" "+val+'</b> '
+		});
+		marker2.set("id", unique_id);
+		marker_array.push(marker2);
+	}
+	else if(flag==0)
+	{
+		var marker2 = new google.maps.Marker
+		({
+            position: new google.maps.LatLng(lat1,lng1),
+            map: map,
+			title:txt+" "+val
+		 });
+		marker2.info = new google.maps.InfoWindow({
+  		content: '<b>'+txt+" "+val+" "+lat1+","+lng1+'</b> '
+		});
+		marker2.set("id", unique_id);
+		marker_array.push(marker2);
+	}
+	google.maps.event.addListener(marker2, 'click', function() 
+	{
+  		marker2.info.open(map, marker2);	
+	});
+		
+}
+
+		 
+function addLoadEvent(func) 
+{
+	var oldonload = window.onload;
+  	if (typeof window.onload != 'function') 
+	{
+    	window.onload = func;
+  	} 
+	else 
+	{
+    	window.onload = function() 
+		{
+      		if (oldonload) 
+			{
+        		oldonload();
+		
+      		}
+      		func();
+    	}
+  	}	
+}
+
+
+
+addLoadEvent(display(1));
+addLoadEvent(function() 
+{
+	
+ 	var windowWidth = $jq(window).width();
+    var windowHeight =$jq(window).height();
+   	$jq('#map_canvas').css({'width':windowWidth*0.95,'height':windowHeight*0.5});
+	$jq('.tableDiv').css({'top':windowHeight*0.9,'left':'0px','height':windowHeight*0.5,'width':windowWidth*0.95});
+	$jq('.tableDiv').doubleScroll();
+	setInterval(function() 
+	{
+		reloadCheck();
+	}, 14 * 60 * 1000);
+
+});
+google.maps.event.addDomListener(window, 'load', initialize);
+</script>
+</head>
+
+<body bgcolor="#000000">
+<input type="button" onclick="addDiv()"/>
+<input type="button" value="remove all" onclick="removeAll()"/>
+<input type="button" value="display" onclick="display(0)"/>
+<input type="button" value="Check for reload" onclick="reloadCheck()"/>
+<div id="win" style="height:300px; width:1400px; widows:inherit; ">
+  
+  <div id="map_canvas" style="border:inset; left: 0px; top: 0px;"></div>
+  <div class="tableDiv" style="width:1200px;overflow:scroll;"><table id='myTable' style="table-layout:fixed;background-color:#ffffff; color:#000; border:inset; height: 2447px; left: 5px; top: 343px; width: 5000px;"></table></div>
+  
+</div>
+</body>
+</html>
