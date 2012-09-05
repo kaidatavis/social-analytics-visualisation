@@ -3,9 +3,10 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Highcharts Example</title>
     <style type="text/css">
+	
 	body{
-    font-family: Georgia;
-    font-size: 12px;}
+    font-family::'Segoe UI',Arial,Helvetica,sans-serif;
+    font-size: 14px;}
 	.banner{
 		width:1252px;
 		height:auto;}
@@ -19,7 +20,7 @@
 	}
 	#news-banner{
 		font-size:18px;
-		background-color:#F66200;
+		background-color:#733171;
 		color:#FFFFFF;
 		width:318px;
 		visibility:hidden;		
@@ -30,134 +31,36 @@
     height: 520px;
     border: none;
     position:absolute;
-    -moz-transform: scale(0.5);
-    -moz-transform-origin: 0 0;
-    -o-transform: scale(0.5);
-    -o-transform-origin: 0 0;
-    -webkit-transform: scale(0.5);
-    -webkit-transform-origin: 0 0;
+	top:100px;
+	left:100px;
+	z-index:1;
 }
+
+
+table.user-tweets td.user{
+	font-weight:700;}
+	table.news-tweets td.user{
+	font-weight:700;}
+	
+.info{float:left; margin-left:10px;}
 </style>
     <script type="text/javascript" src="jquery-1.7.2.js"></script>
     <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDlmZn_jhR4UK9ydbiKf4Mtn9GDuZbLO5w&sensor=true">        
     </script>
-    <script src="Highcharts/js/highcharts.js"></script>
-    <script src="Highcharts/js/modules/exporting.js"></script>
     <script type="text/javascript" src="JSPlacemaker.js"></script>
     <script type="text/javascript">
-	$(document).ready(function(){
+/*	$(document).ready(function(){
 	$('#user-tweets').on('mouseenter', "a", function() {
     $(this).append($("<iframe src='"+this.href+"'></iframe>"));
 }).on('mouseleave', 'a', function () {
     $(this).find("iframe:last").remove();
 });
 });
-
-        function showTweets(value) {
-            user_ids = [];
-            array = [];
-            text_array = [];
-            var ids;
-			$("#user-tweets").html("");
-            //news_tweets(value);
-            user_tweets(value);
-
-            function news_tweets(value) {
-                $.getJSON("https://api.twitter.com/1/statuses/user_timeline.json?include_entities=false&include_rts=false&screen_name="+value+"&count=10&callback=?",
-
-                function (data) { //console.log(data);
-                    var len = data.length;
-                    for (var i = 0; i < len; ++i) {
-                        var user = data[i].user.name;
-                        var date = data[i].created_at;
-                        var profile_img = data[i].user.profile_image_url;
-                        var text = data[i].text;
-                        create_array(user, date, profile_img, text);
-                    }
-                    function create_array(a, b, c, d, e) {
-                        array.push({
-                            user: a,
-                            date: b,
-                            profile_img: c,
-                            text: d
-                        });
-                    }
-                    placemaker_news_tweets(array);
-                });
-            }
-
-            function placemaker_news_tweets(array) {
-
-                //console.log(array);
-
-                for (var i in array) {
-                    var user = array[i].user;
-                    var date = array[i].date;
-                    var profile_img = array[i].profile_img;
-                    var text = array[i].text;
-                    getLocation(user, date, profile_img, text);
-                }
-                var mapOptions = {
-                    center: new google.maps.LatLng(35.74651, - 39.46289),
-                    zoom: 2,
-                    mapTypeId: google.maps.MapTypeId.ROADMAP
-                };
-                // added this 
-                var bounds = new google.maps.LatLngBounds();
-                // create the map
-                var map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
-
-                function getLocation(user, date, profile_img, text) {
-                    var geocoder = new google.maps.Geocoder();
-                    Placemaker.getPlaces(text, function (o) {
-                        console.log(o);
-                        if (!$.isArray(o.match)) {
-                            var latitude = o.match.place.centroid.latitude;
-                            var longitude = o.match.place.centroid.longitude;
-                            var myLatLng = new google.maps.LatLng(latitude, longitude);
-                            var marker = new google.maps.Marker({
-                                icon: profile_img,
-                                title: user,
-                                map: map,
-                                position: myLatLng
-                            });
-
-                            var infowindow = new google.maps.InfoWindow({
-                                content: contentString
-                            });
-                            google.maps.event.addListener(marker, 'click', function () {
-                                infowindow.open(map, marker);
-                            });
-                            bounds.extend(myLatLng);
-                        }
-                        if ($.isArray(o.match)) {
-
-                            var latitude = o.match[0].place.centroid.latitude;
-                            var longitude = o.match[0].place.centroid.longitude;
-                            var myLatLng = new google.maps.LatLng(latitude, longitude);
-                            var marker = new google.maps.Marker({
-                                icon: profile_img,
-                                title: user,
-                                map: map,
-                                position: myLatLng
-                            });
-
-                            var infowindow = new google.maps.InfoWindow({
-                                content: contentString
-                            });
-                            google.maps.event.addListener(marker, 'click', function () {
-                                infowindow.open(map, marker);
-                            });
-                            bounds.extend(myLatLng);
-                        } //end of second if statement
-
-
-
-                    });
-                }
-            }
-
-            function user_tweets(value) {
+*/            function user_tweets(value) {
+			user_ids_2 = [];
+            array_2 = [];
+            var ids_2;
+				$("#user-tweets").html("");
                 $.getJSON("http://search.twitter.com/search.json?q="+value+"&rpp=10&include_entities=true&result_type=mixed&callback=?",
 
                 function (data) {
@@ -172,7 +75,7 @@
                     });
 
                     function create_array(a, b, c, d, e, f) {
-                        array.push({
+                        array_2.push({
                             user: a,
                             user_id: b,
                             date: c,
@@ -183,52 +86,52 @@
                     }
                     //console.log(array);
 
-                    for (var i in array) {
-                        user_ids.push(array[i].user_id);
+                    for (var i in array_2) {
+                        user_ids_2.push(array_2[i].user_id);
                         // console.log(array[i].user_id);
                     }
-                    ids = user_ids.join();
+                    ids_2 = user_ids_2.join();
 
                     //console.log(ids);
-                    search_location(ids, array);
+                    search_location(ids_2, array_2);
                 });
             }
 
-            function search_location(ids, array) {
-                $.getJSON("http://api.twitter.com/1/users/lookup.json?user_id=" + ids + "&callback=?", function (data) { //first attempt to find locations
+            function search_location(ids_2, array_2) {
+                $.getJSON("http://api.twitter.com/1/users/lookup.json?user_id=" + ids_2 + "&callback=?", function (data) { //first attempt to find locations
                     $.each(data, function (i, item) {
                         var location = item.location;
 
-                        array[i].location = location; //locations are added but some are empty
+                        array_2[i].location = location; //locations are added but some are empty
 
                     });
                     var userLocationMap = {};
-                    for (var i = 0; i < array.length; i++) {
-                        if (array[i].location) {
-                            userLocationMap[array[i].user] = array[i].location;
+                    for (var i = 0; i < array_2.length; i++) {
+                        if (array_2[i].location) {
+                            userLocationMap[array_2[i].user] = array_2[i].location;
                         }
                     }
 
-                    for (var i = 0; i < array.length; i++) {
-                        if (!array[i].location) {
-                            array[i].location = userLocationMap[array[i].user];
+                    for (var i = 0; i < array_2.length; i++) {
+                        if (!array_2[i].location) {
+                            array_2[i].location = userLocationMap[array_2[i].user];
                         }
                     }
-                    geo(array);
+                    geo(array_2);
                 });
             }
 
-            function geo(array) {
+            function geo(array_2) {
                 loc = [];
-                console.log(array);
+                console.log(array_2);
 
-                for (var i in array) {
-                    var location = array[i].location;
-                    var user = array[i].user;
-                    var date = array[i].date;
-                    var profile_img = array[i].profile_img;
-                    var text = array[i].text;
-                    var url = array[i].url;	
+                for (var i in array_2) {
+                    var location = array_2[i].location;
+                    var user = array_2[i].user;
+                    var date = array_2[i].date;
+                    var profile_img = array_2[i].profile_img;
+                    var text = array_2[i].text;
+                    var url = array_2[i].url;	
                     geocode(user, date, profile_img, text, url, location);
                 }					
                 var mapOptions = {
@@ -241,15 +144,15 @@
                 // create the map
                 var map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
                 function geocode(user, date, profile_img, text, url, location) {
-                    var templates = [];
-templates[0] = '<div><div></div><h2 class="firstHeading">'+user+'</h2><div>'+text+'</div><div><p><a href="' + url + '"target="_blank">'+url+'</a></p></div><p>Date Posted- '+date+'</p></div>';
-templates[1] = '<table width="320" border="0"><tr><td class="user"  colspan="2" rowspan="1">'+user+'</td></tr><tr><td width="45"><a href="'+profile_img+'"><img src="'+profile_img+'" width="55" height="50"/></a></td><td width="186">'+text+'<p><a href="' + url + '"target="_blank">'+url+'</a></p></td></tr></table><hr>';
-templates[2] = '<div><div></div><h2 class="firstHeading">'+user+'</h2><div>'+text+'</div><div><p><a href="' + url + '"target="_blank">'+url+'</a></p></div><p>Date Posted- '+date+'</p></div>';
-templates[3] = '<table width="320" border="0"><tr><td class="user"  colspan="2" rowspan="1">'+user+'</td></tr><tr><td width="45"><a href="'+profile_img+'"><img src="'+profile_img+'" width="55" height="50"/></a></td><td width="186">'+text+'<p><a href="' + url + '"target="_blank">'+url+'</a></p></td></tr></table><hr>';
-templates[4] = '<div><div></div><h2 class="firstHeading">'+user+'</h2><div>'+text+'</div><div><p><a href="' + url + '"target="_blank">'+url+'</a></p></div><p>Date Posted- '+date+'</p></div>';
-templates[5] = '<table width="320" border="0"><tr><td class="user"  colspan="2" rowspan="1">'+user+'</td></tr><tr><td width="45"><a href="'+profile_img+'"><img src="'+profile_img+'" width="55" height="50"/></a></td><td width="186">'+text+'<p><a href="' + url + '"target="_blank">'+url+'</a></p></td></tr></table><hr>';
-templates[6] = '<div><div></div><h2 class="firstHeading">'+user+'</h2><div>'+text+'</div><div><p><a href="' + url + '"target="_blank">'+url+'</a></p></div><p>Date Posted- '+date+'</p></div>';
-templates[7] = '<table width="320" border="0"><tr><td class="user"  colspan="2" rowspan="1">'+user+'</td></tr><tr><td width="45"><a href="'+profile_img+'"><img src="'+profile_img+'" width="55" height="50"/></a></td><td width="186">'+text+'<p><a href="' + url + '"target="_blank">'+url+'</a></p></td></tr></table><hr>';
+var templates = [];
+templates[0] = '<div><div></div><h2 class="firstHeading"><a href="'+profile_img+'" target="_blank"><img src="'+profile_img+'" width="55" height="50"/></a>'+user+'</h2><div>'+text+'</div><div><p><a href="' + url + '"target="_blank">'+url+'</a></p></div><p>Date Posted- '+date+'</p></div>';
+templates[1] = '<table class="user-tweets" width="320" border="0"><tr><td  class="user"  colspan="2" rowspan="1">'+user+'</td></tr><tr><td width="59" rowspan="2" valign="top"><a href="'+profile_img+'" target="_blank"><img src="'+profile_img+'" width="55" height="50"/></a></td><td width="186">'+text+'<br /><a href="' + url + '"target="_blank">'+url+'</a></td></tr></table><hr>';
+templates[2] = '<div><div></div><h2 class="firstHeading"><a href="'+profile_img+'" target="_blank"><img src="'+profile_img+'" width="55" height="50"/></a>'+user+'</h2><div>'+text+'</div><div><p><a href="' + url + '"target="_blank">'+url+'</a></p></div><p>Date Posted- '+date+'</p></div>';
+templates[3] = '<table class="user-tweets" width="320" border="0"><tr><td class="user"  colspan="2" rowspan="1">'+user+'</td></tr><tr><td width="59" rowspan="2" valign="top"><a href="'+profile_img+'" target="_blank"><img src="'+profile_img+'" width="55" height="50"/></a></td><td width="186">'+text+'<br /><a href="' + url + '"target="_blank">'+url+'</a></td></tr></table><hr>';
+templates[4] = '<div><div></div><h2 class="firstHeading"><a href="'+profile_img+'" target="_blank"><img src="'+profile_img+'" width="55" height="50"/></a>'+user+'</h2><div>'+text+'</div><div><p><a href="' + url + '"target="_blank">'+url+'</a></p></div><p>Date Posted- '+date+'</p></div>';
+templates[5] = '<table class="user-tweets" width="320" border="0"><tr><td class="user"  colspan="2" rowspan="1">'+user+'</td></tr><tr><td width="59" rowspan="2" valign="top"><a href="'+profile_img+'" target="_blank"><img src="'+profile_img+'" width="55" height="50"/></a></td><td width="186">'+text+'<br /><a href="' + url + '"target="_blank">'+url+'</a></td></tr></table><hr>';
+templates[6] = '<div><div></div><h2 class="firstHeading"><a href="'+profile_img+'" target="_blank"><img src="'+profile_img+'" width="55" height="50"/></a>'+user+'</h2><div>'+text+'</div><div><p><a href="' + url + '"target="_blank">'+url+'</a></p></div><p>Date Posted- '+date+'</p></div>';
+templates[7] = '<table class="user-tweets" width="320" border="0"><tr><td class="user"  colspan="2" rowspan="1">'+user+'</td></tr><tr><td width="59" rowspan="2" valign="top"><a href="'+profile_img+'" target="_blank"><img src="'+profile_img+'" width="55" height="50"/></a></td><td width="186">'+text+'<br /><a href="' + url + '"target="_blank">'+url+'</a></td></tr></table><hr>';
 
 var geocoder = new google.maps.Geocoder();
                     geocoder.geocode({
@@ -281,7 +184,7 @@ var geocoder = new google.maps.Geocoder();
                             bounds.extend(myLatLng);
                         } else if (status === google.maps.GeocoderStatus.OVER_QUERY_LIMIT) {
                             setTimeout(function () {
-                                geocode(user, date, profile_img, text, location);
+                                geocode(user,date,profile_img,text,url,location);
                             }, 500);
                         } else {
                             Placemaker.getPlaces(text, function (o) {
@@ -373,19 +276,137 @@ var geocoder = new google.maps.Geocoder();
                     });
                 }
             }
-        }
+
+            function news_tweets(value) {
+			user_ids = [];
+            array = [];
+            var ids;
+				$("#news-tweets").html("");
+                $.getJSON("https://api.twitter.com/1/statuses/user_timeline.json?include_entities=true&include_rts=false&screen_name="+value+"&count=10&callback=?",
+
+                function (data) { //console.log(data);
+                    var len = data.length;
+                    for (var i = 0; i < len; ++i) {
+                        var user = data[i].user.name;
+                        var date = data[i].created_at;
+                        var profile_img = data[i].user.profile_image_url;
+                        var text = data[i].text;
+                        var url = (data[i].entities.urls.length > 0 ? data[i].entities.urls[0].url : '');
+                        create_array(user, date, profile_img, text,url);
+                    }
+                    function create_array(a, b, c, d, e) {
+                        array.push({
+                            user: a,
+                            date: b,
+                            profile_img: c,
+                            text: d,
+							url:e
+                        });
+                    }
+                    placemaker_news_tweets(array);
+                });
+            }
+
+            function placemaker_news_tweets(array) {
+
+                console.log(array);
+
+                for (var i in array) {
+                    var user = array[i].user;
+                    var date = array[i].date;
+                    var profile_img = array[i].profile_img;
+                    var text = array[i].text;
+					var url=array[i].url;
+                    getLocation(user, date, profile_img, text,url);
+                }
+                var mapOptions = {
+                    center: new google.maps.LatLng(35.74651, - 39.46289),
+                    zoom: 2,
+                    mapTypeId: google.maps.MapTypeId.ROADMAP
+                };
+                // added this 
+                var bounds = new google.maps.LatLngBounds();
+                // create the map
+                var map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
+
+                function getLocation(user, date, profile_img, text,url) {
+				var templates = [];
+templates[0] = '<div><div></div><h2 class="firstHeading"><a href="'+profile_img+'" target="_blank"><img src="'+profile_img+'" width="55" height="50"/></a>'+user+'</h2><div>'+text+'</div><div><p><a href="' + url + '"target="_blank">'+url+'</a></p></div><p>Date Posted- '+date+'</p></div>';
+templates[1] = '<table class="news-tweets" width="320" border="0"><tr><td class="user"  colspan="2" rowspan="1">'+user+'</td></tr><tr><td width="59" rowspan="2" valign="top"><a href="'+profile_img+'" target="_blank"><img src="'+profile_img+'" width="55" height="50"/></a></td><td width="186">'+text+'<br /><a href="' + url + '"target="_blank">'+url+'</a></td></tr></table><hr>';
+templates[2] = '<div><div></div><h2 class="firstHeading"><a href="'+profile_img+'" target="_blank"><img src="'+profile_img+'" width="55" height="50"/></a>'+user+'</h2><div>'+text+'</div><div><p><a href="' + url + '"target="_blank">'+url+'</a></p></div><p>Date Posted- '+date+'</p></div>';
+templates[3] = '<table class="news-tweets" width="320" border="0"><tr><td class="user"  colspan="2" rowspan="1">'+user+'</td></tr><tr><td width="59" rowspan="2" valign="top"><a href="'+profile_img+'" target="_blank"><img src="'+profile_img+'" width="55" height="50"/></a></td><td width="186">'+text+'<br /><a href="' + url + '"target="_blank">'+url+'</a></td></tr></table><hr>';
+							var geocoder = new google.maps.Geocoder();
+                    Placemaker.getPlaces(text, function (o) {
+                        console.log(o);
+                        if (!$.isArray(o.match)) {
+                            var latitude = o.match.place.centroid.latitude;
+                            var longitude = o.match.place.centroid.longitude;
+                            var myLatLng = new google.maps.LatLng(latitude, longitude);
+                            var marker = new google.maps.Marker({
+                                icon: profile_img,
+                                title: user,
+                                map: map,
+                                position: myLatLng
+                            });
+
+						  var infowindow = new google.maps.InfoWindow({
+							  content: templates[0].replace('profile_img',profile_img).replace('user',user).replace('text',text).replace('url',url).replace('date',date)
+						  });
+						  var $tweet = $(templates[1].replace('%user',user).replace(/%profile_img/g,profile_img).replace('%text',text).replace('%url',url));
+	  					  $('#user-banner').css("visibility","visible");$('#news-banner').css("visibility","visible");
+						  $('#news-tweets').css("overflow","scroll").append($tweet);
+						  function openInfoWindow() {
+							  infowindow.open(map, marker);
+						  }
+						  google.maps.event.addListener(marker, 'click', openInfoWindow);
+						  $tweet.find(".user").on('click', openInfoWindow);
+                            bounds.extend(myLatLng);
+                        }
+                        if ($.isArray(o.match)) {
+
+                            var latitude = o.match[0].place.centroid.latitude;
+                            var longitude = o.match[0].place.centroid.longitude;
+                            var myLatLng = new google.maps.LatLng(latitude, longitude);
+                            var marker = new google.maps.Marker({
+                                icon: profile_img,
+                                title: user,
+                                map: map,
+                                position: myLatLng
+                            });
+
+						  var infowindow = new google.maps.InfoWindow({
+							  content: templates[2].replace('user',user).replace('text',text).replace('url',url).replace('date',date)
+						  });
+						  var $tweet = $(templates[3].replace('%user',user).replace(/%profile_img/g,profile_img).replace('%text',text).replace('%url',url));
+	  					  $('#user-banner').css("visibility","visible");$('#news-banner').css("visibility","visible");
+						  $('#news-tweets').css("overflow","scroll").append($tweet);
+						  function openInfoWindow() {
+							  infowindow.open(map, marker);
+						  }
+						  google.maps.event.addListener(marker, 'click', openInfoWindow);
+						  $tweet.find(".user").on('click', openInfoWindow);
+                            bounds.extend(myLatLng);
+                        } //end of second if statement
+
+
+
+                    });
+                }
+            }
     </script>
 </head>
-<body><div class="news" style="float:left; width:100%; text-align:center;">
-<img src="img/euronews.png" width="48" height="48 " title="Euronews" onclick=showTweets("euronews"); />
-<img src="img/reuters.png" width="48" height="48 " title="Reuters" onclick=showTweets("reuters"); />
-<img src="img/guardian.jpg" width="48" height="48 " title="Guardian" onclick=showTweets("guardian"); />
-<img src="img/times.png" width="48" height="48 " title="TheTimes" onclick=showTweets("thetimes"); />
-<img src="img/independent.jpg" width="48" height="48" title="The Independent" onclick=showTweets("thetimes");/></div>
+<body><div class="news" style="width:80%; text-align:center;"><div class="info"><span style="font-style: italic; color:#F00;">"Choose one of the news logos to view<br />
+news generated from users and agencies"</span></div>
+<img src="img/euronews.png" width="48" height="48 " title="Euronews" onclick="news_tweets('euronews'); user_tweets('euronews')" />
+<img src="img/reuters.png" width="48" height="48 " title="Reuters" onclick="news_tweets('reuters'); user_tweets('reuters')" />
+<img src="img/skynews.jpg" width="48" height="48 " title="Skynews" onclick="news_tweets('skynews'); user_tweets('skynews')" />
+<img src="img/guardian.jpg" width="48" height="48 " title="Guardian" onclick="news_tweets('guardian'); user_tweets('guardian')" />
+<img src="img/independent.jpg" width="48" height="48" title="The Independent" onclick="news_tweets('Independent'); user-tweets('Independent')" />
+</div>
 <div style="clear:both;"></div>
 <div class="banner"><div id="user-banner">User Tweets</div><div id="news-banner">News Tweets</div></div><div style="clear:both;"></div>
 <div id="user-tweets" style="float:left; width:25%; border:solid #FCF 1px; height:400px;"></div>
-<div id="map_canvas" style="float:left; margin-left:10px;width:47%; border:solid #FCF 1px; height:400px;"></div>
+<div id="map_canvas" style="float:left; margin-left:10px;width:47%; border:solid #FCF 1px; height:400px; " ></div>
 
 <div id="news-tweets" style="float:left; width:25%; margin-left:10px; border:solid #FCF 1px; height:400px;"></div>
 
