@@ -397,11 +397,11 @@ templates[3] = '<table class="news-tweets" width="320" border="0"><tr><td class=
 </head>
 <body><div class="news" style="width:80%; text-align:center;"><div class="info"><span style="font-style: italic; color:#F00;">"Choose one of the news logos to view<br />
 news generated from users and agencies"</span></div>
-<img src="img/euronews.png" width="48" height="48 " title="Euronews" onclick="news_tweets('euronews'); user_tweets('euronews')" />
-<img src="img/reuters.png" width="48" height="48 " title="Reuters" onclick="news_tweets('reuters'); user_tweets('reuters')" />
-<img src="img/skynews.jpg" width="48" height="48 " title="Skynews" onclick="news_tweets('skynews'); user_tweets('skynews')" />
-<img src="img/guardian.jpg" width="48" height="48 " title="Guardian" onclick="news_tweets('guardian'); user_tweets('guardian')" />
-<img src="img/independent.jpg" width="48" height="48" title="The Independent" onclick="news_tweets('Independent'); user-tweets('Independent')" />
+<img src="euronews.png" width="48" height="48 " title="Euronews" onclick="news_tweets('euronews'); user_tweets('euronews')" />
+<img src="reuters.png" width="48" height="48 " title="Reuters" onclick="news_tweets('reuters'); user_tweets('reuters')" />
+<img src="skynews.jpg" width="48" height="48 " title="Skynews" onclick="news_tweets('skynews'); user_tweets('skynews')" />
+<img src="guardian.jpg" width="48" height="48 " title="Guardian" onclick="news_tweets('guardian'); user_tweets('guardian')" />
+<img src="independent.jpg" width="48" height="48" title="The Independent" onclick="news_tweets('Independent'); user-tweets('Independent')" />
 </div>
 <div style="clear:both;"></div>
 <div class="banner"><div id="user-banner">User Tweets</div><div id="news-banner">News Tweets</div></div><div style="clear:both;"></div>
