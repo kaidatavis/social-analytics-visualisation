@@ -65,7 +65,7 @@ function display(flag)
 				setTimeout(function()
 				{
 					addDiv();
-				},40*1000);
+				},2*1000);
 			}
 			
 		}
@@ -101,8 +101,9 @@ function uniqueMaintweets()
 		{
 			if(unique_tw_txt[k][3]!=null)
 			{
-				timer++;
-				googleSearch(unique_tw_txt[k][0],unique_tw_txt[k][1],unique_tw_txt[k][2],unique_tw_txt[k][3],unique_tw_txt[k][4],k,timer);
+				//timer++;
+				//googleSearch(unique_tw_txt[k][0],unique_tw_txt[k][1],unique_tw_txt[k][2],unique_tw_txt[k][3],unique_tw_txt[k][4],k,timer);
+				yahooSearch(unique_tw_txt[k][0],unique_tw_txt[k][1],unique_tw_txt[k][2],unique_tw_txt[k][3],unique_tw_txt[k][4],k);
 			}
 		}
 		
@@ -205,7 +206,7 @@ function googleSearch(txt,tweet_text,time,hash,id,index,timer)
 	}, timer*1500);
 	
 }
-function geo(txt,index)
+function geo(txt,tweet_text,time,hash,id,index)
 {
 	 var lat,long;
 	 
@@ -213,7 +214,7 @@ function geo(txt,index)
 	 var sw = new google.maps.LatLng(50.064192, -9.711914)
 	var ne = new google.maps.LatLng(61.015725, 3.691406)
 	var viewport = new google.maps.LatLngBounds(sw, ne);
-	 geocoder.geocode( { 'address': txt,'region':'GB','bounds': viewport}, function(results, status) {
+	 geocoder.geocode( { 'address': hash,'region':'GB','bounds': viewport}, function(results, status) {
 
               if (status == google.maps.GeocoderStatus.OK) {
    			 lat = results[0].geometry.location.lat();
@@ -226,7 +227,8 @@ function geo(txt,index)
 							unique_tw_txt[index][5]=lat;
 							unique_tw_txt[index][6]=long;
 							unique_tw_txt[index][7]=1;
-							
+							//console.log();
+							console.log(hash+"+"+txt+"----->google accessed");
 						}
 						
 					}
@@ -258,7 +260,7 @@ function yahooSearch(txt,tweet_text,time,hash,id,index)
 				console.log(lat+" "+long);
 				if(lat==51.506321 && long==-0.12714)
 				{
-					geo(hash,index);
+					geo(txt,tweet_text,time,hash,id,index);
 				}
 				else if(lat>=51.11 && lat<=51.75)
 				{
@@ -267,7 +269,7 @@ function yahooSearch(txt,tweet_text,time,hash,id,index)
 						unique_tw_txt[index][5]=lat;
 						unique_tw_txt[index][6]=long;
 						unique_tw_txt[index][7]=1;
-						console.log("yahoo accessed");
+						console.log(txt+"----->yahoo accessed");
 					}
 						
 				}
@@ -370,7 +372,7 @@ function relatedTweets(txt,tweet_text,tweet_time,hash,lat,long,id)
 		type: 'GET',
 			
  		dataType:'jsonp',
-		url: 'http://search.twitter.com/search.json?q='+hash+'&lang=en&geocode='+lat+','+long+',10km',
+		url: 'http://search.twitter.com/search.json?q='+hash+'&lang=en&geocode='+lat+','+long+',100km',
 			 
 		success:function(_json)
 		{
@@ -593,48 +595,83 @@ function timeDiff(date1, date2)
 function retrieveHashtags(str)
 {
 	var out;	
-
+		var hash=str;
+		var flag=0;
 		str=str.toLowerCase();
 		str = str.replace(/[&\/\\#,+()$~%.'":*?<>{}]/g,'');
 		str = str.replace(/,/g,'');
 		str = str.replace(/-/g,'');
-		var words = str.split(' ');
+		
+		var other = hash.split(' ');
+		for(var k=0;k<other.length;k++)
+		{
+			var count=0;
+			var temp=other[k];
+			if(other[k].search('#')>=0)
+			{
+				for(var i=0;i<temp.length;i++)
+				{
+					if(temp[0]==temp[0].toUpperCase())
+					{
+						count++;
+					}
+				}
+				if(count==2)
+				{
+					out=other[k];
+					flag=1;
+					break;
+				}
+				else
+				{
+					flag=0;
+				}
+			}
+			if(flag==1)
+			{
+				break;
+			}
+		}
+		if(flag==0)
+		{
+			var words = str.split(' ');
 		for(var k=0;k<words.length;k++)
 		{
-  			if(words[k].search("sonia")>=0||words[k].search("dan")>=0||words[k].search("http")>=0||words[k].search("good")>=0||words[k].search("good evening")>=0||words[k].search("charlie")>=0||words[k].search("matt")>=0)
+  			
+			if(words[k].search("sonia")>=0||words[k].search("dan")>=0||words[k].search("http")>=0||words[k].search("good")>=0||words[k].search("good evening")>=0||words[k].search("charlie")>=0||words[k].search("matt")>=0)
 			{
 				out=null;
 				break;
 			}
-			else if(words[k].search(/([a-z])?([0-9])/)>=0)
+			else if(words[k].search(/(a)?([0-9])/)>=0)
 			{
 				out=words[k].toUpperCase();
 					
 					
-					if(out.search("LON")>=0)
+					if(out.search("L")>=0)
 					{
-						var z=out.search("LON");
-						out=out.slice(0, z) + " " + out.slice(z,out.length);
+						var z=out.search("L");
+						out=out.slice(0, z) + " " + "LONDON"; //out.slice(z,out.length);
 						break;
 					}
 					else if(out.search("M")>=0||out.search("J")>=0)
 					{
 						out=null;
-					}
-					else if(parseInt(out))
-					{
-						out=null;
-					}
-					else if(out.search("LON")<0)
-					{
-						out=out+" LONDON";
 						break;
 					}
+					else 
+					{
+						out=null;
+						
+					}
+					
 					
 				
 			}
-	
+			
    
+		}
+		
 		}
 	
 	return out;
