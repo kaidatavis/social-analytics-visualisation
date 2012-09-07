@@ -266,6 +266,10 @@ function yahooSearch(txt,tweet_text,time,hash,id,index)
 				{
 					geo(txt,tweet_text,time,hash,id,index);
 				}
+				else if(lat==51.506325 && long==-0.127144)
+				{
+					geo(txt,tweet_text,time,hash,id,index);
+				}
 				else if(lat>=51.11 && lat<=51.75)
 				{
 					if(long>=-0.59 && long<=1.75)
@@ -790,7 +794,7 @@ function setMarker(lat1,lng1,txt,val,flag,unique_id,user,pro_pic)
 		({
             position: new google.maps.LatLng(lat1,lng1),
             map: map,
-			title:txt+" "+val
+			title:txt+" "+val+" "+lat1+lng1
 		 });
 		marker2.info = new google.maps.InfoWindow({
   		content: '<table><td><img src="'+pro_pic+'"></td><td><h2>'+user+'</h2><h3>'+txt+'</h3><h5>Created at:'+val+'</h5></td></table>'
