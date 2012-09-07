@@ -120,7 +120,7 @@ function createDiv(str,hash,time,id,user,pro_pic)
 {
 
 	$jq('#myTable').append('<td style="border:inset;table-layout:fixed;white-space:nowrap;"><div style="height:300px;overflow:scroll"><table id='+id+' style="border:inset;table-layout:fixed;word-wrap:break-word;"></table></div></td>');
-	$jq('#'+id).append('<thead><tr style="background-color:#FF9999;white-space:nowrap;color:#000;border:inset;overflow:scroll" onclick="clickRow(this.id)" onmouseover="mouseOver(this.id)" onmouseout="mouseOut(this.id)" id='+id+'><td><div style="width:500px;overflow:scroll"><img src="'+pro_pic+'"><h5>'+user+'</h5><h4>'+str+'</h4><h6>Created at:'+time+'</h6></div></td></tr><thead>');
+	$jq('#'+id).append('<thead><tr style="background-color:#FF9999;white-space:nowrap;color:#000;border:inset;overflow:scroll" onclick="clickRow(this.id)" onmouseover="mouseOver(this.id)" onmouseout="mouseOut(this.id)" id='+id+'><td><div style="width:500px;overflow:scroll"><table><td><img src="'+pro_pic+'"></td><td><h5>'+user+'</h5><h4>'+str+'</h4><h6>Created at:'+time+'</h6></td></table></div></td></tr><thead>');
 
 
 
@@ -161,7 +161,7 @@ function mouseOut(row_id)
 function createSub(str,hash,time,id,unique_id,user,pro_pic)
 {
 	
-	$jq('#'+id).prepend('<tbody><tr height="2%" id='+unique_id+' onclick="clickRow(this.id)" onmouseover="mouseOver(this.id)" onmouseout="mouseOut(this.id)" style="width:10px;background-color:#0C3;top:0px;color:#000;border:inset;white-space:nowrap;overflow:scroll;"><td><div style="width:500px;overflow:scroll"><img src="'+pro_pic+'"><h5>'+user+'</h5><h4>'+str+'</h4><h6>Created at:'+time+'</h6></div></td></tr></tbody>');
+	$jq('#'+id).prepend('<tbody><tr height="2%" id='+unique_id+' onclick="clickRow(this.id)" onmouseover="mouseOver(this.id)" onmouseout="mouseOut(this.id)" style="width:10px;background-color:#0C3;top:0px;color:#000;border:inset;white-space:nowrap;overflow:scroll;"><td><div style="width:500px;overflow:scroll"><table><td><img src="'+pro_pic+'"></td><td><h5>'+user+'</h5><h4>'+str+'</h4><h6>Created at:'+time+'</h6></td></table></div></td></tr></tbody>');
 }
 
 
@@ -783,7 +783,7 @@ function setMarker(lat1,lng1,txt,val,flag,unique_id,user,pro_pic)
 		iconFile = 'http://maps.google.com/mapfiles/ms/icons/green-dot.png';
 		marker2.setIcon(iconFile);
 		marker2.info = new google.maps.InfoWindow({
-  		content: '<table><td><img src="'+pro_pic+'"></td><td><h2>'+user+'</h2><h3>'+txt+'</h3><h5>Created at:'+val+'</h5></td></table>'
+  		content: '<div style="background-color:#0C3;"><table><td><img src="'+pro_pic+'"></td><td><h2>'+user+'</h2><h3>'+txt+'</h3><h5>Created at:'+val+'</h5></td></table></div>'
 		});
 		marker2.set("id", unique_id);
 		marker_array.push(marker2);
@@ -797,7 +797,7 @@ function setMarker(lat1,lng1,txt,val,flag,unique_id,user,pro_pic)
 			title:txt+" "+val+" "+lat1+lng1
 		 });
 		marker2.info = new google.maps.InfoWindow({
-  		content: '<table><td><img src="'+pro_pic+'"></td><td><h2>'+user+'</h2><h3>'+txt+'</h3><h5>Created at:'+val+'</h5></td></table>'
+  		content: '<div style="background-color:#FF9999;"><table><td><img src="'+pro_pic+'"></td><td><h2>'+user+'</h2><h3>'+txt+'</h3><h5>Created at:'+val+'</h5></td></table></div>'
 		});
 		marker2.set("id", unique_id);
 		marker_array.push(marker2);
