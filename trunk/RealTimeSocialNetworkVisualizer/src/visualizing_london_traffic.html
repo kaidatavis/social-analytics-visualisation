@@ -40,6 +40,10 @@ function display(flag)
 				len++;
 				var tweet_text=_json[key].text;
 				var time=_json[key].created_at;
+				var usr=_json[key].user.screen_name;
+				var pro_pic=_json[key].user.profile_image_url;
+				pro_pic = pro_pic.replace(/\//g,'/');
+				
 				var now = moment().utc();
 				var dt=new Date(now);
 				var diff=hoursBetween(convertTime(time),dt);
@@ -53,7 +57,7 @@ function display(flag)
 					
 					var hash=retrieveHashtags(tweet_text);
 					console.log("Hash tag:"+hash);
-					tw_txt.push([res,tweet_text,time,hash,id]);
+					tw_txt.push([res,tweet_text,time,hash,id,0,0,0,usr,pro_pic]);
 					id++;
 				}
 				
@@ -92,7 +96,7 @@ function uniqueMaintweets()
 				{
 					flag=1;
 					var time_diff=timeDiff(convertTime(unique_tw_txt[l][2]),convertTime(unique_tw_txt[k][2]));
-					similar_tweets.push([unique_tw_txt[l][5],unique_tw_txt[l][6],unique_tw_txt[k][1],unique_tw_txt[l][2],unique_tw_txt[k][2],1,time_diff,unique_tw_txt[l][4]]);
+					similar_tweets.push([unique_tw_txt[l][5],unique_tw_txt[l][6],unique_tw_txt[k][1],unique_tw_txt[l][2],unique_tw_txt[k][2],1,time_diff,unique_tw_txt[l][4],unique_tw_txt[l][8],unique_tw_txt[l][9]]);
 					break;
 				}
 			}
@@ -112,11 +116,11 @@ function uniqueMaintweets()
 }
 
 
-function createDiv(str,hash,time,id)
+function createDiv(str,hash,time,id,user,pro_pic)
 {
 
 	$jq('#myTable').append('<td style="border:inset;table-layout:fixed;white-space:nowrap;"><div style="height:300px;overflow:scroll"><table id='+id+' style="border:inset;table-layout:fixed;word-wrap:break-word;"></table></div></td>');
-	$jq('#'+id).append('<thead><tr style="background-color:#FF9999;text-align:center;white-space:nowrap;color:#000;border:inset;overflow:scroll" onclick="clickRow(this.id)" onmouseover="mouseOver(this.id)" onmouseout="mouseOut(this.id)" id='+id+'><td><div style="width:500px;overflow:scroll">'+id+'<h4>'+str+'</h4><h6>Created at:'+time+'</h6></div></td></tr><thead>');
+	$jq('#'+id).append('<thead><tr style="background-color:#FF9999;white-space:nowrap;color:#000;border:inset;overflow:scroll" onclick="clickRow(this.id)" onmouseover="mouseOver(this.id)" onmouseout="mouseOut(this.id)" id='+id+'><td><div style="width:500px;overflow:scroll"><img src="'+pro_pic+'"><h5>'+user+'</h5><h4>'+str+'</h4><h6>Created at:'+time+'</h6></div></td></tr><thead>');
 
 
 
@@ -154,10 +158,10 @@ function mouseOut(row_id)
 		marker_array[k].info.close();
 	}
 }
-function createSub(str,hash,time,id,unique_id)
+function createSub(str,hash,time,id,unique_id,user,pro_pic)
 {
 	
-	$jq('#'+id).prepend('<tbody><tr height="2%" id='+unique_id+' onclick="clickRow(this.id)" onmouseover="mouseOver(this.id)" onmouseout="mouseOut(this.id)" style="width:10px;background-color:#0C3;top:0px;color:#000;border:inset;white-space:nowrap;overflow:scroll;text-align:center;"><td><div style="width:500px;overflow:scroll">'+unique_id+'<h4>'+str+'</h4><h6>Created at:'+time+'</h6></div></td></tr></tbody>');
+	$jq('#'+id).prepend('<tbody><tr height="2%" id='+unique_id+' onclick="clickRow(this.id)" onmouseover="mouseOver(this.id)" onmouseout="mouseOut(this.id)" style="width:10px;background-color:#0C3;top:0px;color:#000;border:inset;white-space:nowrap;overflow:scroll;"><td><div style="width:500px;overflow:scroll"><img src="'+pro_pic+'"><h5>'+user+'</h5><h4>'+str+'</h4><h6>Created at:'+time+'</h6></div></td></tr></tbody>');
 }
 
 
@@ -305,7 +309,7 @@ function addDiv()
 		if(unique_tw_txt[l][7]==1)
 		{
 			var diff=timeDiff(convertTime(unique_tw_txt[l][2]),dt);
-			unique_tw_txt[l][8]=diff;
+			unique_tw_txt[l][10]=diff;
 		}
 	}
 	unique_tw_txt.sort(function(a,b)
@@ -316,8 +320,8 @@ function addDiv()
 	{
 		if(unique_tw_txt[l][7]==1)
 		{
-			createDiv(unique_tw_txt[l][1],unique_tw_txt[l][3],unique_tw_txt[l][2],unique_tw_txt[l][4]);
-			setMarker(unique_tw_txt[l][5],unique_tw_txt[l][6],unique_tw_txt[l][1],unique_tw_txt[l][2],0,unique_tw_txt[l][4]);
+			createDiv(unique_tw_txt[l][1],unique_tw_txt[l][3],unique_tw_txt[l][2],unique_tw_txt[l][4],unique_tw_txt[l][8],unique_tw_txt[l][9]);
+			setMarker(unique_tw_txt[l][5],unique_tw_txt[l][6],unique_tw_txt[l][1],unique_tw_txt[l][2],0,unique_tw_txt[l][4],unique_tw_txt[l][8],unique_tw_txt[l][9]);
 			relatedTweets(unique_tw_txt[l][0],unique_tw_txt[l][1],unique_tw_txt[l][2],unique_tw_txt[l][3],unique_tw_txt[l][5],unique_tw_txt[l][6],unique_tw_txt[l][4]);
 		}
 	}
@@ -359,7 +363,7 @@ function Dup(arrayName)
 function relatedTweets(txt,tweet_text,tweet_time,hash,lat,long,id)
 {
 	
-	var related_tweet_text,related_tweet_time;
+	var related_tweet_text,related_tweet_time,related_user,related_pro_pic;
 	console.log("Hash:"+hash);
 	var identifier=id;
 	var len=0;
@@ -381,6 +385,9 @@ function relatedTweets(txt,tweet_text,tweet_time,hash,lat,long,id)
 				len++;	
 				related_tweet_text=_json.results[key].text;
 				related_tweet_time=_json.results[key].created_at;
+				related_user=_json.results[key].from_user;
+				related_pro_pic=_json.results[key].profile_image_url;
+				related_pro_pic = related_pro_pic.replace(/\//g,'/');
 				
 				if(tweet_text!=related_tweet_text && identifier==id)
 				{
@@ -411,14 +418,14 @@ function relatedTweets(txt,tweet_text,tweet_time,hash,lat,long,id)
 							else
 							{
 								var time_diff=timeDiff(convertTime(tweet_time),convertTime(related_tweet_time));
-								unique_tot_related.push([lat,long,related_tweet_text,hash,related_tweet_time,1,time_diff,id]);
+								unique_tot_related.push([lat,long,related_tweet_text,hash,related_tweet_time,1,time_diff,id,related_user,related_pro_pic]);
 							}
 						
 						}
 						else
 						{
 							var time_diff=timeDiff(convertTime(tweet_time),convertTime(related_tweet_time));
-							unique_tot_related.push([lat,long,related_tweet_text,hash,related_tweet_time,1,time_diff,id]);
+							unique_tot_related.push([lat,long,related_tweet_text,hash,related_tweet_time,1,time_diff,id,related_user,related_pro_pic]);
 						}
 					}
 				}
@@ -491,64 +498,64 @@ function sortrelatedTweets(lat,long,id)
 		{
 			lt=parseFloat(lat)+0.01+j;
 			lg=parseFloat(long)+0.01+j;
-			createSub(tot_related[k][2],tot_related[k][3],tot_related[k][4],tot_related[k][7],unique_id);
-			setMarker(lt,lg,tot_related[k][2],tot_related[k][4],1,unique_id);
+			createSub(tot_related[k][2],tot_related[k][3],tot_related[k][4],tot_related[k][7],unique_id,tot_related[k][8],tot_related[k][9]);
+			setMarker(lt,lg,tot_related[k][2],tot_related[k][4],1,unique_id,tot_related[k][8],tot_related[k][9]);
 			unique_id++;
 		}
 		else if((k+1)%8==2)
 		{
 			lt=parseFloat(lat);
 			lg=parseFloat(long)+0.01+j;
-			createSub(tot_related[k][2],tot_related[k][3],tot_related[k][4],tot_related[k][7],unique_id);
-			setMarker(lt,lg,tot_related[k][2],tot_related[k][4],1,unique_id);
+			createSub(tot_related[k][2],tot_related[k][3],tot_related[k][4],tot_related[k][7],unique_id,tot_related[k][8],tot_related[k][9]);
+			setMarker(lt,lg,tot_related[k][2],tot_related[k][4],1,unique_id,tot_related[k][8],tot_related[k][9]);
 			unique_id++;
 		}
 		else if((k+1)%8==3)
 		{
 			lt=parseFloat(lat)-0.01-j;
 			lg=parseFloat(long)+0.01+j;
-			createSub(tot_related[k][2],tot_related[k][3],tot_related[k][4],tot_related[k][7],unique_id);
-			setMarker(lt,lg,tot_related[k][2],tot_related[k][4],1,unique_id);
+			createSub(tot_related[k][2],tot_related[k][3],tot_related[k][4],tot_related[k][7],unique_id,tot_related[k][8],tot_related[k][9]);
+			setMarker(lt,lg,tot_related[k][2],tot_related[k][4],1,unique_id,tot_related[k][8],tot_related[k][9]);
 			unique_id++;
 		}
 		else if((k+1)%8==4)
 		{
 			lt=parseFloat(lat)-0.01-j;
 			lg=parseFloat(long);
-			createSub(tot_related[k][2],tot_related[k][3],tot_related[k][4],tot_related[k][7],unique_id);
-			setMarker(lt,lg,tot_related[k][2],tot_related[k][4],1,unique_id);
+			createSub(tot_related[k][2],tot_related[k][3],tot_related[k][4],tot_related[k][7],unique_id,tot_related[k][8],tot_related[k][9]);
+			setMarker(lt,lg,tot_related[k][2],tot_related[k][4],1,unique_id,tot_related[k][8],tot_related[k][9]);
 			unique_id++;
 		}
 		else if((k+1)%8==5)
 		{
 			lt=parseFloat(lat)-0.01-j;
 			lg=parseFloat(long)-0.01-j;
-			createSub(tot_related[k][2],tot_related[k][3],tot_related[k][4],tot_related[k][7],unique_id);
-			setMarker(lt,lg,tot_related[k][2],tot_related[k][4],1,unique_id);
+			createSub(tot_related[k][2],tot_related[k][3],tot_related[k][4],tot_related[k][7],unique_id,tot_related[k][8],tot_related[k][9]);
+			setMarker(lt,lg,tot_related[k][2],tot_related[k][4],1,unique_id,tot_related[k][8],tot_related[k][9]);
 			unique_id++;
 		}
 		else if((k+1)%8==6)
 		{
 			lt=parseFloat(lat);
 			lg=parseFloat(long)-0.01-j;
-			createSub(tot_related[k][2],tot_related[k][3],tot_related[k][4],tot_related[k][7],unique_id);
-			setMarker(lt,lg,tot_related[k][2],tot_related[k][4],1,unique_id);
+			createSub(tot_related[k][2],tot_related[k][3],tot_related[k][4],tot_related[k][7],unique_id,tot_related[k][8],tot_related[k][9]);
+			setMarker(lt,lg,tot_related[k][2],tot_related[k][4],1,unique_id,tot_related[k][8],tot_related[k][9]);
 			unique_id++;
 		}
 		else if((k+1)%8==7)
 		{
 			lt=parseFloat(lat)+0.01+j;
 			lg=parseFloat(long)-0.01-j;
-			createSub(tot_related[k][2],tot_related[k][3],tot_related[k][4],tot_related[k][7],unique_id);
-			setMarker(lt,lg,tot_related[k][2],tot_related[k][4],1,unique_id);
+			createSub(tot_related[k][2],tot_related[k][3],tot_related[k][4],tot_related[k][7],unique_id,tot_related[k][8],tot_related[k][9]);
+			setMarker(lt,lg,tot_related[k][2],tot_related[k][4],1,unique_id,tot_related[k][8],tot_related[k][9]);
 			unique_id++;
 		}
 		else if((k+1)%8==0)
 		{
 			lt=parseFloat(lat)+0.01+j;
 			lg=parseFloat(long);
-			createSub(tot_related[k][2],tot_related[k][3],tot_related[k][4],tot_related[k][7],unique_id);
-			setMarker(lt,lg,tot_related[k][2],tot_related[k][4],1,unique_id);
+			createSub(tot_related[k][2],tot_related[k][3],tot_related[k][4],tot_related[k][7],unique_id,tot_related[k][8],tot_related[k][9]);
+			setMarker(lt,lg,tot_related[k][2],tot_related[k][4],1,unique_id,tot_related[k][8],tot_related[k][9]);
 			unique_id++;
 		}
 		console.log(unique_id);
@@ -724,7 +731,7 @@ function reloadCheck()
 		{
 			console.log("nothing updated--------------------------------------------------------->");
 		}
-	},60000);
+	},2*1000);
 }
 
 function tweetsReturned()
@@ -759,7 +766,7 @@ function initialize()
    
 }
 
-function setMarker(lat1,lng1,txt,val,flag,unique_id)
+function setMarker(lat1,lng1,txt,val,flag,unique_id,user,pro_pic)
 {
 	if(flag==1)
 	{
@@ -772,7 +779,7 @@ function setMarker(lat1,lng1,txt,val,flag,unique_id)
 		iconFile = 'http://maps.google.com/mapfiles/ms/icons/green-dot.png';
 		marker2.setIcon(iconFile);
 		marker2.info = new google.maps.InfoWindow({
-  		content: '<b>'+txt+" "+val+'</b> '
+  		content: '<table><td><img src="'+pro_pic+'"></td><td><h2>'+user+'</h2><h3>'+txt+'</h3><h5>Created at:'+val+'</h5></td></table>'
 		});
 		marker2.set("id", unique_id);
 		marker_array.push(marker2);
@@ -786,7 +793,7 @@ function setMarker(lat1,lng1,txt,val,flag,unique_id)
 			title:txt+" "+val
 		 });
 		marker2.info = new google.maps.InfoWindow({
-  		content: '<b>'+txt+" "+val+" "+lat1+","+lng1+'</b> '
+  		content: '<table><td><img src="'+pro_pic+'"></td><td><h2>'+user+'</h2><h3>'+txt+'</h3><h5>Created at:'+val+'</h5></td></table>'
 		});
 		marker2.set("id", unique_id);
 		marker_array.push(marker2);
