@@ -417,7 +417,7 @@ function relatedTweets(txt,tweet_text,tweet_time,hash,lat,long,id)
 						
 							if(count>2)
 							{
-							
+								
 							}
 							else
 							{
@@ -620,16 +620,42 @@ function retrieveHashtags(str)
 			var temp=other[k];
 			if(other[k].search('#')>=0)
 			{
+				
 				for(var i=0;i<temp.length;i++)
 				{
-					if(temp[0]==temp[0].toUpperCase())
+					if(temp[i]==temp[i].toUpperCase())
 					{
 						count++;
 					}
 				}
-				if(count==2)
+				if(count>=2)
 				{
-					out=other[k];
+					var c=0;
+					temp = other[k].replace(/[&\/\\#,+()$~%.'":;*?<>{}]/g,'');
+					temp = temp.replace(/,/g,'');
+					temp = temp.replace(/-/g,'');
+					for(var i=0;i<temp.length;i++)
+					{
+						if(temp[i]==temp[i].toUpperCase() && /^\d+$/.test(temp[i])==false)
+						{
+							c++;
+							if(c==2)
+							{
+								if(temp.search('A')>=0)
+								{
+									var z=temp.search("L");
+									temp=temp.slice(0, z) + " " + "LONDON"; //out.slice(z,out.length);
+									break;
+								}
+								else
+								{
+									temp=temp.slice(0, i)+" "+temp.slice(i, temp.length);
+									break;
+								}
+							}
+						}
+					}
+					out=temp;
 					flag=1;
 					break;
 				}
@@ -643,7 +669,7 @@ function retrieveHashtags(str)
 				break;
 			}
 		}
-		if(flag==0)
+		if(flag==0||out==null)
 		{
 			var words = str.split(' ');
 		for(var k=0;k<words.length;k++)
@@ -768,6 +794,8 @@ function initialize()
 
  	 map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
    
+    var trafficLayer = new google.maps.TrafficLayer();
+        trafficLayer.setMap(map);
 }
 
 function setMarker(lat1,lng1,txt,val,flag,unique_id,user,pro_pic)
