@@ -15,6 +15,9 @@
 var map;
 var new_tweet_id=1000;
 var $jq=jQuery.noConflict();
+var bflag=0;
+var trafficflag=0;
+var trafficLayer;
 var tw_txt=new Array();
 var unique_tw_txt=new Array();
 var tot_related=new Array();
@@ -69,7 +72,7 @@ function display(flag)
 				setTimeout(function()
 				{
 					addDiv();
-				},2*1000);
+				},4*1000);
 			}
 			
 		}
@@ -144,9 +147,11 @@ function mouseOver(row_id)
 {
 	for(var k=0;k<marker_array.length;k++)
 	{
-		if(marker_array[k].get("id")==row_id)
+		if(marker_array[k].get("id")==row_id && marker_array[k].visible==true)
 		{
 			google.maps.event.trigger(marker_array[k], 'click');
+			marker_array[k].setAnimation(google.maps.Animation.BOUNCE);
+        	
 		}
 	}
 }
@@ -156,6 +161,49 @@ function mouseOut(row_id)
 	{
 		
 		marker_array[k].info.close();
+		
+		
+          marker_array[k].setAnimation(null);
+        
+	}
+}
+
+function showUserTweets()
+{
+	if(bflag==0)
+	{
+		for(var k=0;k<marker_array.length;k++)
+		{
+			if(marker_array[k].get("flag")==1)
+			{
+				marker_array[k].visible=false;
+			}
+		}
+		bflag=1;
+	}
+	else if(bflag==1)
+	{
+		for(var k=0;k<marker_array.length;k++)
+		{
+			if(marker_array[k].get("flag")==1)
+			{
+				marker_array[k].visible=true;
+			}
+		}
+		bflag=0;
+	}
+}
+function showTrafficOverlay()
+{
+	if(trafficflag==0)
+	{
+		trafficLayer.setMap(null);
+		trafficflag=1;
+	}
+	else if(trafficflag==1)
+	{
+		trafficLayer.setMap(map);
+		trafficflag=0;
 	}
 }
 function createSub(str,hash,time,id,unique_id,user,pro_pic)
@@ -678,6 +726,7 @@ function retrieveHashtags(str)
 			if(words[k].search("sonia")>=0||words[k].search("dan")>=0||words[k].search("http")>=0||words[k].search("good")>=0||words[k].search("good evening")>=0||words[k].search("charlie")>=0||words[k].search("matt")>=0)
 			{
 				out=null;
+				console.log("encountered--------------------------------------------------------------------->");
 				break;
 			}
 			else if(words[k].search(/(a)?([0-9])/)>=0)
@@ -794,7 +843,7 @@ function initialize()
 
  	 map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
    
-    var trafficLayer = new google.maps.TrafficLayer();
+    	trafficLayer = new google.maps.TrafficLayer();
         trafficLayer.setMap(map);
 }
 
@@ -806,7 +855,9 @@ function setMarker(lat1,lng1,txt,val,flag,unique_id,user,pro_pic)
 		({
              position: new google.maps.LatLng(lat1,lng1),
              map: map,
-			 title:txt+" "+val
+			 animation: google.maps.Animation.DROP,
+			 title:txt+" "+val,
+			 visible:true
 		});
 		iconFile = 'http://maps.google.com/mapfiles/ms/icons/green-dot.png';
 		marker2.setIcon(iconFile);
@@ -814,6 +865,7 @@ function setMarker(lat1,lng1,txt,val,flag,unique_id,user,pro_pic)
   		content: '<div style="background-color:#0C3;"><table><td><img src="'+pro_pic+'"></td><td><h2>'+user+'</h2><h3>'+txt+'</h3><h5>Created at:'+val+'</h5></td></table></div>'
 		});
 		marker2.set("id", unique_id);
+		marker2.set("flag", 1);
 		marker_array.push(marker2);
 	}
 	else if(flag==0)
@@ -822,12 +874,15 @@ function setMarker(lat1,lng1,txt,val,flag,unique_id,user,pro_pic)
 		({
             position: new google.maps.LatLng(lat1,lng1),
             map: map,
-			title:txt+" "+val+" "+lat1+lng1
+			animation: google.maps.Animation.DROP,
+			title:txt+" "+val+" "+lat1+lng1,
+			visible:true
 		 });
 		marker2.info = new google.maps.InfoWindow({
   		content: '<div style="background-color:#FF9999;"><table><td><img src="'+pro_pic+'"></td><td><h2>'+user+'</h2><h3>'+txt+'</h3><h5>Created at:'+val+'</h5></td></table></div>'
 		});
 		marker2.set("id", unique_id);
+		marker2.set("flag", 0);
 		marker_array.push(marker2);
 	}
 	google.maps.event.addListener(marker2, 'click', function() 
@@ -882,10 +937,11 @@ google.maps.event.addDomListener(window, 'load', initialize);
 
 <body bgcolor="#000000">
 <div id="win" style="height:300px; width:1400px; widows:inherit; ">
-  
+<input type="button" id="showUser" onclick="showUserTweets()" value="Show/Hide User Tweets"/>
+<input type="button" id="showTraffic" onclick="showTrafficOverlay()" value="Show/Hide Traffic Overlay"/>
   <div id="map_canvas" style="border:inset; left: 0px; top: 0px;"></div>
   <div class="tableDiv" style="width:1200px;overflow:scroll;"><table id='myTable' style="table-layout:fixed;background-color:#ffffff; color:#000; border:inset; height: 2447px; left: 5px; top: 343px; width: 5000px;"></table></div>
-  
 </div>
+
 </body>
 </html>
