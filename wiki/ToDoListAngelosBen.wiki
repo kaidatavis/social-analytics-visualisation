@@ -1,0 +1,10 @@
+#summary This is the list of things Angleos & Ben need to finish for their MSc project, in priority order.
+
+= Angelos =
+
+ # Task, status, when expect to finish
+
+
+= Ben =
+
+ # Task, status, when expect to finish
