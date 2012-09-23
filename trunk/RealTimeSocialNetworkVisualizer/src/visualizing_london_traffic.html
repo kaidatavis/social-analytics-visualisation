@@ -1,33 +1,57 @@
-<!--Last updated 6.50pm 4th sep 2012-->
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
+<!--URL for news feed-->
+<!--http://www.tfl.gov.uk/tfl/businessandpartners/syndication/feed.aspx?email=bensharonrose@gmail.com&feedId=13-->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Traffic in London</title>
+
+<link type="text/css" href="../css/smoothness/jquery-ui-1.8.23.custom.css" rel="stylesheet" />
+<style type="text/css">
+input.similar_font
+{
+	font-family:Verdana, Geneva, sans-serif;
+}
+</style>
+
+<script type="text/javascript" src="../lib/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="../lib/jquery-ui-1.8.23.custom.min.js"></script>
 <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=places&sensor=true"></script>
-<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.min.js"></script>
 <script type="text/javascript" src="../lib/jquery.doubleScroll.js"></script>
 <script type="text/javascript" src="../lib/moment.js"></script>
+<script type="text/javascript" src="../lib/jit.js"></script>
+<script type="text/javascript" src="../lib/visualize.js"></script>
+<script type="text/javascript" src="../lib/slimScroll.js"></script>
 
 <script type="text/javascript">
 var map;
+var trafficLayer;
 var new_tweet_id=1000;
+var updateFlag=0;
 var $jq=jQuery.noConflict();
 var bflag=0;
-var trafficflag=0;
-var trafficLayer;
+var roadflag=0,roadId=0;
+var trafficflag=1;
+var id=0;
+var first=0,second=0,third=0,fourth=0,fifth=0,sixth=0;
+var events=0,works=0,other=0,breakdown=0,incident=0,accident=0,hazard=0;
+
+var updateSimilar=new Array();
 var tw_txt=new Array();
 var unique_tw_txt=new Array();
 var tot_related=new Array();
 var unique_tot_related=new Array();
 var marker_array=new Array();
 var similar_tweets=new Array();
+var roadWorks=new Array();
+var roadMarkerArray=new Array();
+var graphParameters=new Array();
+var validTweets=new Array();
+var graphUpdate=new Array();
 
 function display(flag)
 {
-	var id=0;
+	
 	var len=0;
 	$jq.ajax
 	({
@@ -57,20 +81,36 @@ function display(flag)
 					res=res.replace(/([a-z])?([A-Z])/g, "$1 $2");
 					res = res.replace(/\s+/g,'+');
 					res=res+"+London";
-					
+					var time_diff=secondsBetween(convertTime(time),dt);
 					var hash=retrieveHashtags(tweet_text);
 					console.log("Hash tag:"+hash);
-					tw_txt.push([res,tweet_text,time,hash,id,0,0,0,usr,pro_pic]);
-					id++;
+					if(hash==null|| hash==undefined)
+					{
+					}
+					else
+					{
+						tw_txt.push([res,tweet_text,time,hash,id,0,0,0,usr,pro_pic,0,time_diff,hash,0]);
+						id++;
+						if(updateFlag==0)
+						{
+							graphUpdate.push([time]);
+						}
+					}
 				}
 				
 			});
-			
 			uniqueMaintweets();
+				
 			if(flag==1)
 			{
+				progressDialog();
 				setTimeout(function()
 				{
+					$jq('#progress_dialog').dialog('close');
+					unique_tw_txt.sort(function(a,b)
+					{
+    					return a[11] - b[11];
+					});
 					addDiv();
 				},4*1000);
 			}
@@ -82,57 +122,431 @@ function display(flag)
 		
 }
 
+function getNewsFeeds()
+{
+	$jq.ajax
+	({
+		type: "GET",
+		url: "http://localhost/tfl/xml/new.xml",
+		dataType: "xml",
+		async: "false",	 
+		success:function(xml)
+		{
+			$jq(xml).find('rr_event').each(function()
+			{
+				if($jq(this).find('category').text()=="Event")
+				{
+					events++;
+					var title=$jq(this).find('title').text();
+					title = title.replace(/[&\/\\#,+()$~%.'":*?<>{}]/g,'');
+					title = title.replace(/,/g,'');
+					title = title.replace(/-/g,'');
+					title=title+",London";
+					var lmft=$jq(this).find('lastmodifiedtime').text();
+					var now = moment().utc();
+					var dt=new Date(now);
+					lmft=formatTime(lmft);
+					var d1=convertFeed(lmft);
+					var time_diff=hoursBetween(d1,dt);
+					if(time_diff<=24)
+					{
+						var eventstartdate=$jq(this).find('eventstartdate').text();
+						var esd=convertTime(eventstartdate);
+						var pro_pic="http://a0.twimg.com/profile_images/1652050423/twitter-roundel_normal.gif";
+						var eventstarttime=new Date($jq(this).find('eventstarttime').text());
+						if(esd.getDate()==dt.getDate())
+						{
+							var eventstart=$jq(this).find('eventstarttime').text();
+							var eventutc=eventstartdate+"T"+eventstart;
+							eventutc=formatTime(eventutc);
+							eventutc=convertFeed(eventutc);
+							if(updateFlag==0)
+							{
+								graphUpdate.push([d1]);
+							}
+							var tweetFeed=$jq(this).find('title').text();
+							var road=roadTok(tweetFeed);
+							console.log('road Tag:'+road);
+							var diff=secondsBetween(d1,dt);
+							var tweet_search=roadTokenizer(tweetFeed);
+							var description=tweetFeed+'. '+$jq(this).find('description').text();
+							tw_txt.push([tweetFeed,description,d1,road,id,0,0,0,"Tfl Traffic Feeds",pro_pic,0,diff,tweet_search,0]);
+							id++;
+						}
+					}
+				}
+				else if($jq(this).find('category').text()=="Works")
+				{
+					var lmft=$jq(this).find('lastmodifiedtime').text();
+					var now = moment().utc();
+					var dt=new Date(now);
+					lmft=formatTime(lmft);
+					var d2=convertFeed(lmft);
+					var d1=new Date($jq(this).find('eventstartdate').text());
+					var eventstarttime=new Date($jq(this).find('eventstarttime').text());
+					if(d1.getDate()==dt.getDate() & d1.getMonth()==dt.getMonth() & d1.getFullYear()==dt.getFullYear())
+					{
+						works++;
+						var title=$jq(this).find('title').text();
+						var category=$jq(this).find('category').text();
+						var description=$jq(this).find('description').text();
+						var eventstartdate=$jq(this).find('eventstartdate').text();
+						var d3=convertFeed(eventstartdate);
+						var eventstart=$jq(this).find('eventstarttime').text();
+						var eventutc=eventstartdate+"T"+eventstart;
+						eventutc=formatTime(eventutc);
+						if(updateFlag==0)
+						{
+							graphUpdate.push([eventutc]);
+						}
+						roadWorks.push([title,category,description,d2,0,0,d3]);
+					}
+					
+				}
+				else if($jq(this).find('category').text()=="Other Cause")
+				{
+					other++;
+					var title=$jq(this).find('title').text();
+					title = title.replace(/[&\/\\#,+()$~%.'":*?<>{}]/g,'');
+					title = title.replace(/,/g,'');
+					title = title.replace(/-/g,'');
+					title=title+",London";
+					var lmft=$jq(this).find('lastmodifiedtime').text();
+					var now = moment().utc();
+					var dt=new Date(now);
+					lmft=formatTime(lmft);
+					var d1=convertFeed(lmft);
+					var time_diff=hoursBetween(d1,dt);
+					if(time_diff<=24)
+					{
+						if(updateFlag==0)
+						{
+							graphUpdate.push([d1]);
+						}
+						var tweetFeed=$jq(this).find('title').text();
+						var road=roadTok(tweetFeed);
+						console.log('road Tag:'+road);
+						var diff=secondsBetween(d1,dt);
+						var pro_pic="http://a0.twimg.com/profile_images/1652050423/twitter-roundel_normal.gif";
+						var tweet_search=roadTokenizer(tweetFeed);
+						var description=tweetFeed+'. '+$jq(this).find('description').text();
+						tw_txt.push([tweetFeed,description,d1,road,id,0,0,0,"Tfl Traffic Feeds",pro_pic,0,diff,tweet_search,0]);
+						id++;
+					}
+				}
+				else if($jq(this).find('category').text()=="Breakdown")
+				{
+					breakdown++;
+					var title=$jq(this).find('title').text();
+					title = title.replace(/[&\/\\#,+()$~%.'":*?<>{}]/g,'');
+					title = title.replace(/,/g,'');
+					title = title.replace(/-/g,'');
+					title=title+",London";
+					var lmft=$jq(this).find('lastmodifiedtime').text();
+					var now = moment().utc();
+					var dt=new Date(now);
+					lmft=formatTime(lmft);
+					var d1=convertFeed(lmft);
+					var time_diff=hoursBetween(d1,dt);
+					if(time_diff<=24)
+					{
+						if(updateFlag==0)
+						{
+							graphUpdate.push([d1]);
+						}
+						var tweetFeed=$jq(this).find('title').text();
+						var road=roadTok(tweetFeed);
+						console.log('road Tag:'+road);
+						var diff=secondsBetween(d1,dt);
+						var pro_pic="http://a0.twimg.com/profile_images/1652050423/twitter-roundel_normal.gif";
+						var tweet_search=roadTokenizer(tweetFeed);
+						var description=tweetFeed+'. '+$jq(this).find('description').text();
+						tw_txt.push([tweetFeed,description,d1,road,id,0,0,0,"Tfl Traffic Feeds",pro_pic,0,diff,tweet_search,0]);
+						id++;
+					}
+				}
+				else if($jq(this).find('category').text()=="Incident")
+				{
+					incident++;
+					var title=$jq(this).find('title').text();
+					title = title.replace(/[&\/\\#,+()$~%.'":*?<>{}]/g,'');
+					title = title.replace(/,/g,'');
+					title = title.replace(/-/g,'');
+					title=title+",London";
+					var lmft=$jq(this).find('lastmodifiedtime').text();
+					var now = moment().utc();
+					var dt=new Date(now);
+					lmft=formatTime(lmft);
+					var d1=convertFeed(lmft);
+					var time_diff=hoursBetween(d1,dt);
+					if(time_diff<=24)
+					{
+						if(updateFlag==0)
+						{
+							graphUpdate.push([d1]);
+						}
+						var tweetFeed=$jq(this).find('title').text();
+						var road=roadTok(tweetFeed);
+						console.log('road Tag:'+road);
+						var diff=secondsBetween(d1,dt);
+						var pro_pic="http://a0.twimg.com/profile_images/1652050423/twitter-roundel_normal.gif";
+						var tweet_search=roadTokenizer(tweetFeed);
+						var description=tweetFeed+'. '+$jq(this).find('description').text();
+						tw_txt.push([tweetFeed,description,d1,road,id,0,0,0,"Tfl Traffic Feeds",pro_pic,0,diff,tweet_search,0]);
+						id++;
+					}
+				}
+				else if($jq(this).find('category').text()=="Accident")
+				{
+					accident++;
+					var title=$jq(this).find('title').text();
+					title = title.replace(/[&\/\\#,+()$~%.'":*?<>{}]/g,'');
+					title = title.replace(/,/g,'');
+					title = title.replace(/-/g,'');
+					title=title+",London";
+					var lmft=$jq(this).find('lastmodifiedtime').text();
+					var now = moment().utc();
+					var dt=new Date(now);
+					lmft=formatTime(lmft);
+					var d1=convertFeed(lmft);
+					var time_diff=hoursBetween(d1,dt);
+					if(time_diff<=24)
+					{
+						if(updateFlag==0)
+						{
+							graphUpdate.push([d1]);
+						}
+						var tweetFeed=$jq(this).find('title').text();
+						var road=roadTok(tweetFeed);
+						console.log('road Tag:'+road);
+						var diff=secondsBetween(d1,dt);
+						var pro_pic="http://a0.twimg.com/profile_images/1652050423/twitter-roundel_normal.gif";
+						var tweet_search=roadTokenizer(tweetFeed);
+						var description=tweetFeed+'. '+$jq(this).find('description').text();
+						tw_txt.push([tweetFeed,description,d1,road,id,0,0,0,"Tfl Traffic Feeds",pro_pic,0,diff,tweet_search,0]);
+						id++;
+					}
+				}
+				else if($jq(this).find('category').text()=="Hazard")
+				{
+					hazard++;
+					var title=$jq(this).find('title').text();
+					title = title.replace(/[&\/\\#,+()$~%.'":*?<>{}]/g,'');
+					title = title.replace(/,/g,'');
+					title = title.replace(/-/g,'');
+					title=title+",London";
+					var lmft=$jq(this).find('lastmodifiedtime').text();
+					var now = moment().utc();
+					var dt=new Date(now);
+					lmft=formatTime(lmft);
+					var d1=convertFeed(lmft);
+					var time_diff=hoursBetween(d1,dt);
+					if(time_diff<=24)
+					{
+						if(updateFlag==0)
+						{
+							graphUpdate.push([d1]);
+						}
+						var tweetFeed=$jq(this).find('title').text();
+						var road=roadTok(tweetFeed);
+						console.log('road Tag:'+road);
+						var pro_pic="http://a0.twimg.com/profile_images/1652050423/twitter-roundel_normal.gif";
+						var diff=secondsBetween(d1,dt);
+						var tweet_search=roadTokenizer(tweetFeed);
+						var description=tweetFeed+'. '+$jq(this).find('description').text();
+						tw_txt.push([tweetFeed,description,d1,road,id,0,0,0,"Tfl Traffic Feeds",pro_pic,0,diff,tweet_search,0]);
+						id++;
+					}
+				}
+				
+			});
+		}
+	 });
+	
+}
+function formatFeed(temp)
+{
+	temp=temp+':00';
+	var t=temp.length-8;
+	temp=temp.slice(t,t+8);
+	return temp;
+}
+function convertFeed(f)
+{
+	var z=new Date(f);
+	return z;
+}
 function uniqueMaintweets()
 {
 	unique_tw_txt=remDup(tw_txt,1);
-	var flag=0;
+	var flag=1;
 	var timer=0;
+	unique_tw_txt.sort(function(a,b)
+	{
+    	return a[11] - b[11];
+	});
+	
 	for(var k=0;k<unique_tw_txt.length;k++)
 	{
-		flag=0;
-		if(k>0)
+		if(unique_tw_txt[k][3]==null || unique_tw_txt[k][3]==undefined)
+		{
+				
+		}
+		else
 		{
 			//Loop for checking already existing hash tags
-			for(var l=0;l<k;l++)
+			for(var l=k+1;l<unique_tw_txt.length;l++)
 			{
-				if(unique_tw_txt[l][3]==unique_tw_txt[k][3])
+				if(unique_tw_txt[k][3]==unique_tw_txt[l][3] && unique_tw_txt[l][13]==0 && unique_tw_txt[l][3]!=null)
 				{
-					flag=1;
-					var time_diff=timeDiff(convertTime(unique_tw_txt[l][2]),convertTime(unique_tw_txt[k][2]));
-					similar_tweets.push([unique_tw_txt[l][5],unique_tw_txt[l][6],unique_tw_txt[k][1],unique_tw_txt[l][2],unique_tw_txt[k][2],1,time_diff,unique_tw_txt[l][4],unique_tw_txt[l][8],unique_tw_txt[l][9]]);
-					break;
+					var now = moment().utc();
+					var dt=new Date(now);
+					time_diff=secondsBetween(convertTime(unique_tw_txt[k][2]),dt);
+					similar_tweets.push([0,0,unique_tw_txt[l][1],unique_tw_txt[l][2],unique_tw_txt[l][2],1,time_diff,unique_tw_txt[k][4],unique_tw_txt[l][8],unique_tw_txt[l][9],1]);
+					unique_tw_txt[l][13]=1;
+					
 				}
-			}
-		}
-		if(flag==0)
-		{
-			if(unique_tw_txt[k][3]!=null)
-			{
-				//timer++;
-				//googleSearch(unique_tw_txt[k][0],unique_tw_txt[k][1],unique_tw_txt[k][2],unique_tw_txt[k][3],unique_tw_txt[k][4],k,timer);
-				yahooSearch(unique_tw_txt[k][0],unique_tw_txt[k][1],unique_tw_txt[k][2],unique_tw_txt[k][3],unique_tw_txt[k][4],k);
+				
 			}
 		}
 		
 	}
+	for(var k=0;k<unique_tw_txt.length;k++)
+	{	
+		if(unique_tw_txt[k][13]==0)
+		{
+			yahooSearch(unique_tw_txt[k][0],unique_tw_txt[k][1],unique_tw_txt[k][2],unique_tw_txt[k][3],unique_tw_txt[k][4],k);
+		}
+		
+	}
+}
+
+function addDiv()
+{
+	roadWork();
+	var now = moment().utc();
+	var dt=new Date(now);
+	for(var l=0;l<unique_tw_txt.length;l++)
+	{
+		if(unique_tw_txt[l][7]==1)
+		{
+			var diff=timeDiff(convertTime(unique_tw_txt[l][2]),dt);
+			unique_tw_txt[l][10]=diff;
+		}
+	}
+	unique_tw_txt.sort(function(a,b)
+	{
+    	return a[11] - b[11];
+	});	
+	for(var l=0;l<unique_tw_txt.length;l++)
+	{
+		if(unique_tw_txt[l][7]==1)
+		{
+			validTweets.push([unique_tw_txt[l][0],unique_tw_txt[l][2],unique_tw_txt[l][13]]);
+			if(updateFlag==0)
+			{
+			createDiv(unique_tw_txt[l][1],unique_tw_txt[l][3],unique_tw_txt[l][2],unique_tw_txt[l][4],unique_tw_txt[l][8],unique_tw_txt[l][9]);
+			
+			setMarker(unique_tw_txt[l][5],unique_tw_txt[l][6],unique_tw_txt[l][1],unique_tw_txt[l][2],0,unique_tw_txt[l][4],unique_tw_txt[l][8],unique_tw_txt[l][9]);
+			}
+			
+			if(unique_tw_txt[l][8]=="Tfl Traffic Feeds")
+			{
+				relatedTweets(unique_tw_txt[l][0],unique_tw_txt[l][1],unique_tw_txt[l][2],unique_tw_txt[l][12],unique_tw_txt[l][5],unique_tw_txt[l][6],unique_tw_txt[l][4],unique_tw_txt[l][12]);
+			}
+			else
+			{
+				relatedTweets(unique_tw_txt[l][0],unique_tw_txt[l][1],unique_tw_txt[l][2],unique_tw_txt[l][3],unique_tw_txt[l][5],unique_tw_txt[l][6],unique_tw_txt[l][4],unique_tw_txt[l][12]);
+			}
+		}
+	}
 	
 }
 
-
 function createDiv(str,hash,time,id,user,pro_pic)
 {
+	$jq('#myTable').append('<td class="table" style="border:inset;table-layout:fixed;width:150px"><div class="scrollable"><table id='+id+' style="table-layout:fixed;word-wrap:break-word;white-space:nowrap;"></table></div></td>');
+	$jq('#'+id).append('<thead><tr background="/tfl/images/1.jpg" style="white-space:nowrap;word-wrap:break-word;color:#FFFFFF;border:inset;top:0px;width:30px;" onclick="clickRow(this.id)" onmouseover="mouseOver(this.id)" onmouseout="mouseOut(this.id)" id='+id+'><td><div><table><td><img src="'+pro_pic+'"></td><td><h5>'+user+'</h5><h4>'+str+'</h4><h6>Created at:'+time+'</h6></td></table></div></td></tr><thead>');
+	$jq('div.scrollable').slimscroll
+	({
+		height:$jq(window).height()*0.45,
+		railVisible: true,
+		//alwaysVisible: true,
+	});
+}
 
-	$jq('#myTable').append('<td style="border:inset;table-layout:fixed;white-space:nowrap;"><div style="height:300px;overflow:scroll"><table id='+id+' style="border:inset;table-layout:fixed;word-wrap:break-word;"></table></div></td>');
-	$jq('#'+id).append('<thead><tr style="background-color:#FF9999;white-space:nowrap;color:#000;border:inset;overflow:scroll" onclick="clickRow(this.id)" onmouseover="mouseOver(this.id)" onmouseout="mouseOut(this.id)" id='+id+'><td><div style="width:500px;overflow:scroll"><table><td><img src="'+pro_pic+'"></td><td><h5>'+user+'</h5><h4>'+str+'</h4><h6>Created at:'+time+'</h6></td></table></div></td></tr><thead>');
+function roadWork()
+{
+	for(var k=0;k<roadWorks.length;k++)
+	{
+		roadSearch(roadWorks[k][0],k);
+	}
+}
 
-
-
+function roadSearch(txt,k)
+{
+	$jq.ajax
+	({
+		type: 'GET',
+		dataType:'json',
+		url: 'http://where.yahooapis.com/geocode?q='+txt+' London&flags=J&appid=nUPJhHrV34EyYHWLEglxZXUmZTZUgHLiA7Ig0OmdkCa0cuk7cBvLIRnKiz5vSpG7QgL--',
+		success:function(test)
+		{
+			try
+			{
+				var lat=test.ResultSet.Results[0].offsetlat;
+				var long=test.ResultSet.Results[0].offsetlon;
+				if(lat>=51.11 && lat<=51.75)
+				{
+					if(long>=-0.59 && long<=0.326975)
+					{
+						roadWorks[k][4]=lat;
+						roadWorks[k][5]=long;
+						roadMarker(roadWorks[k][0],roadWorks[k][3],roadWorks[k][4],roadWorks[k][5],roadWorks[k][2],roadWorks[k][6]);
+					}
+				}
+				
+			}
+			catch(err)
+			{
+				console.log("No points on the map to plot:Exception loop");
+			}
+				
+		}
+		
+	});
+		
+}
+function showRoadWork()
+{
+	if(roadflag==0)
+	{
+		for(var k=0;k<roadMarkerArray.length;k++)
+		{
+			if(roadMarkerArray[k].get("id")==k)
+			{
+				roadMarkerArray[k].setVisible(true);
+			}
+		}
+		roadflag=1;
+	}
+	else if(roadflag==1)
+	{
+		for(var k=0;k<roadMarkerArray.length;k++)
+		{
+			if(roadMarkerArray[k].get("id")==k)
+			{
+				roadMarkerArray[k].setVisible(false);
+			}
+		}
+		roadflag=0;
+	}
+	
 }
 function clickRow(row_id)
 {
 	for(var k=0;k<marker_array.length;k++)
 	{
-		
 		marker_array[k].info.close();
 	}
 	for(var k=0;k<marker_array.length;k++)
@@ -142,6 +556,7 @@ function clickRow(row_id)
 			google.maps.event.trigger(marker_array[k], 'click');
 		}
 	}
+	
 }
 function mouseOver(row_id)
 {
@@ -159,13 +574,9 @@ function mouseOut(row_id)
 {
 	for(var k=0;k<marker_array.length;k++)
 	{
-		
 		marker_array[k].info.close();
-		
-		
-          marker_array[k].setAnimation(null);
-        
-	}
+		marker_array[k].setAnimation(null);
+    }
 }
 
 function showUserTweets()
@@ -176,7 +587,7 @@ function showUserTweets()
 		{
 			if(marker_array[k].get("flag")==1)
 			{
-				marker_array[k].visible=false;
+				marker_array[k].setVisible(false);
 			}
 		}
 		bflag=1;
@@ -187,7 +598,7 @@ function showUserTweets()
 		{
 			if(marker_array[k].get("flag")==1)
 			{
-				marker_array[k].visible=true;
+				marker_array[k].setVisible(true);
 			}
 		}
 		bflag=0;
@@ -206,97 +617,134 @@ function showTrafficOverlay()
 		trafficflag=0;
 	}
 }
-function createSub(str,hash,time,id,unique_id,user,pro_pic)
+function createSub(str,hash,time,id,unique_id,user,pro_pic,flag)
 {
-	
-	$jq('#'+id).prepend('<tbody><tr height="2%" id='+unique_id+' onclick="clickRow(this.id)" onmouseover="mouseOver(this.id)" onmouseout="mouseOut(this.id)" style="width:10px;background-color:#0C3;top:0px;color:#000;border:inset;white-space:nowrap;overflow:scroll;"><td><div style="width:500px;overflow:scroll"><table><td><img src="'+pro_pic+'"></td><td><h5>'+user+'</h5><h4>'+str+'</h4><h6>Created at:'+time+'</h6></td></table></div></td></tr></tbody>');
+	if(flag==0)
+	{
+		$jq('#'+id).append('<tbody><tr background="/tfl/images/mfkK6Me.jpg" height="2%" id='+unique_id+' onclick="clickRow(this.id)" onmouseover="mouseOver(this.id)" onmouseout="mouseOut(this.id)" style="width:30px;top:0px;color:#FFFFFF;border:inset;word-wrap:break-word;white-space:nowrap;"><td><div ><table><td><img src="'+pro_pic+'"></td><td><h5>'+user+'</h5><h4>'+str+'</h4><h6>Created at:'+time+'</h6></td></table></div></td></tr></tbody>');
+	}
+	else if(flag==1)
+	{
+		$jq('#'+id).append('<tbody><tr height="2%" background="/tfl/images/1.jpg" id='+unique_id+' onclick="clickRow(this.id)" onmouseover="mouseOver(this.id)" onmouseout="mouseOut(this.id)" style="width:30px;top:0px;color:#FFFFFF;border:inset;word-wrap:break-word;white-space:nowrap;"><td><div><table><td><img src="'+pro_pic+'"></td><td><h5>'+user+'</h5><h4>'+str+'</h4><h6>Created at:'+time+'</h6></td></table></div></td></tr></tbody>');
+	}
 }
 
-
-function googleSearch(txt,tweet_text,time,hash,id,index,timer)
+function roadTokenizer(str)
 {
-	var lat,long;
-	var geocoder = new google.maps.Geocoder();
-	window.setTimeout(function()
+	if(str.indexOf("/")>=0)
 	{
-							  
-		geocoder.geocode( { 'address': txt,'region':'gb'}, function(results, status) 
+		var b=str.slice(0,str.indexOf("/")-1);
+		road=b;
+	}
+	else if(str.indexOf("(")>=0)
+	{
+		var b=str.slice(0,str.indexOf("(")-1);
+		road=b;
+	}
+	else
+	{	
+		road=str;
+	}
+	return road;
+}
+function roadTok(str)
+{
+	if(str.indexOf("/")>=0)
+	{
+		var b=str.slice(str.indexOf("/"),str.length);
+		b = b.replace(/[&\/\\#,+()$~%.'":*?<>{}]/g,'');
+		b = b.replace(/,/g,'');
+		b = b.replace(/-/g,'');
+		var c=b.indexOf('A');
+		var road='';
+		for(var i=c;i<b.length;i++)
 		{
-	
-    		if (status == google.maps.GeocoderStatus.OK) 
+			if(b[i]!=' ')
 			{
-   				lat = results[0].geometry.location.lat();
-    			long = results[0].geometry.location.lng();
-				console.log(lat+","+long);
-				if(lat==51.5073346 && long==-0.12768310000001293)
+				road=road+b[i];
+				
+			}
+			else
+			{
+				break;
+			}
+			
+		}
+	}
+	else 
+	{	
+		var b=str;
+		b = b.replace(/[&\/\\#,+()$~%.'":*?<>{}]/g,'');
+		b = b.replace(/,/g,'');
+		b = b.replace(/-/g,'');
+		var d=b.indexOf('A');
+		road='';
+		if(d==0)
+		{
+			for(var i=d;i<b.length;i++)
+			{
+				if(b[i]!=' ')
 				{
-				  
-					yahooSearch(txt,tweet_text,time,hash,id,index);
-				   
-				}
-				else if(lat>=51.11 && lat<=51.75)
-				{
-					if(long>=-0.59 && long<=1.75)
-					{
-						unique_tw_txt[index][5]=lat;
-						unique_tw_txt[index][6]=long;
-						unique_tw_txt[index][7]=1;
-						console.log("hash from google:"+hash);
-					}
-						
+				road=road+b[i];
+				
 				}
 				else
 				{
-					unique_tw_txt[index][5]=0;
-					unique_tw_txt[index][6]=0;
-					unique_tw_txt[index][7]=0;
+				break;
 				}
-			  
 			}
-		});
-																 
-	}, timer*1500);
+		}
+		else
+		{
+			road=str;
+		}
+	}
 	
+	return road+" LONDON";
 }
+
+function formatTime(temp)
+{
+	var t=temp.length-2;
+	temp=temp.slice(0,t)+':'+temp.slice(t,t+2)+':00';
+	return temp;
+}
+
 function geo(txt,tweet_text,time,hash,id,index)
 {
-	 var lat,long;
-	 
-	 var geocoder = new google.maps.Geocoder();
-	 var sw = new google.maps.LatLng(50.064192, -9.711914)
+	var lat,long;
+	var geocoder = new google.maps.Geocoder();
+	var sw = new google.maps.LatLng(50.064192, -9.711914)
 	var ne = new google.maps.LatLng(61.015725, 3.691406)
 	var viewport = new google.maps.LatLngBounds(sw, ne);
-	 geocoder.geocode( { 'address': hash,'region':'GB','bounds': viewport}, function(results, status) {
-
-              if (status == google.maps.GeocoderStatus.OK) {
-   			 lat = results[0].geometry.location.lat();
+	geocoder.geocode( { 'address': hash,'region':'GB','bounds': viewport}, function(results, status) 
+	{
+		if (status == google.maps.GeocoderStatus.OK) 
+		{
+   			lat = results[0].geometry.location.lat();
     		long = results[0].geometry.location.lng();
 			console.log(lat+","+long);
-			  if(lat>=51.11 && lat<=51.75)
+			if(lat>=51.11 && lat<=51.75)
+			{
+				if(long>=-0.59 && long<=1.75)
 				{
-						if(long>=-0.59 && long<=1.75)
-						{
-							unique_tw_txt[index][5]=lat;
-							unique_tw_txt[index][6]=long;
-							unique_tw_txt[index][7]=1;
-							//console.log();
-							console.log(hash+"+"+txt+"----->google accessed");
-						}
-						
-					}
-					else
-					{
-						unique_tw_txt[index][5]=0;
-						unique_tw_txt[index][6]=0;
-						unique_tw_txt[index][7]=0;
-					}
-			  }
-		});
+					unique_tw_txt[index][5]=lat;
+					unique_tw_txt[index][6]=long;
+					unique_tw_txt[index][7]=1;
+					console.log('google accessed'+tweet_text);
+				}
+			}
+			else
+			{
+				unique_tw_txt[index][5]=0;
+				unique_tw_txt[index][6]=0;
+				unique_tw_txt[index][7]=0;
+			}
+		}
+	});
 }
 function yahooSearch(txt,tweet_text,time,hash,id,index)
 {
-	
-	
 	$jq.ajax
 	({
 		type: 'GET',
@@ -320,20 +768,23 @@ function yahooSearch(txt,tweet_text,time,hash,id,index)
 				}
 				else if(lat>=51.11 && lat<=51.75)
 				{
-					if(long>=-0.59 && long<=1.75)
+					if(long>=-0.59 && long<=0.326975)
 					{
 						unique_tw_txt[index][5]=lat;
 						unique_tw_txt[index][6]=long;
 						unique_tw_txt[index][7]=1;
-						console.log(txt+"----->yahoo accessed");
+						console.log('yahoo accessed'+tweet_text);
+						
+					}
+					else
+					{
+						geo(txt,tweet_text,time,hash,id,index);
 					}
 						
 				}
 				else
 				{
-					unique_tw_txt[index][5]=0;
-					unique_tw_txt[index][6]=0;
-					unique_tw_txt[index][7]=0;
+					geo(txt,tweet_text,time,hash,id,index);
 				}
 			}
 			catch(err)
@@ -345,40 +796,11 @@ function yahooSearch(txt,tweet_text,time,hash,id,index)
 			}
 				
 		}
-		,error:function (xhr, ajaxOptions, thrownError)
-		{
-               console.log("No points on the map to plot:Ajax exception");
-        } 
+		
 	});
 			
 }
-function addDiv()
-{
-	var now = moment().utc();
-	var dt=new Date(now);
-	for(var l=0;l<unique_tw_txt.length;l++)
-	{
-		if(unique_tw_txt[l][7]==1)
-		{
-			var diff=timeDiff(convertTime(unique_tw_txt[l][2]),dt);
-			unique_tw_txt[l][10]=diff;
-		}
-	}
-	unique_tw_txt.sort(function(a,b)
-	{
-    	return a[4] - b[4];
-	});	
-	for(var l=0;l<unique_tw_txt.length;l++)
-	{
-		if(unique_tw_txt[l][7]==1)
-		{
-			createDiv(unique_tw_txt[l][1],unique_tw_txt[l][3],unique_tw_txt[l][2],unique_tw_txt[l][4],unique_tw_txt[l][8],unique_tw_txt[l][9]);
-			setMarker(unique_tw_txt[l][5],unique_tw_txt[l][6],unique_tw_txt[l][1],unique_tw_txt[l][2],0,unique_tw_txt[l][4],unique_tw_txt[l][8],unique_tw_txt[l][9]);
-			relatedTweets(unique_tw_txt[l][0],unique_tw_txt[l][1],unique_tw_txt[l][2],unique_tw_txt[l][3],unique_tw_txt[l][5],unique_tw_txt[l][6],unique_tw_txt[l][4]);
-		}
-	}
-	
-}
+
 function remDup(arrayName,z)
 {
 	var newArray=new Array();
@@ -393,7 +815,7 @@ function remDup(arrayName,z)
 		}
   		newArray[newArray.length] = arrayName[i];
   	}
- return newArray;
+ 	return newArray;
 }
 function Dup(arrayName)
 {
@@ -409,12 +831,11 @@ function Dup(arrayName)
 		}
   		newArray1[newArray1.length] = arrayName[i];
   	}
- return newArray1;
+ 	return newArray1;
 }
 
-function relatedTweets(txt,tweet_text,tweet_time,hash,lat,long,id)
+function relatedTweets(txt,tweet_text,tweet_time,hash,lat,long,id,tweet_search)
 {
-	
 	var related_tweet_text,related_tweet_time,related_user,related_pro_pic;
 	console.log("Hash:"+hash);
 	var identifier=id;
@@ -423,89 +844,90 @@ function relatedTweets(txt,tweet_text,tweet_time,hash,lat,long,id)
 	var dt=new Date(now);
 	if(hash!==null)
 	{
-	$jq.ajax
-	({
-		type: 'GET',
-			
- 		dataType:'jsonp',
-		url: 'http://search.twitter.com/search.json?q='+hash+'&lang=en&geocode='+lat+','+long+',1000km',
+		$jq.ajax
+		({
+			type: 'GET',
+			dataType:'jsonp',
+			url: 'http://search.twitter.com/search.json?q='+hash+'&lang=en',//&geocode='+lat+','+long+',1000km',
 			 
-		success:function(_json)
-		{
-			$jq.each(_json.results,function(key)
+			success:function(_json)
 			{
-				len++;	
-				related_tweet_text=_json.results[key].text;
-				related_tweet_time=_json.results[key].created_at;
-				related_user=_json.results[key].from_user;
-				related_pro_pic=_json.results[key].profile_image_url;
-				related_pro_pic = related_pro_pic.replace(/\//g,'/');
-				
-				if(tweet_text!=related_tweet_text && identifier==id)
+				if(_json.results.length<=0)
 				{
-					console.log("diff"+hoursBetween(convertTime(related_tweet_time),dt));
-					if(hoursBetween(convertTime(related_tweet_time),dt)<=24)
+					relatedTweets(txt,tweet_search,tweet_time,hash,lat,long,id,tweet_search);
+					return false;
+				}
+				else
+				{
+					$jq.each(_json.results,function(key)
 					{
-						var count=0;
-						var related_txt="";
-						related_txt=related_tweet_text.toString();
-						
-						var temp=related_txt.split(" ");
-						var i=related_tweet_text.search("#");
-						if(i>=0)
+						len++;	
+						related_tweet_text=_json.results[key].text;
+						related_tweet_time=_json.results[key].created_at;
+						related_user=_json.results[key].from_user;
+						related_pro_pic=_json.results[key].profile_image_url;
+						related_pro_pic = related_pro_pic.replace(/\//g,'/');
+						if(tweet_text!=related_tweet_text && identifier==id)
 						{
-							for(var k=0;k<temp.length;k++)
+							if(hoursBetween(convertTime(related_tweet_time),dt)<=24)
 							{
-								if(temp[k].search("#")>=0)
+								var count=0;
+								var related_txt="";
+								related_txt=related_tweet_text.toString();
+								var temp=related_txt.split(" ");
+								var i=related_tweet_text.search("#");
+								if(i>=0)
 								{
-									count++;
-								}
+									for(var k=0;k<temp.length;k++)
+									{
+										if(temp[k].search("#")>=0)
+										{
+											count++;
+										}
 							
-							}
+									}
 						
-							if(count>2)
-							{
+								if(count>2)
+								{
 								
+								}
+								else
+								{
+									var time_diff=timeDiff(convertTime(related_tweet_time),dt);
+									unique_tot_related.push([lat,long,related_tweet_text,hash,related_tweet_time,1,time_diff,id,related_user,related_pro_pic,0]);
+								}
+						
 							}
 							else
 							{
-								var time_diff=timeDiff(convertTime(tweet_time),convertTime(related_tweet_time));
-								unique_tot_related.push([lat,long,related_tweet_text,hash,related_tweet_time,1,time_diff,id,related_user,related_pro_pic]);
+								var time_diff=timeDiff(convertTime(related_tweet_time),dt);
+								unique_tot_related.push([lat,long,related_tweet_text,hash,related_tweet_time,1,time_diff,id,related_user,related_pro_pic,0]);
 							}
-						
-						}
-						else
-						{
-							var time_diff=timeDiff(convertTime(tweet_time),convertTime(related_tweet_time));
-							unique_tot_related.push([lat,long,related_tweet_text,hash,related_tweet_time,1,time_diff,id,related_user,related_pro_pic]);
 						}
 					}
-				}
 				
-			});
-					
+				});
+			}
 			if(unique_tot_related.length>=0)
 			{
 				console.log("Related tweets:"+unique_tot_related.length);
-			 	sortrelatedTweets(lat,long,id);	
+				sortrelatedTweets(lat,long,id);	
 			}
 			
 		}
 		 
 		
 	 });
-	
+		
 	}
 	
 }
 function sortrelatedTweets(lat,long,id)
 {
-	console.log("id is returned:"+id);
 	var index=unique_tot_related.length-1;
 	console.log("Similar main tweets"+similar_tweets.length);
 	for(var k=0;k<similar_tweets.length;k++)
 	{
-		
 		if(similar_tweets[k][7]==id)
 		{
 			index++;
@@ -514,109 +936,121 @@ function sortrelatedTweets(lat,long,id)
 		
 	}
 	tot_related=Dup(unique_tot_related);
-	
 	tot_related.sort(function(a,b)
 	{
     	return a[6] - b[6];
 	});
 	
-	var lt,lg;
-	var j=0;
-	var z=1000;
-	var unique_id=parseInt(id.toString()+z.toString());
-	console.log("Unique related tweets:"+tot_related.length);
-	var arr=new Array(0.01,0.02,0.03,0.04,0.05,0.06,0.07,0.08,0.09,0.1,0.2,0.3,0.4,0.5);
-	for(var k=0;k<tot_related.length;k++)
+	if(updateSimilar.length<=0)
 	{
-		console.log("spiral loop:"+tot_related[k][7]+"id:"+id);
-		
-		if(k>=8)
-	   	{
-	   		if(k>(parseInt(tot_related.length/8)*8))
-			{
-				j=arr[parseInt(k/8)];
-			}
-	  		else if(k>parseInt(tot_related.length/8))
-			{
-				j=arr[parseInt(k/8)];
-			}
-	   	}
-	   	else
-	   	{
-	   		j=0;
-	   	}
-		
-	   	if((k+1)%8==1)
-		{
-			lt=parseFloat(lat)+0.01+j;
-			lg=parseFloat(long)+0.01+j;
-			createSub(tot_related[k][2],tot_related[k][3],tot_related[k][4],tot_related[k][7],unique_id,tot_related[k][8],tot_related[k][9]);
-			setMarker(lt,lg,tot_related[k][2],tot_related[k][4],1,unique_id,tot_related[k][8],tot_related[k][9]);
-			unique_id++;
-		}
-		else if((k+1)%8==2)
-		{
-			lt=parseFloat(lat);
-			lg=parseFloat(long)+0.01+j;
-			createSub(tot_related[k][2],tot_related[k][3],tot_related[k][4],tot_related[k][7],unique_id,tot_related[k][8],tot_related[k][9]);
-			setMarker(lt,lg,tot_related[k][2],tot_related[k][4],1,unique_id,tot_related[k][8],tot_related[k][9]);
-			unique_id++;
-		}
-		else if((k+1)%8==3)
-		{
-			lt=parseFloat(lat)-0.01-j;
-			lg=parseFloat(long)+0.01+j;
-			createSub(tot_related[k][2],tot_related[k][3],tot_related[k][4],tot_related[k][7],unique_id,tot_related[k][8],tot_related[k][9]);
-			setMarker(lt,lg,tot_related[k][2],tot_related[k][4],1,unique_id,tot_related[k][8],tot_related[k][9]);
-			unique_id++;
-		}
-		else if((k+1)%8==4)
-		{
-			lt=parseFloat(lat)-0.01-j;
-			lg=parseFloat(long);
-			createSub(tot_related[k][2],tot_related[k][3],tot_related[k][4],tot_related[k][7],unique_id,tot_related[k][8],tot_related[k][9]);
-			setMarker(lt,lg,tot_related[k][2],tot_related[k][4],1,unique_id,tot_related[k][8],tot_related[k][9]);
-			unique_id++;
-		}
-		else if((k+1)%8==5)
-		{
-			lt=parseFloat(lat)-0.01-j;
-			lg=parseFloat(long)-0.01-j;
-			createSub(tot_related[k][2],tot_related[k][3],tot_related[k][4],tot_related[k][7],unique_id,tot_related[k][8],tot_related[k][9]);
-			setMarker(lt,lg,tot_related[k][2],tot_related[k][4],1,unique_id,tot_related[k][8],tot_related[k][9]);
-			unique_id++;
-		}
-		else if((k+1)%8==6)
-		{
-			lt=parseFloat(lat);
-			lg=parseFloat(long)-0.01-j;
-			createSub(tot_related[k][2],tot_related[k][3],tot_related[k][4],tot_related[k][7],unique_id,tot_related[k][8],tot_related[k][9]);
-			setMarker(lt,lg,tot_related[k][2],tot_related[k][4],1,unique_id,tot_related[k][8],tot_related[k][9]);
-			unique_id++;
-		}
-		else if((k+1)%8==7)
-		{
-			lt=parseFloat(lat)+0.01+j;
-			lg=parseFloat(long)-0.01-j;
-			createSub(tot_related[k][2],tot_related[k][3],tot_related[k][4],tot_related[k][7],unique_id,tot_related[k][8],tot_related[k][9]);
-			setMarker(lt,lg,tot_related[k][2],tot_related[k][4],1,unique_id,tot_related[k][8],tot_related[k][9]);
-			unique_id++;
-		}
-		else if((k+1)%8==0)
-		{
-			lt=parseFloat(lat)+0.01+j;
-			lg=parseFloat(long);
-			createSub(tot_related[k][2],tot_related[k][3],tot_related[k][4],tot_related[k][7],unique_id,tot_related[k][8],tot_related[k][9]);
-			setMarker(lt,lg,tot_related[k][2],tot_related[k][4],1,unique_id,tot_related[k][8],tot_related[k][9]);
-			unique_id++;
-		}
-		console.log(unique_id);
-		
+		updateSimlar=tot_related;
 	}
-	unique_id=0;
-	id=0;
-	tot_related.splice(0,tot_related.length);
-	unique_tot_related.splice(0,unique_tot_related.length);
+	else
+	{
+		var k=updateSimilar.length;
+		for(var i=0;i<tot_related.length-1;i++)
+		{
+			updateSimilar[k]=tot_related[i];
+			k++;
+		}
+	}
+	if(updateFlag==0)
+	{
+		var lt,lg;
+		var j=0;
+		var z=1000;
+		var unique_id=parseInt(id.toString()+z.toString());
+		console.log("Unique related tweets:"+tot_related.length);
+		var arr=new Array(0.01,0.02,0.03,0.04,0.05,0.06,0.07,0.08,0.09,0.1,0.2,0.3,0.4,0.5);
+		for(var k=0;k<tot_related.length;k++)
+		{
+			if(k>=8)
+	   		{
+	   			if(k>(parseInt(tot_related.length/8)*8))
+				{
+					j=arr[parseInt(k/8)];
+				}
+	  			else if(k>parseInt(tot_related.length/8))
+				{
+					j=arr[parseInt(k/8)];
+				}
+	   		}
+	   		else
+	   		{
+	   			j=0;
+	   		}
+		
+	   		if((k+1)%8==1)
+			{
+				lt=parseFloat(lat)+0.01+j;
+				lg=parseFloat(long)+0.01+j;
+				createSub(tot_related[k][2],tot_related[k][3],tot_related[k][4],tot_related[k][7],unique_id,tot_related[k][8],tot_related[k][9],tot_related[k][10]);
+				setMarker(lt,lg,tot_related[k][2],tot_related[k][4],1,unique_id,tot_related[k][8],tot_related[k][9]);
+				unique_id++;
+			}
+			else if((k+1)%8==2)
+			{
+				lt=parseFloat(lat);
+				lg=parseFloat(long)+0.01+j;
+				createSub(tot_related[k][2],tot_related[k][3],tot_related[k][4],tot_related[k][7],unique_id,tot_related[k][8],tot_related[k][9],tot_related[k][10]);
+				setMarker(lt,lg,tot_related[k][2],tot_related[k][4],1,unique_id,tot_related[k][8],tot_related[k][9]);
+				unique_id++;
+			}
+			else if((k+1)%8==3)
+			{
+				lt=parseFloat(lat)-0.01-j;
+				lg=parseFloat(long)+0.01+j;
+				createSub(tot_related[k][2],tot_related[k][3],tot_related[k][4],tot_related[k][7],unique_id,tot_related[k][8],tot_related[k][9],tot_related[k][10]);
+				setMarker(lt,lg,tot_related[k][2],tot_related[k][4],1,unique_id,tot_related[k][8],tot_related[k][9]);
+				unique_id++;
+			}
+			else if((k+1)%8==4)
+			{
+				lt=parseFloat(lat)-0.01-j;
+				lg=parseFloat(long);
+				createSub(tot_related[k][2],tot_related[k][3],tot_related[k][4],tot_related[k][7],unique_id,tot_related[k][8],tot_related[k][9],tot_related[k][10]);
+				setMarker(lt,lg,tot_related[k][2],tot_related[k][4],1,unique_id,tot_related[k][8],tot_related[k][9]);
+				unique_id++;
+			}
+			else if((k+1)%8==5)
+			{
+				lt=parseFloat(lat)-0.01-j;
+				lg=parseFloat(long)-0.01-j;
+				createSub(tot_related[k][2],tot_related[k][3],tot_related[k][4],tot_related[k][7],unique_id,tot_related[k][8],tot_related[k][9],tot_related[k][10]);
+				setMarker(lt,lg,tot_related[k][2],tot_related[k][4],1,unique_id,tot_related[k][8],tot_related[k][9]);
+				unique_id++;
+			}
+			else if((k+1)%8==6)
+			{
+				lt=parseFloat(lat);
+				lg=parseFloat(long)-0.01-j;
+				createSub(tot_related[k][2],tot_related[k][3],tot_related[k][4],tot_related[k][7],unique_id,tot_related[k][8],tot_related[k][9],tot_related[k][10]);
+				setMarker(lt,lg,tot_related[k][2],tot_related[k][4],1,unique_id,tot_related[k][8],tot_related[k][9]);
+				unique_id++;
+			}
+			else if((k+1)%8==7)
+			{
+				lt=parseFloat(lat)+0.01+j;
+				lg=parseFloat(long)-0.01-j;
+				createSub(tot_related[k][2],tot_related[k][3],tot_related[k][4],tot_related[k][7],unique_id,tot_related[k][8],tot_related[k][9],tot_related[k][10]);
+				setMarker(lt,lg,tot_related[k][2],tot_related[k][4],1,unique_id,tot_related[k][8],tot_related[k][9]);
+				unique_id++;
+			}
+			else if((k+1)%8==0)
+			{
+				lt=parseFloat(lat)+0.01+j;
+				lg=parseFloat(long);
+				createSub(tot_related[k][2],tot_related[k][3],tot_related[k][4],tot_related[k][7],unique_id,tot_related[k][8],tot_related[k][9],tot_related[k][10]);
+				setMarker(lt,lg,tot_related[k][2],tot_related[k][4],1,unique_id,tot_related[k][8],tot_related[k][9]);
+				unique_id++;
+			}
+			
+		}
+		unique_id=0;
+		id=0;
+		tot_related.splice(0,tot_related.length);
+		unique_tot_related.splice(0,unique_tot_related.length);
+	}
 }
 function convertTime(f)
 {
@@ -625,143 +1059,136 @@ function convertTime(f)
 	var z=new Date(tmp1);
 	return z;
 }
+function secondsBetween(date1, date2) 
+{
+    var one_sec = 1000;
+	var date1_ms = date1.getTime();
+    var date2_ms = date2.getTime();
+	// Calculate the difference in milliseconds
+    var difference_ms = date2_ms - date1_ms;
+	return Math.round(difference_ms / one_sec);
+}
 function hoursBetween(date1, date2) 
 {
-    var one_day = 60*60*1000;
-
-    var date1_ms = date1.getTime();
+    var one_hour = 60*60*1000;
+	var date1_ms = date1.getTime();
     var date2_ms = date2.getTime();
-
-    // Calculate the difference in milliseconds
+	// Calculate the difference in milliseconds
     var difference_ms = date2_ms - date1_ms;
-
-    return Math.round(difference_ms / one_day);
+	return Math.round(difference_ms / one_hour);
 }
 function timeDiff(date1, date2) 
 {
     //Get 1 second in milliseconds
     var one_msec = 1000;
-
-    var date1_ms = date1.getTime();
+	var date1_ms = date1.getTime();
     var date2_ms = date2.getTime();
-
-    // Calculate the difference in milliseconds
+	// Calculate the difference in milliseconds
     var difference_ms = date2_ms - date1_ms;
-
-    // Convert back to seconds
+	// Convert back to seconds
     return Math.round(difference_ms / one_msec);
 }
 function retrieveHashtags(str)
 {
 	var out;	
-		var hash=str;
-		var flag=0;
-		str=str.toLowerCase();
-		str = str.replace(/[&\/\\#,+()$~%.'":*?<>{}]/g,'');
-		str = str.replace(/,/g,'');
-		str = str.replace(/-/g,'');
-		
-		var other = hash.split(' ');
-		for(var k=0;k<other.length;k++)
+	var hash=str;
+	var flag=0;
+	str=str.toLowerCase();
+	str = str.replace(/[&\/\\#,+()$~%.'":*?<>{}]/g,'');
+	str = str.replace(/,/g,'');
+	str = str.replace(/-/g,'');
+	var other = hash.split(' ');
+	for(var k=0;k<other.length;k++)
+	{
+		var count=0;
+		var temp=other[k];
+		if(other[k].search('#')>=0)
 		{
-			var count=0;
-			var temp=other[k];
-			if(other[k].search('#')>=0)
+			for(var i=0;i<temp.length;i++)
 			{
-				
+				if(temp[i]==temp[i].toUpperCase())
+				{
+					count++;
+				}
+			}
+			if(count>=2)
+			{
+				var c=0;
+				temp = other[k].replace(/[&\/\\#,+()$~%.'":;*?<>{}]/g,'');
+				temp = temp.replace(/,/g,'');
+				temp = temp.replace(/-/g,'');
 				for(var i=0;i<temp.length;i++)
 				{
-					if(temp[i]==temp[i].toUpperCase())
+					if(temp[i]==temp[i].toUpperCase() && /^\d+$/.test(temp[i])==false)
 					{
-						count++;
-					}
-				}
-				if(count>=2)
-				{
-					var c=0;
-					temp = other[k].replace(/[&\/\\#,+()$~%.'":;*?<>{}]/g,'');
-					temp = temp.replace(/,/g,'');
-					temp = temp.replace(/-/g,'');
-					for(var i=0;i<temp.length;i++)
-					{
-						if(temp[i]==temp[i].toUpperCase() && /^\d+$/.test(temp[i])==false)
+						c++;
+						if(c==2)
 						{
-							c++;
-							if(c==2)
+							if(temp.search('A')>=0)
 							{
-								if(temp.search('A')>=0)
-								{
-									var z=temp.search("L");
-									temp=temp.slice(0, z) + " " + "LONDON"; //out.slice(z,out.length);
-									break;
-								}
-								else
-								{
-									temp=temp.slice(0, i)+" "+temp.slice(i, temp.length);
-									break;
-								}
+								var z=temp.search("L");
+								temp=temp.slice(0, z) + " " + "LONDON"; //out.slice(z,out.length);
+								break;
+							}
+							else
+							{
+								temp=temp.slice(0, i)+" "+temp.slice(i, temp.length);
+								break;
 							}
 						}
 					}
-					out=temp;
-					flag=1;
-					break;
 				}
-				else
-				{
-					flag=0;
-				}
-			}
-			if(flag==1)
-			{
+				out=temp;
+				flag=1;
 				break;
 			}
+			else
+			{
+				flag=0;
+			}
 		}
-		if(flag==0||out==null)
+		if(flag==1)
 		{
-			var words = str.split(' ');
+			break;
+		}
+	}
+	if(flag==0||out==null)
+	{
+		var words = str.split(' ');
 		for(var k=0;k<words.length;k++)
 		{
-  			
-			if(words[k].search("sonia")>=0||words[k].search("dan")>=0||words[k].search("http")>=0||words[k].search("good")>=0||words[k].search("good evening")>=0||words[k].search("charlie")>=0||words[k].search("matt")>=0)
+  			if(words[k].search("sonia")>=0||words[k].search("dan")>=0||words[k].search("http")>=0||words[k].search("good")>=0||words[k].search("good evening")>=0||words[k].search("charlie")>=0||words[k].search("matt")>=0)
 			{
 				out=null;
-				console.log("encountered--------------------------------------------------------------------->");
 				break;
 			}
 			else if(words[k].search(/(a)?([0-9])/)>=0)
 			{
 				out=words[k].toUpperCase();
-					
-					
-					if(out.search("L")>=0)
-					{
-						var z=out.search("L");
-						out=out.slice(0, z) + " " + "LONDON"; //out.slice(z,out.length);
-						break;
-					}
-					else if(out.search("M")>=0||out.search("J")>=0)
-					{
-						out=null;
-						break;
-					}
-					else 
-					{
-						out=null;
+				if(out.search("L")>=0)
+				{
+					var z=out.search("L");
+					out=out.slice(0, z) + " " + "LONDON"; //out.slice(z,out.length);
+					break;
+				}
+				else if(out.search("M")>=0||out.search("J")>=0)
+				{
+					out=null;
+					break;
+				}
+				else 
+				{
+					out=null;
 						
-					}
-					
-					
-				
+				}
 			}
 			
-   
-		}
+   		}
 		
-		}
-	
+	}
 	return out;
 }
+
 function removeAll()
 {
 	for(var k=0;k<marker_array.length;k++)
@@ -781,6 +1208,7 @@ function removeAll()
 	$jq('#myTable td').remove();
 	clearArray();
 }
+
 function clearArray()
 {
 	tw_txt.splice(0,tw_txt.length);
@@ -788,63 +1216,149 @@ function clearArray()
 	similar_tweets.splice(0,similar_tweets.length);
 	unique_tot_related.splice(0,unique_tot_related.length);
 	tot_related.splice(0,tot_related.length);
+	validTweets.splice(0,validTweets.length);
+	updateSimilar.splice(0,updateSimilar.length);
+	roadWorks.splice(0,roadWorks.length);
+	graphUpdate.splice(0,graphUpdate.length);
+	graphParameters.splice(0,graphParameters.length);
 }
+
 function reloadCheck()
 {
-	var new_tweet_count;
-	var old_tweet_count=tweetsReturned();
-	display(0);
-	
+	var new_main_tweet_count=0;
+	var new_sub_tweet_count=0;
+	var old_main_tweet_count=validTweets.length;
+	var old_sub_tweet_count=updateSimilar.length;
+	clearArray();
+	updateFlag=1;
+	addLoadEvent(getNewsFeeds());
+	display(1);
 	window.setTimeout(function()
 	{
-		new_tweet_count=tweetsReturned();
-		if(new_tweet_count>old_tweet_count)
+		new_main_tweet_count=validTweets.length;
+		new_sub_tweet_count=updateSimilar.length;
+		if(new_main_tweet_count>old_main_tweet_count)
 		{
 			removeAll();
+			updateFlag=0;
+			getNewsFeeds();
 			display(1);
-			console.log("New tweets:"+old_tweet_count);
-			console.log("New tweets:"+new_tweet_count);
+			console.log("updated successfully!--------------------------------------------------->"); 
+		}
+		else if(new_sub_tweet_count>old_sub_tweet_count)
+		{
+			removeAll();
+			updateFlag=0;
+			getNewsFeeds();
+			display(1);
 			console.log("updated successfully!--------------------------------------------------->"); 
 		}
 		else
 		{
 			console.log("nothing updated--------------------------------------------------------->");
 		}
-	},2*1000);
+	},10*1000);
 }
 
-function tweetsReturned()
+//graph for visualizing traffic pattern over a day
+function generateGraph()
 {
-	var count=0;
-	try
+	for(var z=0;z<graphUpdate.length;z++)
 	{
-	for(var z=0;unique_tw_txt.length;z++)
-	{
-		if(unique_tw_txt[z][7]==1)
+		var now = moment().utc();
+		var dt=new Date(now);
+		var temp=graphUpdate[z][0];
+		temp=convertTime(temp);
+		console.log(graphUpdate[z][0]);
+		var date=temp.getHours();
+		if(dt.getDate()==temp.getDate())
 		{
-			count++;
+			addParameters(date);
 		}
 	}
-	}catch(err)
+	graphParameters.push(['0-4 hrs',first]);
+	graphParameters.push(['4-8 hrs',second]);
+	graphParameters.push(['8-12 hrs',third]);
+	graphParameters.push(['12-16 hrs',fourth]);
+	graphParameters.push(['16-20 hrs',fifth]);
+	graphParameters.push(['20-24 hrs',sixth]);
+	cjson();
+	scrollWindow()
+}
+function cjson()
+{
+	var tw=graphParameters;
+	var edited="{'label':[";
+	for(var j=0;j<tw.length;j++)
 	{
+		if(j==tw.length-1)
+		{
+			edited +="'"+tw[j][0]+"'";
+		}
+		else
+		{
+			edited +="'"+tw[j][0]+"',";
+		}
 	}
-	return count;
+	edited += "],'values':[";
+	for(var i=0;i<tw.length;i++) 
+	{
+    	if(i==tw.length-1)
+		{
+			edited += "{'label':'"+tw[i][0]+"','values':["+tw[i][1]+"]}";
+		}
+		else
+		{
+			edited += "{'label':'"+tw[i][0]+"','values':["+tw[i][1]+"]},";
+		}
+	}
+	edited = edited.substring(0, edited.length) + "]}";
+
+	var obj=eval( '(' + edited + ')'); 
+	var b=1;
+	init(b,obj);
+	
+}
+function addParameters(date)
+{
+	if(date>=0 & date<4)
+	{
+		first++;
+	}
+	else if(date>=4 & date<8)
+	{
+		second++;
+	}
+	else if(date>=8 & date<12)
+	{
+		third++;
+	}
+	else if(date>=12 & date<16)
+	{
+		fourth++;
+	}
+	else if(date>=16 & date<20)
+	{
+		fifth++;
+	}
+	else if(date>=20 & date<24)
+	{
+		sixth++;
+	}
 }
 
 //Initialize the google map
 function initialize() 
 {
 	var latlng = new google.maps.LatLng(51.517, -0.106);
-	var myOptions = {
-        zoom: 10,
-        center: latlng,
-        mapTypeId: google.maps.MapTypeId.ROADMAP
+	var myOptions = 
+	{
+       zoom: 10,
+       center: latlng,
+       mapTypeId: google.maps.MapTypeId.ROADMAP
     };
-
- 	 map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
-   
-    	trafficLayer = new google.maps.TrafficLayer();
-        trafficLayer.setMap(map);
+	map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+   	trafficLayer = new google.maps.TrafficLayer();
 }
 
 function setMarker(lat1,lng1,txt,val,flag,unique_id,user,pro_pic)
@@ -859,10 +1373,10 @@ function setMarker(lat1,lng1,txt,val,flag,unique_id,user,pro_pic)
 			 title:txt+" "+val,
 			 visible:true
 		});
-		iconFile = 'http://maps.google.com/mapfiles/ms/icons/green-dot.png';
+		iconFile = '/tfl/images/dark-blue-dot.png';
 		marker2.setIcon(iconFile);
 		marker2.info = new google.maps.InfoWindow({
-  		content: '<div style="background-color:#0C3;"><table><td><img src="'+pro_pic+'"></td><td><h2>'+user+'</h2><h3>'+txt+'</h3><h5>Created at:'+val+'</h5></td></table></div>'
+  		content: '<div style="color:#FFFFFF;"><table background="/tfl/images/mfkK6Me.jpg"><td><img src="'+pro_pic+'"></td><td><h2>'+user+'</h2><h3>'+txt+'</h3><h5>Created at:'+val+'</h5></td></table></div>'
 		});
 		marker2.set("id", unique_id);
 		marker2.set("flag", 1);
@@ -878,8 +1392,11 @@ function setMarker(lat1,lng1,txt,val,flag,unique_id,user,pro_pic)
 			title:txt+" "+val+" "+lat1+lng1,
 			visible:true
 		 });
-		marker2.info = new google.maps.InfoWindow({
-  		content: '<div style="background-color:#FF9999;"><table><td><img src="'+pro_pic+'"></td><td><h2>'+user+'</h2><h3>'+txt+'</h3><h5>Created at:'+val+'</h5></td></table></div>'
+		iconFile = '/tfl/images/light-blue-dot.png';
+		marker2.setIcon(iconFile);
+		marker2.info = new google.maps.InfoWindow
+		({
+  			content: '<div style="color:#FFFFFF;"><table background="/tfl/images/1.jpg" ><td><img src="'+pro_pic+'"></td><td><h2>'+user+'</h2><h3>'+txt+'</h3><h5>Created at:'+val+'</h5></td></table></div>'
 		});
 		marker2.set("id", unique_id);
 		marker2.set("flag", 0);
@@ -891,8 +1408,88 @@ function setMarker(lat1,lng1,txt,val,flag,unique_id,user,pro_pic)
 	});
 		
 }
+function roadMarker(txt,date,lat,lng,description,eventstartdate)
+{
+	var marker3 = new google.maps.Marker
+	({
+     	position: new google.maps.LatLng(lat,lng),
+        map: map,
+		animation: google.maps.Animation.DROP,
+		title:txt,
+		visible:false
+	});
+	iconFile = '/tfl/images/roadwork.png';
+	marker3.setIcon(iconFile);
+	marker3.info = new google.maps.InfoWindow
+	({
+  		content: '<div><table background="/tfl/images/1.jpg"><td><img src="/tfl/images/roadwork.png"></td><td><h2>Road Works in London</h2><h5>Work scheduled date:'+eventstartdate+'</h5><h3>'+txt+'. '+description+'</h3><h5>'+date+'</h5></td></table></div>'
+	});
+	marker3.set("id", roadId);
+	marker3.set("flag", 1);
+	roadMarkerArray.push(marker3);
+	google.maps.event.addListener(marker3, 'click', function() 
+	{
+  		marker3.info.open(map, marker3);	
+	});
+	roadId++;	
 
-		 
+}
+function progressDialog()
+{
+	var val=0;
+	var interval=setInterval(function()
+	{
+		val=val+1;
+		$jq('#progressbar').progressbar
+		({
+			value: val
+		});
+		$jq('#percent').text(val+'%');
+		if(val==100)
+		{
+			clearInterval(interval);
+		}
+	},32);
+	$jq('#progress_dialog').dialog('open');
+}
+
+$jq(document).ready(function() 
+{
+	setInterval(function() 
+	{
+		reloadCheck();
+	}, 14 * 60 * 1000);
+	$jq('#tutorial').dialog
+	({
+		autoOpen: false,
+		width: 600,
+		height:600,
+		modal:true
+	});	
+
+	$jq('#progress_dialog').dialog
+	({
+		autoOpen: false,
+		width: 600,
+		modal:true
+	});
+})
+
+function tutorialDialog()
+{
+	$jq('#tutorial').dialog('open');
+}
+
+function scrollWindow() 
+{
+	$jq("html, body").animate({ scrollTop: $jq(window).height() }, "slow");
+}
+
+function scrollUp()
+{
+	$jq("html, body").animate({ scrollTop: 0 }, "slow");
+}
+
 function addLoadEvent(func) 
 {
 	var oldonload = window.onload;
@@ -914,34 +1511,61 @@ function addLoadEvent(func)
   	}	
 }
 
-
-
+addLoadEvent(getNewsFeeds());
 addLoadEvent(display(1));
 addLoadEvent(function() 
 {
-	
- 	var windowWidth = $jq(window).width();
+	var windowWidth = $jq(window).width();
     var windowHeight =$jq(window).height();
+	$jq('#main_div').css({'width':windowWidth,'height':windowHeight});
    	$jq('#map_canvas').css({'width':windowWidth*0.95,'height':windowHeight*0.5});
-	$jq('.tableDiv').css({'top':windowHeight*0.9,'left':'0px','height':windowHeight*0.5,'width':windowWidth*0.95});
+	$jq('.tableDiv').css({'top':windowHeight*0.9,'left':'0px','height':windowHeight*0.4,'width':windowWidth*0.956});
 	$jq('.tableDiv').doubleScroll();
-	setInterval(function() 
-	{
-		reloadCheck();
-	}, 14 * 60 * 1000);
-
+	$jq('#infovis').css({'top':windowHeight*1.2,'left':'0px','width':windowWidth*0.95,'height':windowHeight*0.5});
+	$jq('#scrollTop').css({'top':windowHeight*1.2+windowHeight*0.5,'left':windowWidth*0.4});
+	init();
+	
 });
 google.maps.event.addDomListener(window, 'load', initialize);
 </script>
+
 </head>
+<body bgcolor="#000000" style="font-family:Verdana, Geneva, sans-serif">
+<input type="button" class="similar_font" id="showUser" onclick="showUserTweets()" value="Show/Hide Related Traffic Updates"/>
+<input type="button" class="similar_font"  id="showTraffic" onclick="showTrafficOverlay()" rel="downloadr" value="Show/Hide Google Traffic Information"/>
+<input type="button" class="similar_font"  id="roadWork" onclick="showRoadWork()" value="Show/Hide Road Works"/>
+<input type="button" class="similar_font"  id="showUser" onclick="generateGraph()" value="Graph for Traffic Pattern Over a day"/>
+<input type="button" class="similar_font"  id="showTutorial" onclick="tutorialDialog()" value="View Tutorial"/>
 
-<body bgcolor="#000000">
-<div id="win" style="height:300px; width:1400px; widows:inherit; ">
-<input type="button" id="showUser" onclick="showUserTweets()" value="Show/Hide User Tweets"/>
-<input type="button" id="showTraffic" onclick="showTrafficOverlay()" value="Show/Hide Traffic Overlay"/>
-  <div id="map_canvas" style="border:inset; left: 0px; top: 0px;"></div>
-  <div class="tableDiv" style="width:1200px;overflow:scroll;"><table id='myTable' style="table-layout:fixed;background-color:#ffffff; color:#000; border:inset; height: 2447px; left: 5px; top: 343px; width: 5000px;"></table></div>
+<div id="map_canvas" style="border:inset; left: 0px; top: 0px;"></div>
+  
+<div class="tableDiv" style="width:1200px;"><table id='myTable' style="table-layout:fixed;background-color:#ffffff; color:#000; left: 5px; top: 343px; width: 5000px;"></table></div>
 </div>
-
+<div id="center-container">
+<div id="infovis" style="position:absolute; width: 832px; height: 379px; left: 113px; top: 1033px; background-color:#000">
+</div>    
+</div>
+<input type="button" id="scrollTop" onclick="scrollUp()" style="position:absolute; left: 9px; top: 2534px;" value="Go to Top of the page"/>
+<div id="tutorial" title="Help on the contents displayed" style="background-color:#8D91FC">
+<p>Welcome to Visualisation of London Traffic via Twitter and TFL New Feeds Tutorial!</p>
+<p><b>Understanding markers on the google map:</b></p>
+<p><img src="/tfl/images/light-blue-box.png"/>-Main Traffic updates</p>
+<p><img src="/tfl/images/dark-blue-box.png"/>-Related Traffic updates</p>
+<p><b>Understanding details below the google map:</b></p>
+<p><ol><li>The first row on the table below the map indicates the main traffic updates</li>
+<li>The rest of the rows below the first row are the related traffic updates</li></ol></p>
+ <p><b>Other Additional Functions</b></p>
+<p><ol><li><b>Show/Hide Related Traffic Updates:</b><br/>Displays or hides marker for related traffic updates on the google map</li>
+<li><b>Show/Hide Google Traffic Informaton:</b><br/>Displays or hides the Google traffic information on the google map</li>
+<li><b>Show/Hide Road Works:</b><br/>Displays or hides the road works on the google map. If you click on the marker the details related to the road work will be displayed by a pop-up window</li>
+<li><b>Graph for Traffic Pattern Over a day:</b><br/>Displays a graph for the traffic updates plotted with time over a day</li></ol></p>
+<p><b>Sources used for traffic updates:</b></p>
+<p><ol><li>TFL traffic news twitter profile updates</li>
+<li>TFL news feeds</li><ol></p>
+</div>
+<div id="progress_dialog"  title="Loading.........." style="background-color:#8D91FC">
+<p>Please wait while the application loads.......<div id="progressbar"></div></p>
+<p><div id="percent"></div></p>
+</div>
 </body>
 </html>
