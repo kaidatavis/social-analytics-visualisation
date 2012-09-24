@@ -33,6 +33,7 @@ var bflag=0;
 var roadflag=0,roadId=0;
 var trafficflag=1;
 var id=0;
+var tweetFlag=0;
 var first=0,second=0,third=0,fourth=0,fifth=0,sixth=0;
 var events=0,works=0,other=0,breakdown=0,incident=0,accident=0,hazard=0;
 
@@ -127,7 +128,7 @@ function getNewsFeeds()
 	$jq.ajax
 	({
 		type: "GET",
-		url: "http://localhost/tfl/xml/new.xml",
+		url: "http://localhost/tfl/xml/stream.xml",
 		dataType: "xml",
 		async: "false",	 
 		success:function(xml)
@@ -861,8 +862,9 @@ function relatedTweets(txt,tweet_text,tweet_time,hash,lat,long,id,tweet_search)
 			 
 			success:function(_json)
 			{
-				if(_json.results.length<=0)
+				if(_json.results.length<=0 & tweetFlag==0)
 				{
+					tweetFlag=1;
 					relatedTweets(txt,tweet_search,tweet_time,hash,lat,long,id,tweet_search);
 					return false;
 				}
@@ -916,6 +918,7 @@ function relatedTweets(txt,tweet_text,tweet_time,hash,lat,long,id,tweet_search)
 					}
 				
 				});
+				tweetFlag=0;	
 			}
 			if(unique_tot_related.length>=0)
 			{
@@ -1278,7 +1281,6 @@ function generateGraph()
 		var dt=new Date(now);
 		var temp=graphUpdate[z][0];
 		temp=convertTime(temp);
-		console.log(graphUpdate[z][0]);
 		var date=temp.getHours();
 		if(dt.getDate()==temp.getDate())
 		{
