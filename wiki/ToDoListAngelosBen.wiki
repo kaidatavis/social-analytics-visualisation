@@ -2,11 +2,14 @@
 
 = Angelos =
 
- # Show user tweets when clicking on specific news tweets, Done
+ # Show user tweets when clicking on specific news tweets,
+   Status: Done
+   Expected date to finish 10/10/12
 
- # added dropdown menus for selecting different channels, Done
-
- # show url of the news on the same page,Done
+ # Show different icons(markers) on map for very bad news like
+   explosions,crashes and accidents. 
+   Status:Currently working on it
+   Expected date to finish 1/10/12
 
 
 = Ben =
