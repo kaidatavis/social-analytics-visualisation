@@ -7,7 +7,7 @@
    Expected date to finish 10/10/12
 
  # Show different icons(markers) on map for very bad news like
-   explosions,crashes and accidents. 
+   explosions,crashes and accidents.                                       
    Status:Currently working on it
    Expected date to finish 1/10/12
 
