@@ -343,7 +343,7 @@
                 news_templates[1] = '<div class="tweets"><div class="user">' + news_user + '</div><div class="date">' + news_date + '</div>\
 			    <span class="clear"></span><div class="img"><a href="' + news_profile_img + '" target="_blank"><img src="' + news_profile_img + '"\
 			    width="55" height="50"/>\
-			    </a></div><div class="text">' + news_title + '<br /><div class="show">Show user tweets..</div></div></div>';
+			    </a></div><div class="text">' + news_title + '<br /><div class="button">Show tweets</div></div>';
 				$.getJSON("http://where.yahooapis.com/geocode?location=" + news_text + "&flags=J&appid=Y7pwNojV34HFg6fmPML_2_YDetrgip_ZFLNaq3cetV6waFtW3O1eF2wJOcU.FMkbHO5iU9R7DxFZ", function (data) {
                                 console.log(data);
                                 var latitude = data.ResultSet.Results[0].latitude;
@@ -383,7 +383,7 @@
                                 google.maps.event.addListener(marker, 'click', openInfoWindow);
                                 $tweet.find(".user")
                                     .on('click', openInfoWindow);
-								$tweet.find('.show').on('click',open);
+								$tweet.find('.button').on('click',open);
 
                                 bounds.extend(myLatLng);
                             });
@@ -555,11 +555,7 @@
     </script>
 </head>
 <body>
-    <div class="news" style="width:80%; text-align:center;><div class=" info
-    "><span style="font-style: italic; color:#F00; ">"Pick one of the news logos to view<br
-    />news generated from users and agencies"</span>
-    </div>
-    <img class="international" src="img/euronews.png" width="48" height="48 "
+<!--    <img class="international" src="img/euronews.png" width="48" height="48 "
     title="Euronews" onclick="call_tweets('euronews','25067168',3)" />
     <img class="international" src="img/reuters.png" width="48" height="48 "
     title="Reuters" onclick="call_tweets('reuters','1652541',10)" />
@@ -572,7 +568,11 @@
     <img class="england" src="img/independent.jpg" width="48" height="48"
     title="The Independent" onclick="news_tweets('Independent','16973333')"
     />
-  <select name="Country">
+-->  
+<table width="200" border="0" align="center">
+  <tr>
+    <td><div class="styled-select">
+<select name="Country">
 <option>Select country</option>
   <option>France</option>
   <option>Greece</option>
@@ -582,22 +582,32 @@
   <option>Romania</option>
   <option>United Kingdom</option>
 </select>
+</div>
+</td>
+    <td><div class="styled-select">
 <select name="News Channel">
   <option>News channels</option>
 </select>
-
+</div>
+</td>
+    <td><div class="styled-select">
 <select id="tweets-select">
 <option selected="true" value="5">5 tweets</option>
 <option value="10">10 tweets</option>
 <option value="20">20 Tweets</option>
 <option value="50">50 Tweets</option>
 </select> 
-<input type="submit" value="Submit" onClick="get();" />
+</div>
+</td>
+    <td><input type="submit" value="Submit" onClick="get();" />
+</td>
+  </tr>
+</table>
 
 <div style="clear:both;"></div>
     <div class="banner">
         <div id="user-banner"></div>
-        <div id="news-banner">News Tweets</div></div>
+        <div id="news-banner">News Feeds</div></div>
 <div style="clear:both;"></div>
     <div id="user-tweets" style="float:left; width:30%; border:solid #FCF 1px; height:400px;"></div>
     <div id="news-tweets" style="float:left; width:30%; margin-left:1%; border:solid #FCF 1px; height:400px;"></div>
@@ -605,10 +615,5 @@
     <div class="frame"></div>
 <div class="arrow"></div><div style="clear:both;"></div>
     <div id="map_canvas" style="float:right; margin-top:20px; width:100%; border:solid #FCF 1px; height:400px;"></div>
-    
-<!--<div id="news-tweets" style="float:left; width:25%; margin-left:10px;
-    border:solid #FCF 1px; height:400px;"></div>
--->
 </body>
-
 </html>
