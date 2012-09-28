@@ -2,7 +2,11 @@
 
 = Angelos =
 
- # Task, status, when expect to finish
+ # Show user tweets when clicking on specific news tweets, Done
+
+ # added dropdown menus for selecting different channels, Done
+
+ # show url of the news on the same page,Done
 
 
 = Ben =
