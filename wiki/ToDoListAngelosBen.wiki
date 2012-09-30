@@ -2,25 +2,25 @@
 
 = Angelos =
 
- #1 Show user tweets when clicking on specific news tweets,
+ 1# Show user tweets when clicking on specific news tweets,
    Status: Done
 
    Expected date to finish: 10/10/12
 
- #2 Provide help on how to use the site.
+ 2# Provide help on how to use the site.
 
    Status: Currently working on it
 
    Expected date to finish: 10/10/12
 
- #3 Show different icons(markers) on map for very bad news like
+ 3# Show different icons(markers) on map for very bad news like
    explosions,crashes and accidents.
 
    Status: Currently working on it
 
    Expected date to finish: 10/10/12
 
- #4 Show the same bad news into an animated news ticker.
+ 4# Show the same bad news into an animated news ticker.
 
    Status: Currently working on it
 
