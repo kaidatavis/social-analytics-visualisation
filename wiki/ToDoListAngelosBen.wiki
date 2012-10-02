@@ -38,11 +38,11 @@
 ||4|| Making user interface attractive || Finished || 23/09/12 ||
 ||5|| Introduction(Thesis) || Finished || 30/09/12 ||
 ||6|| Background and Literature review || Finished || 01/09/12 ||
-||7|| Requirement Specifications || Finished || 01/09/12 ||
-||8|| Analysis and Design || ongoing || 02/09/12 ||
-||9|| Implementation and Testing || not yet started || 03/09/12 ||
-||10|| Demonstration and Evaluation || not yet started || 03/09/12 ||
-||11|| Critical Evaluation || not yet started || 04/09/12 ||
-||12|| Conclusion || not yet started || 06/09/12 ||
-||13|| Appendices || not yet started || 06/09/12 ||
-||14|| Submit Rough Draft || not yet completed || 06/09/12 ||
+||7|| Requirement Specifications || Finished || 01/10/12 ||
+||8|| Analysis and Design || ongoing || 02/10/12 ||
+||9|| Implementation and Testing || not yet started || 03/10/12 ||
+||10|| Demonstration and Evaluation || not yet started || 03/10/12 ||
+||11|| Critical Evaluation || not yet started || 04/10/12 ||
+||12|| Conclusion || not yet started || 06/10/12 ||
+||13|| Appendices || not yet started || 06/10/12 ||
+||14|| Submit Rough Draft || not yet completed || 06/10/12 ||
