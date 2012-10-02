@@ -31,7 +31,7 @@
 
 ==To do list includes both Coding and Thesis==
 
-||*S.No*|| *Task* || *Status* || *Expected finish Date* ||
+||*No*|| *Task* || *Status* || *Expected finish Date* ||
 ||1|| Adding Tfl traffic news feeds(XML file)to the existing system || Finished || 17/09/12 ||
 ||2|| Displaying current road works in London|| Finished || 19/09/12 ||
 ||3|| Adding a graph for visualizing traffic pattern over a day || Finished || 21/09/12 ||
