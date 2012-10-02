@@ -31,18 +31,18 @@
 
 ==To do list includes both Coding and Thesis==
 
-|| *Task* || *Status* || *Expected finish Date* ||
-|| Adding Tfl traffic news feeds(XML file)to the existing system || Finished || 17/09/12 ||
-|| Displaying current road works in London|| Finished || 19/09/12 ||
-|| Adding a graph for visualizing traffic pattern over a day || Finished || 21/09/12 ||
-|| Making user interface attractive || Finished || 23/09/12 ||
-|| Introduction(Thesis) || Finished || 30/09/12 ||
-|| Background and Literature review || Finished || 01/09/12 ||
-|| Requirement Specifications || Finished || 01/09/12 ||
-|| Analysis and Design || ongoing || 02/09/12 ||
-|| Implementation and Testing || not yet started || 03/09/12 ||
-|| Demonstration and Evaluation || not yet started || 03/09/12 ||
-|| Critical Evaluation || not yet started || 04/09/12 ||
-|| Conclusion || not yet started || 06/09/12 ||
-|| Appendices || not yet started || 06/09/12 ||
-|| Submit Rough Draft || not yet completed || 06/09/12 ||
+||*S.No.*|| *Task* || *Status* || *Expected finish Date* ||
+||1|| Adding Tfl traffic news feeds(XML file)to the existing system || Finished || 17/09/12 ||
+||2|| Displaying current road works in London|| Finished || 19/09/12 ||
+||3|| Adding a graph for visualizing traffic pattern over a day || Finished || 21/09/12 ||
+||4|| Making user interface attractive || Finished || 23/09/12 ||
+||5|| Introduction(Thesis) || Finished || 30/09/12 ||
+||6|| Background and Literature review || Finished || 01/09/12 ||
+||7|| Requirement Specifications || Finished || 01/09/12 ||
+||8|| Analysis and Design || ongoing || 02/09/12 ||
+||9|| Implementation and Testing || not yet started || 03/09/12 ||
+||10|| Demonstration and Evaluation || not yet started || 03/09/12 ||
+||11|| Critical Evaluation || not yet started || 04/09/12 ||
+||12|| Conclusion || not yet started || 06/09/12 ||
+||13|| Appendices || not yet started || 06/09/12 ||
+||14|| Submit Rough Draft || not yet completed || 06/09/12 ||
