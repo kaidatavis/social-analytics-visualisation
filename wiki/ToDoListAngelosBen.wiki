@@ -29,4 +29,20 @@
 
 = Ben =
 
- # Task, status, when expect to finish
+==To do list includes both Coding and Thesis==
+
+|| *Task* || *Status* || *Expected finish Date* ||
+|| Adding Tfl traffic news feeds(XML file)to the existing system || Finished || 17/09/12 ||
+|| Displaying current road works in London|| Finished || 19/09/12 ||
+|| Adding a graph for visualizing traffic pattern over a day || Finished || 21/09/12 ||
+|| Making user interface attractive || Finished || 23/09/12 ||
+|| Introduction(Thesis) || Finished || 30/09/12 ||
+|| Background and Literature review || Finished || 01/09/12 ||
+|| Requirement Specifications || Finished || 01/09/12 ||
+|| Analysis and Design || ongoing || 02/09/12 ||
+|| Implementation and Testing || not yet started || 03/09/12 ||
+|| Demonstration and Evaluation || not yet started || 03/09/12 ||
+|| Critical Evaluation || not yet started || 04/09/12 ||
+|| Conclusion || not yet started || 06/09/12 ||
+|| Appendices || not yet started || 06/09/12 ||
+|| Submit Rough Draft || not yet completed || 06/09/12 ||
