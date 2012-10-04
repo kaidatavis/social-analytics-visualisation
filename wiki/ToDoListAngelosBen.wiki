@@ -3,7 +3,7 @@
 = Angelos =
 
  1# Show user tweets when clicking on specific news tweets,
-   Status: Done
+   Status: Finished
 
    Expected date to finish: 10/10/12
 
