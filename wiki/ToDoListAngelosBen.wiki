@@ -9,20 +9,20 @@
 
  2# Provide help on how to use the site.
 
-   Status: Currently working on it
+   Status: Finished
 
    Expected date to finish: 10/10/12
 
  3# Show different icons(markers) on map for very bad news like
    explosions,crashes and accidents.
 
-   Status: Currently working on it
+   Status: Not yet started
 
    Expected date to finish: 10/10/12
 
  4# Show the same bad news into an animated news ticker.
 
-   Status: Currently working on it
+   Status: Not yet started
 
    Expected date to finish: 10/10/12
 
