@@ -24,6 +24,7 @@ input.similar_font
 <script type="text/javascript" src="../lib/slimScroll.js"></script>
 
 <script type="text/javascript">
+//Global Variables
 var map;
 var trafficLayer;
 var new_tweet_id=1000;
@@ -37,6 +38,7 @@ var tweetFlag=0;
 var first=0,second=0,third=0,fourth=0,fifth=0,sixth=0;
 var events=0,works=0,other=0,breakdown=0,incident=0,accident=0,hazard=0;
 
+//Arrays
 var updateSimilar=new Array();
 var tw_txt=new Array();
 var unique_tw_txt=new Array();
@@ -50,84 +52,14 @@ var graphParameters=new Array();
 var validTweets=new Array();
 var graphUpdate=new Array();
 
-function display(flag)
-{
-	
-	var len=0;
-	$jq.ajax
-	({
-		type: 'GET',
-			
- 		dataType:'jsonp',
-		url: 'https://api.twitter.com/1/statuses/user_timeline.json?screen_name=TflTrafficNews&count=200',
-			 
-		success:function(_json)
-		{
-			$jq.each(_json,function(key)
-			{
-				len++;
-				var tweet_text=_json[key].text;
-				var time=_json[key].created_at;
-				var usr=_json[key].user.screen_name;
-				var pro_pic=_json[key].user.profile_image_url;
-				pro_pic = pro_pic.replace(/\//g,'/');
-				
-				var now = moment().utc();
-				var dt=new Date(now);
-				var diff=hoursBetween(convertTime(time),dt);
-				if(diff<=24)
-				{
-					var res=tweet_text;
-					res=res.replace(/[^0-9a-zA-Z ]/g, "");
-					res=res.replace(/([a-z])?([A-Z])/g, "$1 $2");
-					res = res.replace(/\s+/g,'+');
-					res=res+"+London";
-					var time_diff=secondsBetween(convertTime(time),dt);
-					var hash=retrieveHashtags(tweet_text);
-					console.log("Hash tag:"+hash);
-					if(hash==null|| hash==undefined)
-					{
-					}
-					else
-					{
-						tw_txt.push([res,tweet_text,time,hash,id,0,0,0,usr,pro_pic,0,time_diff,hash,0]);
-						id++;
-						if(updateFlag==0)
-						{
-							graphUpdate.push([time]);
-						}
-					}
-				}
-				
-			});
-			uniqueMaintweets();
-				
-			if(flag==1)
-			{
-				progressDialog();
-				setTimeout(function()
-				{
-					$jq('#progress_dialog').dialog('close');
-					unique_tw_txt.sort(function(a,b)
-					{
-    					return a[11] - b[11];
-					});
-					addDiv();
-				},4*1000);
-			}
-			
-		}
-			
-		 
-	});
-		
-}
 
+//To retrieve Syndicated feeds from TFL live traffic disruptions data feed
 function getNewsFeeds()
 {
 	$jq.ajax
 	({
 		type: "GET",
+		//url: "http://localhost/tfl/xml/stream.xml",
 		url: "http://localhost/tfl/xml/stream.xml",
 		dataType: "xml",
 		async: "false",	 
@@ -365,6 +297,80 @@ function getNewsFeeds()
 	 });
 	
 }
+//To retrieve tweets from TFL twitter traffic news profile
+function display(flag)
+{
+	
+	var len=0;
+	$jq.ajax
+	({
+		type: 'GET',
+			
+ 		dataType:'jsonp',
+		url: 'https://api.twitter.com/1/statuses/user_timeline.json?screen_name=TflTrafficNews&count=200',
+			 
+		success:function(_json)
+		{
+			$jq.each(_json,function(key)
+			{
+				len++;
+				var tweet_text=_json[key].text;
+				var time=_json[key].created_at;
+				var usr=_json[key].user.screen_name;
+				var pro_pic=_json[key].user.profile_image_url;
+				pro_pic = pro_pic.replace(/\//g,'/');
+				
+				var now = moment().utc();
+				var dt=new Date(now);
+				var diff=hoursBetween(convertTime(time),dt);
+				if(diff<=24)
+				{
+					var res=tweet_text;
+					res=res.replace(/[^0-9a-zA-Z ]/g, "");
+					res=res.replace(/([a-z])?([A-Z])/g, "$1 $2");
+					res = res.replace(/\s+/g,'+');
+					res=res+"+London";
+					var time_diff=secondsBetween(convertTime(time),dt);
+					var hash=retrieveHashtags(tweet_text);
+					console.log("Hash tag:"+hash);
+					if(hash==null|| hash==undefined)
+					{
+					}
+					else
+					{
+						tw_txt.push([res,tweet_text,time,hash,id,0,0,0,usr,pro_pic,0,time_diff,hash,0]);
+						id++;
+						if(updateFlag==0)
+						{
+							graphUpdate.push([time]);
+						}
+					}
+				}
+				
+			});
+			uniqueMaintweets();
+				
+			if(flag==1)
+			{
+				progressDialog();
+				setTimeout(function()
+				{
+					$jq('#progress_dialog').dialog('close');
+					unique_tw_txt.sort(function(a,b)
+					{
+    					return a[11] - b[11];
+					});
+					addDiv();
+				},4*1000);
+			}
+			
+		}
+			
+		 
+	});
+		
+}
+//To format the TFL time stamp
 function formatFeed(temp)
 {
 	temp=temp+':00';
@@ -372,11 +378,14 @@ function formatFeed(temp)
 	temp=temp.slice(t,t+8);
 	return temp;
 }
+//To convert UTC to javascript date object
 function convertFeed(f)
 {
 	var z=new Date(f);
 	return z;
 }
+//First duplication and categorization of main tweets takes place
+//Followed by geo-coding the main tweets
 function uniqueMaintweets()
 {
 	unique_tw_txt=remDup(tw_txt,1);
@@ -421,7 +430,8 @@ function uniqueMaintweets()
 		
 	}
 }
-
+//Adding the dynamic DIV for the main traffic updates
+//Adding main traffic updates marker to the google map
 function addDiv()
 {
 	roadWork();
@@ -463,11 +473,11 @@ function addDiv()
 	}
 	
 }
-
+//Function to append the main traffic DIV
 function createDiv(str,hash,time,id,user,pro_pic)
 {
-	$jq('#myTable').append('<td class="table" style="border:inset;table-layout:fixed;width:150px"><div class="scrollable"><table id='+id+' style="table-layout:fixed;word-wrap:break-word;white-space:nowrap;"></table></div></td>');
-	$jq('#'+id).append('<thead><tr background="/tfl/images/1.jpg" style="white-space:nowrap;word-wrap:break-word;color:#FFFFFF;border:inset;top:0px;width:30px;" onclick="clickRow(this.id)" onmouseover="mouseOver(this.id)" onmouseout="mouseOut(this.id)" id='+id+'><td><div><table><td><img src="'+pro_pic+'"></td><td><h5>'+user+'</h5><h4>'+str+'</h4><h6>Created at:'+time+'</h6></td></table></div></td></tr><thead>');
+	$jq('#myTable').append('<td class="table" style="border:inset;table-layout:fixed;width:150px;"><div class="scrollable"><table id='+id+' style="table-layout:fixed;white-space:nowrap;"></table></div></td>');
+	$jq('#'+id).append('<thead><tr background="/tfl/images/1.jpg" style="white-space:nowrap;word-wrap:break-word;color:#FFFFFF;border:inset;top:0px;width:30px;" onclick="clickRow(this.id)" onmouseover="mouseOver(this.id)" onmouseout="mouseOut(this.id)" id='+id+'><td><div><table><td><img src="'+pro_pic+'"></td><td><h5>'+user+'</h5><h4><div style="white-space:break-word">'+str+'</div></h4><h6>Created at:'+time+'</h6></td></table></div></td></tr><thead>');
 	$jq('div.scrollable').slimscroll
 	({
 		height:$jq(window).height()*0.45,
@@ -475,7 +485,7 @@ function createDiv(str,hash,time,id,user,pro_pic)
 		//alwaysVisible: true,
 	});
 }
-
+//Function to invoke the roadSearch() function to geo-code the road works 
 function roadWork()
 {
 	for(var k=0;k<roadWorks.length;k++)
@@ -518,6 +528,7 @@ function roadSearch(txt,k)
 	});
 		
 }
+//To show/hide road work via button click
 function showRoadWork()
 {
 	if(roadflag==0)
@@ -544,6 +555,7 @@ function showRoadWork()
 	}
 	
 }
+//To display a pop up marker info window when a div is clicked 
 function clickRow(row_id)
 {
 	for(var k=0;k<marker_array.length;k++)
@@ -559,6 +571,7 @@ function clickRow(row_id)
 	}
 	
 }
+//To display a pop up marker info window when a div is hovered 
 function mouseOver(row_id)
 {
 	for(var k=0;k<marker_array.length;k++)
@@ -571,6 +584,7 @@ function mouseOver(row_id)
 		}
 	}
 }
+//To remove the info window when the mouse is moved from a div element
 function mouseOut(row_id)
 {
 	for(var k=0;k<marker_array.length;k++)
@@ -579,7 +593,7 @@ function mouseOut(row_id)
 		marker_array[k].setAnimation(null);
     }
 }
-
+//To show/hide the user related traffic informatin via a button click 
 function showUserTweets()
 {
 	if(bflag==0)
@@ -605,6 +619,7 @@ function showUserTweets()
 		bflag=0;
 	}
 }
+//To show/hide google traffic information
 function showTrafficOverlay()
 {
 	if(trafficflag==0)
@@ -618,6 +633,7 @@ function showTrafficOverlay()
 		trafficflag=0;
 	}
 }
+//To append a div for the related traffic below the main traffic updates 
 function createSub(str,hash,time,id,unique_id,user,pro_pic,flag)
 {
 	if(flag==0)
@@ -629,7 +645,7 @@ function createSub(str,hash,time,id,unique_id,user,pro_pic,flag)
 		$jq('#'+id).append('<tbody><tr height="2%" background="/tfl/images/1.jpg" id='+unique_id+' onclick="clickRow(this.id)" onmouseover="mouseOver(this.id)" onmouseout="mouseOut(this.id)" style="width:30px;top:0px;color:#FFFFFF;border:inset;word-wrap:break-word;white-space:nowrap;"><td><div><table><td><img src="'+pro_pic+'"></td><td><h5>'+user+'</h5><h4>'+str+'</h4><h6>Created at:'+time+'</h6></td></table></div></td></tr></tbody>');
 	}
 }
-
+//To remove the roads the roads from the TFL traffic data feeds
 function roadTokenizer(str)
 {
 	if(str.indexOf("/")>=0)
@@ -712,14 +728,14 @@ function roadTok(str)
 			return road;
 		}
 }
-
+//To format the time stamp retrieved from tfl data feeds to UTC
 function formatTime(temp)
 {
 	var t=temp.length-2;
 	temp=temp.slice(0,t)+':'+temp.slice(t,t+2)+':00';
 	return temp;
 }
-
+//To geo-code using google API 
 function geo(txt,tweet_text,time,hash,id,index)
 {
 	var lat,long;
@@ -753,6 +769,7 @@ function geo(txt,tweet_text,time,hash,id,index)
 		}
 	});
 }
+//To geo-code using yahoo API
 function yahooSearch(txt,tweet_text,time,hash,id,index)
 {
 	$jq.ajax
@@ -810,7 +827,7 @@ function yahooSearch(txt,tweet_text,time,hash,id,index)
 	});
 			
 }
-
+//To remove duplicated elements from an array
 function remDup(arrayName,z)
 {
 	var newArray=new Array();
@@ -843,7 +860,7 @@ function Dup(arrayName)
   	}
  	return newArray1;
 }
-
+//To retrieve related tweets from the Twitter SEARCH API
 function relatedTweets(txt,tweet_text,tweet_time,hash,lat,long,id,tweet_search)
 {
 	var related_tweet_text,related_tweet_time,related_user,related_pro_pic;
@@ -934,6 +951,8 @@ function relatedTweets(txt,tweet_text,tweet_time,hash,lat,long,id,tweet_search)
 	}
 	
 }
+//To sort the related tweets by time
+//Then creating the marker pattern and invoking setMarker() function to plot user related tweets on to google map
 function sortrelatedTweets(lat,long,id)
 {
 	var index=unique_tot_related.length-1;
@@ -1071,6 +1090,7 @@ function convertTime(f)
 	var z=new Date(tmp1);
 	return z;
 }
+//To find time difference between time stamps in seconds 
 function secondsBetween(date1, date2) 
 {
     var one_sec = 1000;
@@ -1080,6 +1100,7 @@ function secondsBetween(date1, date2)
     var difference_ms = date2_ms - date1_ms;
 	return Math.round(difference_ms / one_sec);
 }
+//To find time difference between time stamps in hours
 function hoursBetween(date1, date2) 
 {
     var one_hour = 60*60*1000;
@@ -1089,6 +1110,7 @@ function hoursBetween(date1, date2)
     var difference_ms = date2_ms - date1_ms;
 	return Math.round(difference_ms / one_hour);
 }
+//To find time difference between time stamps in days
 function timeDiff(date1, date2) 
 {
     //Get 1 second in milliseconds
@@ -1100,6 +1122,7 @@ function timeDiff(date1, date2)
 	// Convert back to seconds
     return Math.round(difference_ms / one_msec);
 }
+//To extract the roads from TFL traffic updates
 function retrieveHashtags(str)
 {
 	var out;	
@@ -1200,7 +1223,7 @@ function retrieveHashtags(str)
 	}
 	return out;
 }
-
+//To remove all the markers from the google map
 function removeAll()
 {
 	for(var k=0;k<marker_array.length;k++)
@@ -1220,7 +1243,7 @@ function removeAll()
 	$jq('#myTable td').remove();
 	clearArray();
 }
-
+//To reset or clear all the arrays used in the application
 function clearArray()
 {
 	tw_txt.splice(0,tw_txt.length);
@@ -1234,7 +1257,7 @@ function clearArray()
 	graphUpdate.splice(0,graphUpdate.length);
 	graphParameters.splice(0,graphParameters.length);
 }
-
+//To check twitter for real time updates
 function reloadCheck()
 {
 	var new_main_tweet_count=0;
@@ -1296,6 +1319,7 @@ function generateGraph()
 	cjson();
 	scrollWindow()
 }
+//To update the graph
 function cjson()
 {
 	var tw=graphParameters;
@@ -1330,6 +1354,7 @@ function cjson()
 	init(b,obj);
 	
 }
+//To split the traffic updates for a day into six intervals
 function addParameters(date)
 {
 	if(date>=0 & date<4)
@@ -1371,7 +1396,7 @@ function initialize()
 	map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
    	trafficLayer = new google.maps.TrafficLayer();
 }
-
+//To plot the markers on to the google map
 function setMarker(lat1,lng1,txt,val,flag,unique_id,user,pro_pic)
 {
 	if(flag==1)
@@ -1419,6 +1444,7 @@ function setMarker(lat1,lng1,txt,val,flag,unique_id,user,pro_pic)
 	});
 		
 }
+//To plot the geo-coded marker on to the google map
 function roadMarker(txt,date,lat,lng,description,eventstartdate)
 {
 	var marker3 = new google.maps.Marker
@@ -1445,6 +1471,7 @@ function roadMarker(txt,date,lat,lng,description,eventstartdate)
 	roadId++;	
 
 }
+//To dispay the progress bar during loading time
 function progressDialog()
 {
 	var val=0;
@@ -1463,7 +1490,7 @@ function progressDialog()
 	},32);
 	$jq('#progress_dialog').dialog('open');
 }
-
+//To invoke programs at loading time
 $jq(document).ready(function() 
 {
 	setInterval(function() 
@@ -1521,7 +1548,7 @@ function addLoadEvent(func)
     	}
   	}	
 }
-
+//Additional funcitons to be invoked on page load
 addLoadEvent(getNewsFeeds());
 addLoadEvent(display(1));
 addLoadEvent(function() 
