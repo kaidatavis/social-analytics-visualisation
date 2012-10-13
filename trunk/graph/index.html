@@ -1,0 +1,621 @@
+<!DOCTYPE HTML>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>News Map Visualize</title>
+    <link type="text/css" href="css/custom-theme/jquery-ui-1.8.24.custom.css" rel="Stylesheet" />	
+    <link rel="stylesheet" type="text/css" href="css/css.css"/>
+    <script type="text/javascript" src="js/jquery-1.8.1.js"></script>
+    <script type="text/javascript" src="js/jquery-1.8.2.min.js"></script>
+	<script type="text/javascript" src="js/jquery-ui-1.8.24.custom.min.js"></script>
+   <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDlmZn_jhR4UK9ydbiKf4Mtn9GDuZbLO5w&sensor=true"></script>
+    <script type="text/javascript" src="js/frame.js"></script>
+    <script type="text/javascript" src="js/dropdown.js"></script>
+    <script type="text/javascript" src="js/news_tweets.js"></script>
+    <script type="text/javascript">
+	$.fx.speeds._default = 1000;
+	$(function() {
+		$( "#dialog" ).dialog({
+			autoOpen: false,
+			show: "blind",
+			hide: "explode",
+			width: 690,
+			modal:true
+		});
+
+		$( "#opener" ).click(function() {
+			$( "#dialog" ).dialog( "open" );
+			return false;
+		});
+	});
+		function transfer_arrays(news_array, user_tweets,query,count){
+			$('#loading').css("visibility", "hidden");
+            user_ids_2 = [];
+            user_news_array = [];
+            var ids_2;
+            $("#user-tweets,#news-tweets,#user-news-tweets").html("");
+            $.getJSON("http://search.twitter.com/search.json?q=%40" + query + "&rpp="+count+"&include_entities=true&result_type=recent&callback=?",
+            function (data) {
+                $.each(data.results, function (i, item) {
+                    var user = item.from_user;
+                    var user_id = item.from_user_id;
+                    var date = item.created_at;
+                    var profile_img = item.profile_image_url;
+                    var text = item.text;
+                    create_news_array(user, user_id, date, profile_img, text);
+                });
+
+                function create_news_array(a, b, c, d, e, f) {
+                    user_news_array.push({
+                        user: a,
+                        user_id: b,
+                        date: c,
+                        profile_img: d,
+                        text: e
+                    });
+                }
+                for (var i in user_news_array) {
+                    user_ids_2.push(user_news_array[i].user_id);
+                }
+                ids_2 = user_ids_2.join();
+				console.log(user_news_array);
+                search_location(ids_2, user_news_array,user_tweets,news_array,query);
+            });
+            function search_location(ids_2, user_news_array,user_tweets,news_array,query) {
+                $.getJSON("http://api.twitter.com/1/users/lookup.json?user_id=" + ids_2 + "&callback=?", function (data) {
+                    $.each(data, function (i, item) {
+                        var location = item.location;
+
+                        user_news_array[i].location = location; //locations are added but some are empty
+
+                    });
+                    var userLocationMap = {};
+                    for (var i = 0; i < user_news_array.length; i++) {
+                        if (user_news_array[i].location) {
+                            userLocationMap[user_news_array[i].user] = user_news_array[i].location;
+                        }
+                    }
+
+                    for (var i = 0; i < user_news_array.length; i++) {
+                        if (!user_news_array[i].location) {
+                            user_news_array[i].location = userLocationMap[user_news_array[i].user];
+                        }
+                    }
+				geo(user_news_array,user_tweets,news_array,query);
+                });
+            }
+
+             var mapOptions = {
+                center: new google.maps.LatLng(48.69096, - 31.64063),
+                zoom: 3,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            };
+            var bounds = new google.maps.LatLngBounds();
+            var map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
+
+            function geo(user_news_array,user_tweets,news_array,query) {
+
+               for (var i = 0; i < user_news_array.length; i++) {
+                    var location = user_news_array[i].location;
+                    var user = user_news_array[i].user;
+                    var date = user_news_array[i].date;
+                    var profile_img = user_news_array[i].profile_img;
+                    var text = user_news_array[i].text;
+                    var text = text.replace(/http:\/\/\S+/g, '<a href="$&">$&&nbsp;<img src="img/find.png"></a>');
+                    var text = text.replace(/(@)(\w+)/g, ' $1<a href="http://twitter.com/$2" target="_blank">$2</a>');
+                    var text = text.replace(/(#)(\w+)/g, ' $1<a href="http://search.twitter.com/search?q=%23$2" target="_blank">$2</a>');
+
+                    geocode_user_tweets(user, date, profile_img, text, location,query);
+                }
+                for (var x = 0; x < news_array.length; x++) {
+                    var news_date = news_array[x].news_date;
+                    var news_profile_img = news_array[x].news_profile_img;
+                    var news_text = news_array[x].news_text;
+                    var news_url = news_array[x].news_url;
+                    var news_user = news_array[x].news_user;
+                   geocode_news_tweets(news_user, news_date, news_profile_img, news_text, news_url,user_tweets);
+                }
+			}
+                function geocode_user_tweets(user, date, profile_img, text, location,query) {
+                    var templates = [];
+                    templates[0] = '<div><div></div><h2 class="firstHeading"><a href="' + profile_img + '" target="_blank"><img src="' + profile_img + '" width="55" height="50"/></a>' + user + '</h2><div>' + text + '</div><p>Date Posted- ' + date + '</p></div>';
+                    templates[1] = '<div class="tweets"><div class="user">' + user + '</div><div class="date">' + date + '</div><span class="clear"></span><div class="img"><a href="' + profile_img + '" target="_blank"><img src="' + profile_img + '" width="55" height="50"/></a></div><div class="text">' + text + '</div>';
+                    templates[2] = '<div><div></div><h2 class="firstHeading"><a href="' + profile_img + '" target="_blank"><img src="' + profile_img + '" width="55" height="50"/></a>' + user + '</h2><div>' + text + '</div><p>Date Posted- ' + date + '</p></div>';
+                    templates[3] = '<div class="tweetss"><div class="user">' + user + '</div><div class="date">' + date + '</div><span class="clear"></span><div class="img"><a href="' + profile_img + '" target="_blank"><img src="' + profile_img + '" width="55" height="50"/></a></div><div class="text">' + text + '</div>';
+                    var geocoder = new google.maps.Geocoder();
+                    geocoder.geocode({
+                        address: location
+                    }, function (response, status) {
+                        if (status == google.maps.GeocoderStatus.OK) {
+                            var x = response[0].geometry.location.lat(),
+                                y = response[0].geometry.location.lng();
+                            var myLatLng = new google.maps.LatLng(x, y);
+                            var marker = new google.maps.Marker({
+                                icon: profile_img,
+                                title: user,
+                                map: map,
+                                position: myLatLng
+                            });
+                            var infowindow = new google.maps.InfoWindow({
+                                content: templates[0].replace('user', user)
+                                    .replace('text', text)
+                                    .replace('date', date)
+                            });
+                            var $tweet = $(templates[1].replace('%user', user)
+                                .replace(/%profile_img/g, profile_img)
+                                .replace('%text', text));
+                            $('#user-banner')
+                                .css("visibility", "visible");
+							$('#user-banner').text('Users mentioned @'+query+'');
+                            $('#user-tweets')
+                                .css({
+                                'overflow-y': 'scroll',
+                                'overflow-x': 'hidden'
+                            })
+                                .append($tweet);
+
+                            function openInfoWindow() {
+                                infowindow.open(map, marker);
+                            }
+                            google.maps.event.addListener(marker, 'click', openInfoWindow);
+                            $tweet.find(".user")
+                                .on('click', openInfoWindow);
+                            bounds.extend(myLatLng);
+                        } else if (status === google.maps.GeocoderStatus.OVER_QUERY_LIMIT) {
+                            setTimeout(function () {
+                                geocode_user_tweets(user, date, profile_img, text, location);
+                            }, 500);
+                        } else {
+                            $.getJSON("http://where.yahooapis.com/geocode?q=" + text +
+							 "&flags=J&appid=Y7pwNojV34HFg6fmPML_2_YDetrgip_ZFLNaq3cetV6waFtW3O1eF2wJOcU.FMkbHO5iU9R7DxFZ", function (data) {
+							if($.isArray(data.ResultSet.Results)){
+                                var latitude = data.ResultSet.Results[0].latitude;
+                                var longitude = data.ResultSet.Results[0].longitude;
+                                var myLatLng = new google.maps.LatLng(latitude, longitude);
+                                var marker = new google.maps.Marker({
+                                    icon: profile_img,
+                                    title: user,
+                                    map: map,
+                                    position: myLatLng
+                                });
+                                var infowindow = new google.maps.InfoWindow({
+                                    content: templates[2].replace('user', user)
+                                        .replace('text', text)
+                                        .replace('date', date)
+                                });
+                                var $tweet = $(templates[3].replace('%user', user)
+                                    .replace(/%profile_img/g, profile_img)
+                                    .replace('%text', text));
+                                $('#user-banner')
+                                    .css("visibility", "visible");
+                                $('#news-banner')
+                                    .css("visibility", "visible");
+                                $('#user-tweets')
+                                    .css({
+                                    'overflow-y': 'scroll',
+                                    'overflow-x': 'hidden'
+                                })
+                                    .append($tweet);
+
+                                function openInfoWindow() {
+                                    infowindow.open(map, marker);
+                                }
+                                google.maps.event.addListener(marker, 'click', openInfoWindow);
+                                $tweet.find(".user")
+                                    .on('click', openInfoWindow);
+
+                                bounds.extend(myLatLng);
+							}
+						else if(!$.isArray(data.ResultSet.Results)){
+                                var latitude = data.ResultSet.Results[0].latitude;
+                                var longitude = data.ResultSet.Results[0].longitude;
+                                var myLatLng = new google.maps.LatLng(latitude, longitude);
+                                var marker = new google.maps.Marker({
+                                    icon: profile_img,
+                                    title: user,
+                                    map: map,
+                                    position: myLatLng
+                                });
+                                var infowindow = new google.maps.InfoWindow({
+                                    content: templates[2].replace('user', user)
+                                        .replace('text', text)
+                                        .replace('date', date)
+                                });
+                                var $tweet = $(templates[3].replace('%user', user)
+                                    .replace(/%profile_img/g, profile_img)
+                                    .replace('%text', text));
+                                $('#user-banner')
+                                    .css("visibility", "visible");
+                                $('#news-banner')
+                                    .css("visibility", "visible");
+                                $('#user-tweets')
+                                    .css({
+                                    'overflow-y': 'scroll',
+                                    'overflow-x': 'hidden'
+                                })
+                                    .append($tweet);
+
+                                function openInfoWindow() {
+                                    infowindow.open(map, marker);
+                                }
+                                google.maps.event.addListener(marker, 'click', openInfoWindow);
+                                $tweet.find(".user")
+                                    .on('click', openInfoWindow);
+
+                                bounds.extend(myLatLng);
+							}
+                            });
+                        }
+                    });
+                }
+				function geocode_news_tweets(news_user, news_date, news_profile_img, news_text, news_url,user_tweets){
+				var text2=news_text.replace(/\r"\/:\.`'\[/g, "");
+				var news_title=news_text.replace(/http:\/\/\S+/g, '<a href="$&">$&&nbsp;<img src="img/find.png"></a>');
+				var	news_templates=[];
+                news_templates[0] = '<div><div></div><h2 class="firstHeading"><a href="' + news_profile_img + '" target="_blank">\
+				<img src="' + news_profile_img + '"width="55" height="50"/></a>' + news_user + '</h2><div>' + news_text + '</div>\
+				<p>Date Posted- ' + news_date + '</p></div>';
+                news_templates[1] = '<div class="tweets"><div class="user">' + news_user + '</div><div class="date">' + news_date + '</div>\
+			    <span class="clear"></span><div class="img"><a href="' + news_profile_img + '" target="_blank"><img src="' + news_profile_img + '"\
+			    width="55" height="50"/>\
+			    </a></div><div class="text">' + news_title + '<br /><div class="button2">Show tweets</div></div>';
+				console.log(text2);
+				$.getJSON("http://where.yahooapis.com/geocode?q=" + text2 + "&flags=J&appid=Y7pwNojV34HFg6fmPML_2_YDetrgip_ZFLNaq3cetV6waFtW3O1eF2wJOcU.FMkbHO5iU9R7DxFZ",
+				 function (data) {
+					console.log(text2,data);
+							if($.isArray(data.ResultSet.Results)){
+                                var latitude = data.ResultSet.Results[0].latitude;
+                                var longitude = data.ResultSet.Results[0].longitude;
+                                var myLatLng = new google.maps.LatLng(latitude, longitude);
+                                var marker = new google.maps.Marker({
+                                    icon: news_profile_img,
+                                    title: news_user,
+                                    map: map,
+                                    position: myLatLng
+                                });
+                                var infowindow = new google.maps.InfoWindow({
+                                    content: news_templates[0].replace('news_user', news_user)
+                                        .replace('news_text', news_text)
+                                        .replace('news_date', news_date)
+                                });
+                                var $tweet = $(news_templates[1].replace('%news_user', news_user)
+                                    .replace(/%news_profile_img/g, news_profile_img)
+                                    .replace('%news_text', news_text));
+                                $('#user-banner')
+                                    .css("visibility", "visible");
+                                $('#news-banner')
+                                    .css("visibility", "visible");
+                                $('#news-tweets')
+                                    .css({
+                                    'overflow-y': 'scroll',
+                                    'overflow-x': 'hidden'
+                                })
+                                    .append($tweet);
+
+                                function openInfoWindow() {
+                                    infowindow.open(map, marker);
+                                }
+								function open(){
+									find('' + text2);
+								}
+                                google.maps.event.addListener(marker, 'click', openInfoWindow);
+                                $tweet.find(".user")
+                                    .on('click', openInfoWindow);
+								$tweet.find('.button2').on('click',open);
+
+                                bounds.extend(myLatLng);
+							}
+							else if(!$.isArray(data.ResultSet.Results)){
+								console.log(text2,data);
+								var latitude = data.ResultSet.Results.latitude;
+                                var longitude = data.ResultSet.Results.longitude;
+                                var myLatLng = new google.maps.LatLng(latitude, longitude);
+                                var marker = new google.maps.Marker({
+                                    icon: news_profile_img,
+                                    title: news_user,
+                                    map: map,
+                                    position: myLatLng
+                                });
+                                var infowindow = new google.maps.InfoWindow({
+                                    content: news_templates[0].replace('news_user', news_user)
+                                        .replace('news_text', news_text)
+                                        .replace('news_date', news_date)
+                                });
+                                var $tweet = $(news_templates[1].replace('%news_user', news_user)
+                                    .replace(/%news_profile_img/g, news_profile_img)
+                                    .replace('%news_text', news_text));
+                                $('#user-banner')
+                                    .css("visibility", "visible");
+                                $('#news-banner')
+                                    .css("visibility", "visible");
+                                $('#news-tweets')
+                                    .css({
+                                    'overflow-y': 'scroll',
+                                    'overflow-x': 'hidden'
+                                })
+                                    .append($tweet);
+
+                                function openInfoWindow() {
+                                    infowindow.open(map, marker);
+                                }
+								function open(){
+									find('' + text2);
+								}
+                                google.maps.event.addListener(marker, 'click', openInfoWindow);
+                                $tweet.find(".user")
+                                    .on('click', openInfoWindow);
+								$tweet.find('.button2').on('click',open);
+
+                                bounds.extend(myLatLng);
+
+								}
+                            
+/*							if (data){
+								var $tweet = $(news_templates[1].replace('%news_user', news_user)
+                                    .replace(/%news_profile_img/g, news_profile_img)
+                                    .replace('%news_text', news_text));
+                                $('#user-banner')
+                                    .css("visibility", "visible");
+                                $('#news-banner')
+                                    .css("visibility", "visible");
+                                $('#news-tweets')
+                                    .css({
+                                    'overflow-y': 'scroll',
+                                    'overflow-x': 'hidden'
+                                })
+                                    .append($tweet);
+								function open(){
+									find('' + text2);
+								}
+								$tweet.find('.button').on('click',open); 
+							}
+*/				});
+		}
+		function find(text2){
+			$('#user-news-tweets').html("");
+			$('.frame')
+				.find("iframe:last")
+				.remove();
+			$('.frame,.arrow')
+				.css("visibility", "hidden");
+
+			for (var x = 0; x < user_tweets.length; x++) {
+				var user = user_tweets[x].user;
+				var date = user_tweets[x].date;
+				var profile_img = user_tweets[x].user_profile_img;
+				var url = user_tweets[x].url;
+				var location=user_tweets[x].location;
+				var text = user_tweets[x].text;
+				var text3=text.replace(/\r"\/:\.`'/g, "");
+				var news_title=text.replace(/http:\/\/\S+/g, '<a href="$&">$&&nbsp;<img src="img/find.png"></a>');
+				if (text3.indexOf(text2.substr(0, 10)) > -1) {
+				geocode_user_news_tweets(user, date, profile_img, text, location);
+				}
+			}
+			function geocode_user_news_tweets(user, date, profile_img, text,location){
+			var templates = [];
+                    templates[0] = '<div><div></div><h2 class="firstHeading"><a href="' + profile_img + '" target="_blank"><img src="' + profile_img + '" width="55" height="50"/></a>' + user + '</h2><div>' + news_title + '</div><p>Date Posted- ' + date + '</p></div>';
+                    templates[1] = '<div class="tweets"><div class="user">' + user + '</div><div class="date">' + date + '</div><span class="clear"></span><div class="img"><a href="' + profile_img + '" target="_blank"><img src="' + profile_img + '" width="55" height="50"/></a></div><div class="text">' + news_title + '</div>';
+                    templates[2] = '<div><div></div><h2 class="firstHeading"><a href="' + profile_img + '" target="_blank"><img src="' + profile_img + '" width="55" height="50"/></a>' + user + '</h2><div>' + news_title + '</div><p>Date Posted- ' + date + '</p></div>';
+                    templates[3] = '<div class="tweetss"><div class="user">' + user + '</div><div class="date">' + date + '</div><span class="clear"></span><div class="img"><a href="' + profile_img + '" target="_blank"><img src="' + profile_img + '" width="55" height="50"/></a></div><div class="text">' + news_title + '</div>';
+                    var geocoder = new google.maps.Geocoder();
+                    geocoder.geocode({
+                        address: location
+                    }, function (response, status) {
+                        if (status == google.maps.GeocoderStatus.OK) {
+                            var x = response[0].geometry.location.lat(),
+                                y = response[0].geometry.location.lng();
+                            var myLatLng = new google.maps.LatLng(x, y);
+                            var marker = new google.maps.Marker({
+                                icon: profile_img,
+                                title: user,
+                                map: map,
+                                position: myLatLng
+                            });
+                            var infowindow = new google.maps.InfoWindow({
+                                content: templates[0].replace('user', user)
+                                    .replace('news_title', news_title)
+                                    .replace('date', date)
+                            });
+                            var $tweet = $(templates[1].replace('%user', user)
+                                .replace(/%profile_img/g, profile_img)
+                                .replace('%news_title', news_title));
+                            $('#user-banner')
+                                .css("visibility", "visible");
+                            $('#user-news-tweets')
+                                .css({
+                                'overflow-y': 'scroll',
+                                'overflow-x': 'hidden'
+                            })
+                                .append($tweet);
+
+                            function openInfoWindow() {
+                                infowindow.open(map, marker);
+                            }
+                            google.maps.event.addListener(marker, 'click', openInfoWindow);
+                            $tweet.find(".user")
+                                .on('click', openInfoWindow);
+                            bounds.extend(myLatLng);
+                        } else if (status === google.maps.GeocoderStatus.OVER_QUERY_LIMIT) {
+                            setTimeout(function () {
+                                geocode_user_news_tweets(user, date, profile_img, text, location);
+                            }, 500);
+                        } else {
+                            $.getJSON("http://where.yahooapis.com/geocode?q=" + text + "&flags=J&appid=Y7pwNojV34HFg6fmPML_2_YDetrgip_ZFLNaq3cetV6waFtW3O1eF2wJOcU.FMkbHO5iU9R7DxFZ", function (data) {
+                                var latitude = data.ResultSet.Results[0].latitude;
+                                var longitude = data.ResultSet.Results[0].longitude;
+                                var myLatLng = new google.maps.LatLng(latitude, longitude);
+                                var marker = new google.maps.Marker({
+                                    icon: profile_img,
+                                    title: user,
+                                    map: map,
+                                    position: myLatLng
+                                });
+                                var infowindow = new google.maps.InfoWindow({
+                                    content: templates[2].replace('user', user)
+                                        .replace('news_title', news_title)
+                                        .replace('date', date)
+                                });
+                                var $tweet = $(templates[3].replace('%user', user)
+                                    .replace(/%profile_img/g, profile_img)
+                                    .replace('%news_title', news_title));
+                                $('#user-banner')
+                                    .css("visibility", "visible");
+                                $('#news-banner')
+                                    .css("visibility", "visible");
+                                $('#user-news-tweets')
+                                    .css({
+                                    'overflow-y': 'scroll',
+                                    'overflow-x': 'hidden'
+                                })
+                                    .append($tweet);
+
+                                function openInfoWindow() {
+                                    infowindow.open(map, marker);
+                                }
+                                google.maps.event.addListener(marker, 'click', openInfoWindow);
+                                $tweet.find(".user")
+                                    .on('click', openInfoWindow);
+
+                                bounds.extend(myLatLng);
+                            });
+                        }
+                    });
+
+				}
+			}
+	
+		}
+            
+
+					 function call_tweets(query,user_id, count) {
+		$('#loading').css("visibility", "visible");
+		  news_tweets(query, user_id, count).done(function callback(array) {
+			  var news_array = array[0];
+			  var user_tweets = array[1];
+			  var query=array[2]; 
+			  var count=array[3];
+			      var ids=[];
+				   var ids_3;
+ 
+                for (var i in user_tweets) {
+				   ids.push(user_tweets[i].user_id);
+                }
+                ids_3 = ids.join();
+				search_location(ids_3);
+            function search_location(ids_3) {
+                $.getJSON("http://api.twitter.com/1/users/lookup.json?user_id=" + ids_3 + "&callback=?", function (data) {
+                    $.each(data, function (i, item) {
+                        var location = item.location;
+
+                        user_tweets[i].location = location; //locations are added but some are empty
+
+                    });
+                    var userLocationMap = {};
+                    for (var i = 0; i < user_tweets.length; i++) {
+                        if (user_tweets[i].location) {
+                            userLocationMap[user_tweets[i].user] = user_tweets[i].location;
+                        }
+                    }
+
+                    for (var i = 0; i < user_tweets.length; i++) {
+                        if (!user_tweets[i].location) {
+                            user_tweets[i].location = userLocationMap[user_tweets[i].user];
+                        }
+                    }
+                   trance(user_tweets);
+                });
+            }
+			function trance(user_tweets){
+			  transfer_arrays(news_array, user_tweets,query,count);
+			}
+		  })
+			  .fail(console.log);
+	  }
+    </script>
+</head>
+<body>
+<table width="984" border="0" align="center">
+  <tr>
+    <td width="254"><div class="styled-select">
+<select name="Country">
+<option>Select country</option>
+  <option>France</option>
+  <option>Greece</option>
+  <option>Spain</option>
+  <option >International news</option>
+  <option>Italy</option>
+  <option>Romania</option>
+  <option>United Kingdom</option>
+</select>
+</div>
+</td>
+    <td width="256"><div class="styled-select">
+<select name="News Channel">
+  <option>News channels</option>
+</select>
+</div>
+</td>
+    <td width="271" align="center"><div class="styled-select">
+<select id="tweets-select">
+<option selected="true" value="5">5 tweets</option>
+<option value="10">10 tweets</option>
+<option value="20">20 Tweets</option>
+<option value="50">50 Tweets</option>
+</select> 
+</div>
+</td>
+    <td width="93" align="center"><input class="button" type="submit" value="Submit" onClick="get();" />
+</td><td width="88"><div id="opener"></div></td>
+  </tr>
+</table>
+
+<div style="clear:both;"></div>
+    <div class="banner">
+        <div id="user-banner"></div>
+        <div id="news-banner">News Feeds</div></div>
+<div style="clear:both;"></div>
+    <div id="user-tweets" style="float:left; width:30%; border:solid #FCF 1px; height:400px;"></div>
+    <div id="news-tweets" style="float:left; width:30%; margin-left:1%; border:solid #FCF 1px; height:400px;"></div>
+    <div id="user-news-tweets" style="float:left; width:35%; margin-left:1%; border:solid #FCF 1px; height:400px;"><div class="info">
+<div id="dialog" title="How to use the program">
+    
+    <table width="200" border="0">
+  <tr>
+    <td>1. Select a country/news channel/number of tweets from the dropdowns menus</td>
+  </tr>
+  <tr>
+  <td><img class="dr" src="img/dr.PNG" width="615" height="43"></td>
+  <tr>
+    <td>2. View location of the user OR news tweet on the map</td></tr>
+  <tr>
+    <td><div class="name"><img src="img/loc.PNG" width="240" height="113"><br />Click on a user's name</div><div class="news"><img src="img/news.PNG" width="215" height="114"><br />Click on a channel's name</div></td>
+    </tr>
+  <tr>
+    <td>3. Open infoWindows</td>
+  </tr>
+  <tr>
+  	<td><div class="window"><img src="img/windowinfo.PNG" width="418" height="215"><br />Click on a user's profile picture</div></td>
+  </tr>
+    <td>4. Open URL's</td>
+  </tr>
+  <tr>
+    <td><div class="urlhelp"><img src="img/url.PNG" width="550" height="187"><br />Click on any of the url's link</div></td>
+  </tr>
+  </tr>
+    <td>5. Show users talking about the same news event</td>
+  </tr>
+  </tr>
+    <td><div class="tweetshelp"><img src="img/n.PNG"><br />
+      Click on the button called "show tweets"..!</div></td>
+  </tr>
+</table>
+</div>
+</div></div>
+    <div class="frame"></div>
+<div class="arrow"></div><div style="clear:both;"></div>
+    <div id="map_canvas" style="float:right; margin-top:20px; width:100%; border:solid #FCF 1px; height:400px;"></div>
+    <div id="loading"><img src="img/ajax-loader2.gif" /></div>
+
+</body>
+
+</html>
