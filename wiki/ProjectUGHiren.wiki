@@ -4,7 +4,9 @@
 
 == Meeting 1 Nov 2012 ==
 
-What to do next 
+=== What to do next ===
  * Find a real client and find out what their requirements are
  * Research on latest industry practice for e-commerce website
  * Revise the IPP to reflect these changes
+
+*Next meeting: 10am, Thursday, Nov 8*
