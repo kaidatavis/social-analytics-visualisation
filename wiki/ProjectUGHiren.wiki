@@ -22,7 +22,7 @@ My topic was about the developing an e-commerce website using CMS.I improved thi
 Design, implementation and analysis of online transaction processing systems’ (OLTP) performance under simultaneous access
 
 ==Client== 
-=Retail store case study with following basic requirements==
+=Retail store case study with following basic requirements=
   •	Website should allow multiple browsing of products and other associated web pages.
   •	Users will not need to register in order to browse through the website.
   •	System should allow for product acquisition.
