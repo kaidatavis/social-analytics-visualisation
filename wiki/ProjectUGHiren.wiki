@@ -23,12 +23,12 @@ Design, implementation and analysis of online transaction processing systems’ 
 
 ===Client===
 ====Retail store case study with following basic requirements====
-  •	Website should allow multiple browsing of products and other associated web pages.
-  •	Users will not need to register in order to browse through the website.
-  •	System should allow for product acquisition.
-  •	System should confirm the number of products acquired.
-  •	The system should also inform user if product acquisition is successful or otherwise.
-  •	Administrative maintenance and change of system information should be allowed
+  *	Website should allow multiple browsing of products and other associated web pages.
+  *	Users will not need to register in order to browse through the website.
+  *	System should allow for product acquisition.
+  *	System should confirm the number of products acquired.
+  *	The system should also inform user if product acquisition is successful or otherwise.
+  *	Administrative maintenance and change of system information should be allowed
 
 ===Problem Statement===
  
@@ -41,7 +41,7 @@ The scope of this project will not exceed the design, instigation, testing of ou
 
 ===Objectives===
 ====The fundamental objectives of this project====
-  -	 Developing and deploying an online company via prototyping approach to software     development,
-  -	 Model implementation using Hypertext Pre-processor (PHP), MySQL and Dreamweaver CS5. 
-  -	 Testing the model using black box and white box methodology of software testing,
-  -	 Automate performance test for system analysis and Development process management utilising      prince2 project management.
+  *	 Developing and deploying an online company via prototyping approach to software     development,
+  *	 Model implementation using Hypertext Pre-processor (PHP), MySQL and Dreamweaver CS5. 
+  *	 Testing the model using black box and white box methodology of software testing,
+  *	 Automate performance test for system analysis and Development process management utilising      prince2 project management.
