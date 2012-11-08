@@ -11,6 +11,8 @@
 
 *Next meeting: 10am, Thursday, Nov 8*
 
+----
+
 =My work=
 
 ===Revised Topic===
@@ -45,3 +47,18 @@ The scope of this project will not exceed the design, instigation, testing of ou
   *	 Model implementation using Hypertext Pre-processor (PHP), MySQL and Dreamweaver CS5. 
   *	 Testing the model using black box and white box methodology of software testing,
   *	 Automate performance test for system analysis and Development process management utilising      prince2 project management.
+
+----
+
+== Meeting: 8 Nov 2012 ==
+
+=== Summary ===
+ * Good progress has been made
+ * Need to think more about the topic: the current one is technically too difficult
+ * The requirements are a good start but need to be more systematic and organised
+   * Think of different aspects of the requirements: functional and non-functional, different aspects within functional: product display, user browsing, order, website administration, etc.
+ * It will be better to use a CMS such as WordPress, which already has many functions available.
+  * Research on existing WordPress plug-in/extension for e-commerce websites.
+  * Think of how to improve some of them as the project topic.
+ * Research on latest industry practice for e-commerce website
+  * See if there is any interesting project topic there.
