@@ -62,3 +62,4 @@ The scope of this project will not exceed the design, instigation, testing of ou
   * Think of how to improve some of them as the project topic.
  * Research on latest industry practice for e-commerce website
   * See if there is any interesting project topic there.
+ * Next meeting: 1pm, Wed, Nov 14
