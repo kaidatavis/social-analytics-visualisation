@@ -125,3 +125,15 @@ Shipping Calculation: will be fixed on the basis of India shipping or outside In
           *     Checkout Payment - can add shipping information and select payment mode, 
           *      Checkout Confirmation - can see all the detail with final payment and payment method. Here User will click “Pay Now” to pay online for product he/she selected. After successful payment User will back to site.
           *     Product Search - allows user to search product by different search criteria like name, product code etc for exactly what they desire. 10 or 20 products can be displayed per page for easy and fast access of the listing.
+
+----
+
+== Meeting 14 Nov 2012 ==
+ * Good progress have been made on requirements and CMS research.
+=== What to do next ===
+ * Research on latest industry practice for e-commerce website
+ * Finish IPP
+   * Include CMS research results
+   * Include industry research results
+ * Draft a project plan: break down the tasks and set a deadline for each.
+*Next meeting: 2pm, Wed, Nov 21*
