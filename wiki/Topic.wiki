@@ -1,3 +1,0 @@
-#summary Hiren project topic
-
-= Project Topic =
