@@ -134,8 +134,28 @@ Shipping Calculation: will be fixed on the basis of India shipping or outside In
  * Good progress have been made on requirements and CMS research.
 === What to do next ===
  * Research on latest industry practice for e-commerce website
- * Finish IPP
+ * ~~Finish IPP~~
    * Include CMS research results
    * Include industry research results
- * Draft a project plan: break down the tasks and set a deadline for each.
+ * ~~Draft a project plan: break down the tasks and set a deadline for each.~~
 *Next meeting: 2pm, Wed, Nov 21*
+
+----
+
+== Meeting 21 Nov 2012 ==
+
+=== What to do next ===
+
+ * Move 'topic' and 'requirements' into separate wiki pages. Delete the contents on this page and only leave a link
+ * Email Kai a copy of IPP
+ * Revise project plan:
+   * Add time for literature review: 1 month
+   * Have two iterations of development cycle afterwards
+   * Each iteration should take about two months
+ * Email Kai the revised plan next week
+ * Literature review
+   * A list of existing work/technologies that are being used to build e-commerce website with CMS
+   * Their advantages and disadvantages
+ * The first version of literature review needs to be ready by the next meeting (two weeks)
+ 
+*Next meeting: 3pm, Tues, Dec 4
