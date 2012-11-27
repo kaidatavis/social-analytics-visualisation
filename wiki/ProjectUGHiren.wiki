@@ -17,41 +17,6 @@
 
 [https://code.google.com/p/social-analytics-visualisation/wiki/Topic_Hiren?ts=1354024786&updated=Topic_Hiren My Topic]
 
-[https://code.google.com/p/social-analytics-visualisation/wiki/Topic Project topic]
-
-===Revised Topic===
-
-My topic was about the developing an e-commerce website using CMS.I improved this topic & will not use CMS tools such as joomla or wordpress for developing the website.I'll do the coding manually instead of using CMS tools.Therefore,I'll use Hypertext Pre-processor (PHP), MySQL and Dreamweaver CS5.further details are given below. 
-
-===My revised topic===
-
-Design, implementation and analysis of online transaction processing systems’ (OLTP) performance under simultaneous access
-
-===Client===
-====Retail store case study with following basic requirements====
-  *	Website should allow multiple browsing of products and other associated web pages.
-  *	Users will not need to register in order to browse through the website.
-  *	System should allow for product acquisition.
-  *	System should confirm the number of products acquired.
-  *	The system should also inform user if product acquisition is successful or otherwise.
-  *	Administrative maintenance and change of system information should be allowed
-
-===Problem Statement===
- 
-Despite all the benefits real-time transaction processing systems can deliver, there are Unpredictable situations in the area of response time when these systems reach or exceed their load capacities for user access. This cannot be good for a business especially for a company which has an online presence as its only means of getting its services to its clients. The questions of what a transaction processing system entails, how it can be developed and implemented and what improvements it can provide a company in its day to day business operations can be enquired in these regard. We also have to investigate the issue of response time which should not exceed 10 seconds (IBM Information centre, 2010) in normal production systems.
-
-===Scope===
-
-The scope of this project will not exceed the design, instigation, testing of our online transaction processing system for its performance when being accessed and basic system testing procedures. The main focus entails studying technologies used in developing online transaction system, deciding the technology to be applied in developing our case study website and analyzing its performance after deployment
-
-
-===Objectives===
-====The fundamental objectives of this project====
-  *	 Developing and deploying an online company via prototyping approach to software     development,
-  *	 Model implementation using Hypertext Pre-processor (PHP), MySQL and Dreamweaver CS5. 
-  *	 Testing the model using black box and white box methodology of software testing,
-  *	 Automate performance test for system analysis and Development process management utilising      prince2 project management.
-
 ----
 
 == Meeting: 8 Nov 2012 ==
@@ -70,65 +35,9 @@ The scope of this project will not exceed the design, instigation, testing of ou
 
 ----
 
+==Requirements Details==
 
-==Requirements Details of the Store Front/Shopping Cart==
-
-===1. Admin Tools:===
-
-This will be Password protected control panel to fully manage every aspect of entire store. It will contain following in order to manage the store.
-
-====1.1 Category Management:====
-
-	*	Unlimited Parent Categories and Subcategories – from admin interface one can create Unlimited Categories and Subcategories.
-	*	Category Image and Description Option
-	*	Category Display Order – From admin one can choose the display order of the categories on the website
-
-====1.2 Product Management:====
-	*	Product Code - Unique Code for each product.
-	*	Product Fields - can be divided into different sections like:  Product Code, Product Name, Brief Description, Detail Description, Price, Quantity, Weight etc. (all of which can be re-named to whatever you choose).
-	*	Product Image Upload - AUTOMATIC photo resizing & optimization. Creates all required thumbnails for you, all you have to do is upload your largest photo, and the system takes care of the rest.
-	*	Hide/Show Product - Products can be hidden from website without removing them from the database.
-	*	Special Product - Easily set a product as a "Special" or "Featured" item. Specials automatically appear on a "Specials" page. Featured items automatically appear on the store's home page.
-
-
-====1.3 Order Management:====
-
-         *     View & Process Orders - Quick view of online orders.
-         *     Order Search - Search by date, paid/unpaid order, Order Number, Name, Status, etc.
-         *     Delete Order - Quick deletion of junk orders
-         *     Shipment Detail - Can add shipment detail of paid order.
-
-====1.4 Shipping Management:====
-
-Shipping Calculation: will be fixed on the basis of India shipping or outside India shipping.
-
-====1.5 Payment Options Management:====
-
-          *    Product cart will supports the following payment Methods:
-
-          *    PayPal
-
-====1.6 Email Management:==== 
-
-          *     Automated Sign-Up confirmation
-          *     Automated Password Recovery
-          *     Automated New Order Notifications
-          *     Automated Order Confirmation
-
-
-===2. User Interface and Tools (Buying Option):===
-
-          *     View Categories/Subcategories – Can browse products by categories and sub categories wise.
-          *     Product Detail - Can view details of the product with image (thumbnail and big)
-          *     Add Product to Shopping Cart - Can add his/her required products to shopping cart
-          *     View Shopping Cart - Summary shown as reference for customer as they continue to browse for     more products.
-          *     Edit Shopping Cart - can change quantity of products showing in shopping cart and can also delete products from shopping cart.
-          *     Checkout - After completing his/her shopping user will go to checkout page.
-          *     Customer Login: can login to their account by providing their email address and password.
-          *     New Customer: will be able to shop faster, be up to date on an order's status, and keep track of the orders you have previously made
-          *     Checkout Payment - can add shipping information and select payment mode, 
-          *      Checkout Confirmation - can see all the detail with final payment and payment method. Here User will click “Pay Now” to pay online for product he/she selected. After successful payment User will back to site.
-          *     Product Search - allows user to search product by different search criteria like name, product code etc for exactly what they desire. 10 or 20 products can be displayed per page for easy and fast access of the listing.
+[https://code.google.com/p/social-analytics-visualisation/wiki/Requirements?ts=1354025031&updated=Requirements Requirements] 
 
 ----
 
