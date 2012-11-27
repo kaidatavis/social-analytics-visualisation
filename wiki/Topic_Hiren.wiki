@@ -1,0 +1,34 @@
+[https://code.google.com/p/social-analytics-visualisation/wiki/Topic Project topic]
+
+===Revised Topic===
+
+My topic was about the developing an e-commerce website using CMS.I improved this topic & will not use CMS tools such as joomla or wordpress for developing the website.I'll do the coding manually instead of using CMS tools.Therefore,I'll use Hypertext Pre-processor (PHP), MySQL and Dreamweaver CS5.further details are given below. 
+
+===My revised topic===
+
+Design, implementation and analysis of online transaction processing systems’ (OLTP) performance under simultaneous access
+
+===Client===
+====Retail store case study with following basic requirements====
+  *	Website should allow multiple browsing of products and other associated web pages.
+  *	Users will not need to register in order to browse through the website.
+  *	System should allow for product acquisition.
+  *	System should confirm the number of products acquired.
+  *	The system should also inform user if product acquisition is successful or otherwise.
+  *	Administrative maintenance and change of system information should be allowed
+
+===Problem Statement===
+ 
+Despite all the benefits real-time transaction processing systems can deliver, there are Unpredictable situations in the area of response time when these systems reach or exceed their load capacities for user access. This cannot be good for a business especially for a company which has an online presence as its only means of getting its services to its clients. The questions of what a transaction processing system entails, how it can be developed and implemented and what improvements it can provide a company in its day to day business operations can be enquired in these regard. We also have to investigate the issue of response time which should not exceed 10 seconds (IBM Information centre, 2010) in normal production systems.
+
+===Scope===
+
+The scope of this project will not exceed the design, instigation, testing of our online transaction processing system for its performance when being accessed and basic system testing procedures. The main focus entails studying technologies used in developing online transaction system, deciding the technology to be applied in developing our case study website and analyzing its performance after deployment
+
+
+===Objectives===
+====The fundamental objectives of this project====
+  *	 Developing and deploying an online company via prototyping approach to software     development,
+  *	 Model implementation using Hypertext Pre-processor (PHP), MySQL and Dreamweaver CS5. 
+  *	 Testing the model using black box and white box methodology of software testing,
+  *	 Automate performance test for system analysis and Development process management utilising      prince2 project management.
