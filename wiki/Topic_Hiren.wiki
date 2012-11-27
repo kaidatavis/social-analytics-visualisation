@@ -32,3 +32,9 @@ The scope of this project will not exceed the design, instigation, testing of ou
   *	 Model implementation using Hypertext Pre-processor (PHP), MySQL and Dreamweaver CS5. 
   *	 Testing the model using black box and white box methodology of software testing,
   *	 Automate performance test for system analysis and Development process management utilising      prince2 project management.
+
+===Final Topic===
+
+====We finalized  below topic after negotiation====  
+
+  *     My topic is about the developing an e-commerce website using CMS.
