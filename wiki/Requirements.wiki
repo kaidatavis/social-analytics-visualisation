@@ -1,0 +1,56 @@
+===1. Admin Tools:===
+
+This will be Password protected control panel to fully manage every aspect of entire store. It will contain following in order to manage the store.
+
+====1.1 Category Management:====
+
+	*	Unlimited Parent Categories and Subcategories – from admin interface one can create Unlimited Categories and Subcategories.
+	*	Category Image and Description Option
+	*	Category Display Order – From admin one can choose the display order of the categories on the website
+
+====1.2 Product Management:====
+	*	Product Code - Unique Code for each product.
+	*	Product Fields - can be divided into different sections like:  Product Code, Product Name, Brief Description, Detail Description, Price, Quantity, Weight etc. (all of which can be re-named to whatever you choose).
+	*	Product Image Upload - AUTOMATIC photo resizing & optimization. Creates all required thumbnails for you, all you have to do is upload your largest photo, and the system takes care of the rest.
+	*	Hide/Show Product - Products can be hidden from website without removing them from the database.
+	*	Special Product - Easily set a product as a "Special" or "Featured" item. Specials automatically appear on a "Specials" page. Featured items automatically appear on the store's home page.
+
+
+====1.3 Order Management:====
+
+         *     View & Process Orders - Quick view of online orders.
+         *     Order Search - Search by date, paid/unpaid order, Order Number, Name, Status, etc.
+         *     Delete Order - Quick deletion of junk orders
+         *     Shipment Detail - Can add shipment detail of paid order.
+
+====1.4 Shipping Management:====
+
+Shipping Calculation: will be fixed on the basis of India shipping or outside India shipping.
+
+====1.5 Payment Options Management:====
+
+          *    Product cart will supports the following payment Methods:
+
+          *    PayPal
+
+====1.6 Email Management:==== 
+
+          *     Automated Sign-Up confirmation
+          *     Automated Password Recovery
+          *     Automated New Order Notifications
+          *     Automated Order Confirmation
+
+
+===2. User Interface and Tools (Buying Option):===
+
+          *     View Categories/Subcategories – Can browse products by categories and sub categories wise.
+          *     Product Detail - Can view details of the product with image (thumbnail and big)
+          *     Add Product to Shopping Cart - Can add his/her required products to shopping cart
+          *     View Shopping Cart - Summary shown as reference for customer as they continue to browse for     more products.
+          *     Edit Shopping Cart - can change quantity of products showing in shopping cart and can also delete products from shopping cart.
+          *     Checkout - After completing his/her shopping user will go to checkout page.
+          *     Customer Login: can login to their account by providing their email address and password.
+          *     New Customer: will be able to shop faster, be up to date on an order's status, and keep track of the orders you have previously made
+          *     Checkout Payment - can add shipping information and select payment mode, 
+          *      Checkout Confirmation - can see all the detail with final payment and payment method. Here User will click “Pay Now” to pay online for product he/she selected. After successful payment User will back to site.
+          *     Product Search - allows user to search product by different search criteria like name, product code etc for exactly what they desire. 10 or 20 products can be displayed per page for easy and fast access of the listing.
