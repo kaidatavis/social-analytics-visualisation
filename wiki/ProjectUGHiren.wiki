@@ -76,3 +76,11 @@
 ==Literature Review==
 
 [https://code.google.com/p/social-analytics-visualisation/wiki/LiteratureReviewDraft?ts=1354631775&updated=LiteratureReviewDraft First Draft Of Literature Review]
+
+----
+
+== Meeting 4 Dec 2012 ==
+
+=== What to do next ===
+
+ * Revise the iterations in the plan to include all of the: requirements, design, implementation, and test, for each iteration.
