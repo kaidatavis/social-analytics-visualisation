@@ -1,4 +1,4 @@
-#summary CMT3333 Project - Ahmed
+#summary CMT3333 Project - Ahmed - iPad App for Alphabet Learning
 
 = CMT3333 Project - Ahmed =
 
