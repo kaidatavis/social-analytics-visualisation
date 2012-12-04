@@ -2,13 +2,10 @@
 
 ===1.1 CONTENT MANAGEMENT SYSTEMS (CMS): DEFINATIONS AND STRUCTURES===
 
-Probir Ghosh, Andrew Rau-Chaplin (2006), E-business has grown rapidly in past few decades.
-With this rapid growth, the demand for dynamic content generation has increased enormously.
-The companies are developing dynamic websites to enhance efficiency and to get most up to
-date information. With this technology web pages can be created at run time that increases the
-flexibility giving a rich experience to its users. One of the drawback of the posed by dynamic
-web pages is that they reduce the performance of application server such as waiting for
+Probir Ghosh, Andrew Rau-Chaplin (2006), E-business has grown rapidly in past few decades. With this rapid growth, the demand for dynamic content generation has increased enormously. The companies are developing dynamic websites to enhance efficiency and to get most up to
+date information. With this technology web pages can be created at run time that increases the flexibility giving a rich experience to its users. One of the drawback of the posed by dynamic web pages is that they reduce the performance of application server such as waiting for
 connection to the database and wait for processing the query.
+
 Aleksandar Stoev, Aleksandar Dimov et al (2008) assert that software developers are trying to
 develop web applications with best quality and at lower price. Most of the existing solutions are
 static in nature. In last ten years the demand for web applications has increased enormously. One
