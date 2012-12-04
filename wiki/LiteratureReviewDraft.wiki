@@ -1,0 +1,235 @@
+==LITERATURE REVIEW==
+
+===1.1 CONTENT MANAGEMENT SYSTEMS (CMS): DEFINATIONS AND STRUCTURES===
+
+Probir Ghosh, Andrew Rau-Chaplin (2006), E-business has grown rapidly in past few decades.
+With this rapid growth, the demand for dynamic content generation has increased enormously.
+The companies are developing dynamic websites to enhance efficiency and to get most up to
+date information. With this technology web pages can be created at run time that increases the
+flexibility giving a rich experience to its users. One of the drawback of the posed by dynamic
+web pages is that they reduce the performance of application server such as waiting for
+connection to the database and wait for processing the query.
+Aleksandar Stoev, Aleksandar Dimov et al (2008) assert that software developers are trying to
+develop web applications with best quality and at lower price. Most of the existing solutions are
+static in nature. In last ten years the demand for web applications has increased enormously. One
+of the most common problems in existing websites is their static nature. There is a need to
+develop more dynamic web applications to reduce the cost of maintenance.
+Matthijs Dijkstra et al (2004) assert companies are seeking people who can develop dynamic
+websites in short time. Although developers are always ready to provide the support and help for
+maintaining the websites but they are very expensive when the company needs to update on
+regular basis. While creating dynamic websites it’s very important to differentiate between static
+and dynamic data. The navigation through web pages mostly depends on static data where as
+dynamic data is actually stored in the database and does not play a role in decision making
+process. The users can access the dynamic data by making a request to the server through
+browser and a web page will be rendered on the fly based on the data stored in the database.
+Andrew Yang, James Linn, and David Quadrato (1998) say, the content of web site is more
+important than simply connection to the internet. For a website to be successful it is very
+important to include dynamic data in their web pages. A dynamic website is capable of retrieving
+only desired data requested by the users. The data is actually stored in various files on servers
+over the internet.
+Dr. M.H. Jansen-Vullers, M. Netjes and Dr. ir. H.A. Reijers (2004) have found that it is very
+important for companies to integrate existing business processes with new electronic business
+processes rather than having a flashy website. In order to achieve business benefits the business
+strategy must be aligned with its information strategy. There are many examples of failures of
+companies after starting business online. Those companies failed because they could not
+redesign their business model according to the new requirements.
+Min Zhu, Weidong Liu , Zhuo Fang, Wensong Hu (2008), believe that due to rapid growth of
+internet organizations are putting their business online. There are millions of websites benefiting
+businesses. But one of the major problems with these websites is, when customer opens a
+website, he may have to wait for a long time to get the response. Therefore it is very important
+for a business to have a website with quick response.
+According to Michael Grossniklaus and Moira C. Norrie “Managing today’s websites presents a
+whole new set of challenges and requirements”. In the beginning when website is small it’s
+easy to manage them but as sites grow they become more complex and to manage and update a
+site can become very difficult and expensive.
+Warren Harrison (2006) says “with CMS the users of the website do not have to type the
+contents into the file using HTML tags. The fields are populated in the database and CMS
+renders the web pages on the fly”. Harrison claims that developers are more conscious about
+technical details of the system and they do not pay much attention on how end users will be
+affected but in doing so they are developing systems that are complex and useless because at the
+end of the day end users will use the system not developers. So it is very important to keep your
+end users while developing the system.
+CMS allows common users of the website to focus on contents of the site leaving design for
+developers. In CMS layout of the web pages is stored separately from contents usually in style
+sheets, making it easy to change the contents without affecting the design of the webpage.
+Phil Suh, James Ellis, and David (2002) believe that a CMS is a technology that is used make the
+process of creating, updating and publishing the content of a website as easy as possible. Thus
+the management of the website can change the contents, apply different themes without having
+the knowledge of programming.
+Naveen Aggarwal, Nupur Prakash and Sanjeev Sofat (2009) believe that with the introduction of
+Web 2.0 people are finding new ways of sharing information. The use of CMS allows its users to
+enhance their creativity and diverse ways to collaborate. The use of content management systems
+is increasing with the passage of time. Today’s applications require various types of contents
+such as multimedia that are stored on remote servers. Upon request these contents are brought to
+display on browsers. To design applications based on content management system is very
+complex task. All modules depend upon each other and data is highly coupled. Another
+challenging task is to design screens that users can customize according to their choice. People
+think and behave differently, their choices and tastes are different, and their learning speed is
+different. The developer has to think about all these options for their users. The end system
+should be flexible enough to fulfill the demands of user for quite a fair period to time.
+
+===1.1.1 TYPES OF CONTENT MANAGEMENT SYSTEMS===
+
+Email, record processing, information about customers, information about products, different
+reports, streaming media are all types of information that forms business content. The amount of
+content to be processed is increasing day by day depending upon the requirements of the
+companies. With this increase in processing the large amount of contents efficiently and
+accurately, organizations are looking for diverse content management solutions to enhance the
+productivity of their business. Content management system provides this solution by allowing
+creation, searching, editing, and publishing of contents to its users. Companies can take
+advantage by acquiring CMS. Different types of CMSs are being used these days such as
+document management, magazine/news publishing, E-Commerce, Source management control,
+middleware but mainly there are two categories of content management systems, Enterprise
+CMS and Web Portal CMS.
+
+====DOCUMENT MANAGEMENT CMS====
+These are software systems designed specifically for the storage and publication of information
+on corporate level.
+
+====MAGAZINE/NEWS PUBLISHING SYSTEMS====
+These software systems help in publishing of news and magazine online. These CMSs also
+provide the functionality of online discussion boards.
+
+
+
+====E-COMMERCE SYSTMS====
+These systems are used for online shopping. Both customers and management can be benefited
+from these types of systems. Mainly these systems depend upon simple database to retrieve
+information
+.
+====ENTERPRISE CMSs====
+These types of content management systems provide comprehensive solutions at corporate level.
+The main purpose to these CMSs is to provide the opportunity to the corporation to increase its
+efficiency and improve business. The human are more prone to make mistakes. By using these
+automated software human errors can be reduced to a certain level. At corporate level these
+packages provide various functionalities like automatic ordering, shipping, invoicing, CRM and
+management of documents. Enterprise CMSs are very complex in nature proving a lot of
+functionalities and hence come in very heavy price.
+
+====WEB PORTALS====
+Web portals are small packages that can include one or more functionalities depending on the
+needs of the company. Web portals permit their users depending on their role to change and
+update some portions of the website. This is cost saving approach for the companies who don’t
+want to spend money on maintenance of their websites.
+
+===1.1.2 PROPERTIES OF CONTENT MANAGEMENT SYSTEMS===
+Mark Robson in executive overview of CMS suggests that while selecting a content
+management system for your company; following key factors should be considered very
+carefully.
+
+====WYSIWYG====
+“What You See Is What You Get” is the most important factor a CMS should have. Many
+developers claim that their CMS is 100% WYSIWYG but in reality it is not true. There are lots
+of limitations for users of the system when they try to update the contents of their websites. A
+good CMS will allow its users to easily modify text, colors and formatting.
+
+====EASY TO USE====
+A CMS should be easy to use for novice users. Quite often vendors of CMS are interested in
+putting a lot of functionalities in their system but they forget users of the system. If a CMS is not
+providing ease of use then it is worthless.
+
+====FAST BROWSING====
+One of major problems of a lots modern websites is that their response time is very slow. Due to
+this problem users have to wait for a long time to get their desired page. The main reason for this
+is, developers make their page very complex by putting a lot of code. Web pages should be kept
+simple and extra code should be avoided in order to make the browsing experience fast.
+
+====FLEXIBLE====
+Flexibility is yet another factor to consider while developing a CMS. Content management
+systems are meant to be flexible otherwise there is no point to go for CMS. A CMS is for life, so
+13	
+it should be flexible enough to allow its users to make changes and include new features with
+ease and comfort.
+
+====BACK END NEEDS TO BE ORGANIZED====
+Back end is the back bone of the system so it should be organized properly. Most of the times
+when user requests a page the system checks the data in back end to get most up to date
+information. If back end data is logically organized then users will get accurate and latest
+information.
+
+====SUITABLE FOR THE COMPANY====
+Many CMSs are available in market but the question is, were they designed for your company?
+Every company has different business requirements so it is not necessary that one CMS will suit all
+companies. It would be good for company to go for its own CMS rather than choosing a common
+CMS. The company then will be able to explain its requirements.
+
+===1.1.3 MAIN FUNCTIONS OF CONTENT MANAGEMENT SYSTEMS===
+Paul Browning (2001) asserts that a content management system will vary from product to
+product and it is not possible to have all functionalities in one single system but a true CMS
+should have the following core elements.
+1. Versioning
+2. Workflow
+3. Integration
+These broad categories can be subdivided into smaller sub categories which are shown in the
+diagram below.
+ (source: http://www.google.co.uk/images?hl=en&q=cms+feautre+onion&biw=1280&bih=607
+
+===1.1.4 WORKING OF CMS===
+
+A content management system stores data in a central database on a remote location. Upon
+request these contents are brought to the browser. CMS uses templates which are physical
+WebPages. Basically a template consists of two parts which are HTML and coding. The HTML
+part contains place holders and the code behind brings data from database and which is then
+rendered on the browser in the form of web page. The function of template is to find the URL of
+main content, widgets and menu and display on the browser. As shown in the diagram below
+global navigation, menu, and widgets form the make a frame for the main content. These
+elements can be reused for other WebPages.
+The diagram belows shows how a typical CMS works. The main CMS application is hosted on a
+remote server. Different users are assigned different roles. According to roles they can make
+changes to the site. Design mangaers have full rights, approvers and editors have moderate
+rights, site visitors have minimum rights and contetnt contributers have limited rights.
+
+===1.1.5 RISKS ASSOCIATED WITH CONTENT MANAGEMENT SYSTEMS===
+
+David Hillis (2009) says most of the time CMSs are successful but obviously like any other
+systems CMSs are also not totally risk free. There are certain risks associated with content
+management systems. One of the most important risks is lack of planning. A CMS is good and
+beneficial if its implementation is successful. Before developing system it is very important to
+align business model with technical specification. Business goals should always be given
+preference and system should be developed accordingly. The system should be easy to use even
+for non technical people. If the system is complex people will not use it and hence it will be
+worthless. Navigation becomes a problem if contents and structure are not managed together
+which will make hard for users to search and retrieve data. User’s roles are very important while
+developing a system. If user’s roles are not managed properly than there is a possibility of
+unauthorized users to access and modify important information. Another important factor worth
+mentioning is to consider human factor while developing content management alongside
+technical specification.
+
+===1.1.6 BUSNIESS BENEFITS OF CONTENT MANAGEMENT SYSTEMS===
+
+Paul Browning and Mike Lowndes (2001) believe that content management system in reality is
+not a technology but it is terminology that pin points the problems of modern websites. Internet
+has become the main media for delivery to content. By creating, managing and publishing
+content in an organized way companies can achieve business benefits. CMS allows re-use of
+information collected from various resources saving time and cost. With the help of CMS
+maintenance of information become much more easy and flexible keeping central control at the
+same time. CMS ensures consistency of presentation by keeping the design logic from content
+logic. By changing and updating the contents of the site on regular basis not only give a new
+look and feel to the website but it also attracts customers because they are getting fresh data and
+most up to date information. The users of the system know the business better than anybody else,
+CMS gives them full control. The data is stored on a remote sever and only those users can
+update data and make changes who are allowed to do so which means CMS provides better
+security. CMS provides full flexibility by giving control to the users of the company according to
+their roles and hence a company can save a lot of money by not calling specialist to update the
+contents of their site on a regular basis.
+(source: http://www.tech-faq.com/content-management-system.html)
+
+===References===
+
+* D. N. Jutla, J. Craig et al (2001) A Methodology for Creating e-Business Strategy, Proceedings of the 34th Hawaii International Conference on System Sciences – 2001
+* Brian Platz  (2007) 10 Reasons Why companies should start doing business online, available online at: http://www.dbwebdoctor.com/article_why_companies_need_a_website.asp 
+* JIANG Liang-fu, CHEN Jing-liang , SHI Yong-qin (2010)  3rd International Conference on Information Management, Innovation Management and Industrial Engineering available online at: http://0-csdl.computer.org/dl/proceedings/iciii/2010/4279/04/4279d496.pdf 
+* Zhi Liu, Dongyong Yang, Dongyuan Gu Department of Computer Science and Technology Zhejiang University of Technology Hangzhou 310023, China, 2010 Second International Workshop on Education Technology and Computer Science
+* Aleksandar Stoev, Aleksandar Dimov et al (2008) Architectural framework for Dynamic Web-applications, International Conference on Computer Systems and Technologies - CompSysTech’08 
+* Matthijs Dijkstra et al (2004) A Model for the Management of Dynamic Web ApplicationsICEC'04, Sixth International Conference on Electronic Commerce Edited by: Marijn Janssen, Henk G. Sol, and René W. Wagenaar
+* Probir Ghosh, Andrew Rau-Chaplin (2006),  Performance of Dynamic Web Page Generation for Database-driven Web Sites Proceedings of the International Conference on Next Generation Web Services Practices (NWeSP'06)
+* Chito N. Angeles,  Web Technologies: Training for Development and Teaching Resources: available online at: http://paarl.wikispaces.com/file/view/Developing+a+website.pdf , 
+* Andrew Yang, James Linn, David Quadrato (1998) Developing Integrated Web and Database Applications a Using JAVA Applets and JDBC Drivers (pp-302)
+* Dr. M.H. Jansen-Vullers, M. Netjes and Dr. ir. H.A. Reijers (2004), ‘Business Process Redesign for Effective E-Commerce’, sixth International Conference on Electronic Commerce Edited by: Marijn Janssen, Henk G. Sol, and René W. Wagenaar (ACM)
+* Min Zhu1,  Weidong Liu ,  Zhuo Fang,  Wensong Hu (2008), Optimal Design for DOT NET Based E-commerce Websites, 2008 International Conference on Information Management, Innovation Management and Industrial Engineering, available at: http://0-csdl.computer.org./dl/proceedings/iciii/2008/3435/02/3435b424.pdf  
+* Michael Grossniklaus, Moira C. Norrie : Information Concepts for Content Management Institute for Information Systems ETH Zentrum Zurich, Switzerland: Proceedings of the Third International Conference on Web Information Systems Engineering (Workshops)
+* Harrison Warren,  Portland State University  (2006)  , Content Mismanagement Systems Vol: 23  Pp 5 – 8 
+* Phil Suh, James Ellis, and David (2002) Thiemeck, “Content Management Systems”, Peer Information. 
+* Naveen Aggarwal, Nupur Prakash and Sanjeev Sofat (2009), Web Hypermedia Content Management System Effort Estimation Model, SIGSOFT Software Engineering Notes, Volume 34 Number 2, available at http://0-delivery.acm.org.brum.beds.ac.uk (accessed 5/04/11)
+* Mark Robson, Website Content Management System (CMS) Package executive overview available at: http://www.insightgroup.co.uk/modules/downloadable_files/assets/10-CMS_Questions-021109.pdf 
+* Paul Browning and Mike Lowndes (2001), JISC TechWatch Report: Content Management Systems, Information strategy cooridantor Bristol University available at: http://www.citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.15...pdf  
