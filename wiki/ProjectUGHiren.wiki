@@ -84,3 +84,11 @@
 === What to do next ===
 
  * Revise the iterations in the plan to include all of the: requirements, design, implementation, and test, for each iteration.
+ * Literature review
+   * Add some example (software) for different types of CMS.
+   * Ideally should focus on CMS for e-commerce.
+   * Only discuss CMS (already in the report) and e-commerce (not in the report yet) in general afterwards
+ * Add the plan to wiki page using just the list
+ * Start the design of the system for the first iteration.
+
+*Next meeting: 2pm, Tuesday, 18 Dec*
