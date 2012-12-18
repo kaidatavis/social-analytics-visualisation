@@ -97,3 +97,24 @@
 ==Link==
 
 https://docs.google.com/open?id=0B_lEEKwJi5irUXRILUFqTnZSMG8
+
+----
+
+== Meeting 18 Dec 2012 ==
+
+=== What to do next ===
+
+ * Revise plan
+   * Add start/end dates
+   * Add writing of final report
+ * Literature review
+   * Expand on the 'CMS Tools and Modules for E-commerce website'
+     * Brief description of each system: design purpose, etc.
+     * How they different from each other
+     * What are they good/bad at
+ * Add the plan to wiki page using just the list
+ * Start the design and implementation of the system for the first iteration.
+ * Write progress report for 2nd coursework
+   * Use the meeting minutes.
+
+*Next meeting: 2pm, Tuesday, 15 Jan*
