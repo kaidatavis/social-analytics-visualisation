@@ -125,6 +125,22 @@ https://docs.google.com/file/d/0B_lEEKwJi5irN2lGei1RYVBNQkU/edit
 
 ----
 
+== Plan ==
+ 
+ * 01 Nov 2012, 2 weeks, problem definition
+ * 15 Nov 2012, 2 weeks, requirement analysis
+ * 29 Nov 2012, 2 months, literature review
+ * 28 Jan 2013, 5 weeks, first iteration
+   * 28 Jan 2013, 1 week, system design
+   * 04 Feb 2013, 3 weeks, implementation
+   * 25 Feb 2013, 1 week, testing and evaluation (questionnaire)
+ * 04 Mar 2013, 5 weeks, second iteration
+   * 04 Mar 2013, 1 week, system design
+   * 11 Mar 2013, 3 weeks, implementation
+   * 01 Apr 2013, 1 week, testing and evaluation
+ * 08 Apr 2013, 1.5 weeks, report writing
+  
+   
 == Meeting 15 Jan 2013 ==
 
 === What to do next ===
