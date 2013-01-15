@@ -122,3 +122,14 @@ https://docs.google.com/open?id=0B_lEEKwJi5irUXRILUFqTnZSMG8
 ==Link==
 
 https://docs.google.com/file/d/0B_lEEKwJi5irN2lGei1RYVBNQkU/edit
+
+----
+
+== Meeting 15 Jan 2013 ==
+
+=== What to do next ===
+
+ * Literature review: 'CMS Tools and Modules for E-commerce website'
+     * Brief description of each system: design purpose, etc.
+     * Describe why only comparing some (three) of them.
+     * For comparison, focus on features related to e-commerce, move the rest to appendix.
