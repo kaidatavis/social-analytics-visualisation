@@ -1,0 +1,49 @@
+# Angelos #
+
+  1. Show user tweets when clicking on specific news tweets,
+> > Status: Finished
+
+
+> Expected date to finish: 10/10/12
+
+> 2# Provide help on how to use the site.
+
+> Status: Finished
+
+> Expected date to finish: 10/10/12
+
+> 3# Show different icons(markers) on map for very bad news like
+> > explosions,crashes and accidents.
+
+
+> Status: Not yet started
+
+> Expected date to finish: 10/10/12
+
+> 4# Show the same bad news into an animated news ticker.
+
+> Status: Not yet started
+
+> Expected date to finish: 10/10/12
+
+
+# Ben #
+
+## To do list includes both Coding and Thesis ##
+
+|**No**| **Task** | **Status** | **Expected finish Date** |
+|:-----|:---------|:-----------|:-------------------------|
+|1     | Adding Tfl traffic news feeds(XML file)to the existing system | Finished   | 17/09/12                 |
+|2     | Displaying current road works in London| Finished   | 19/09/12                 |
+|3     | Adding a graph for visualizing traffic pattern over a day | Finished   | 21/09/12                 |
+|4     | Making user interface attractive | Finished   | 23/09/12                 |
+|5     | Introduction(Thesis) | Finished   | 30/09/12                 |
+|6     | Background and Literature review | Finished   | 01/09/12                 |
+|7     | Requirement Specifications | Finished   | 01/10/12                 |
+|8     | Analysis and Design | ongoing    | 02/10/12                 |
+|9     | Implementation and Testing | not yet started | 03/10/12                 |
+|10    | Demonstration and Evaluation | not yet started | 03/10/12                 |
+|11    | Critical Evaluation | not yet started | 04/10/12                 |
+|12    | Conclusion | not yet started | 06/10/12                 |
+|13    | Appendices | not yet started | 06/10/12                 |
+|14    | Submit Rough Draft | not yet completed | 06/10/12                 |

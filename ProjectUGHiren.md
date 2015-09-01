@@ -1,0 +1,167 @@
+# Wiki page for the undergraduate project by Hiren Patel #
+
+## Meeting 1 Nov 2012 ##
+
+### What to do next ###
+  * Find a real client and find out what their requirements are
+  * Research on latest industry practice for e-commerce website
+  * Revise the IPP to reflect these changes
+
+**Next meeting: 10am, Thursday, Nov 8**
+
+
+---
+
+
+# My work #
+
+[My Topic](https://code.google.com/p/social-analytics-visualisation/wiki/Topic_Hiren?ts=1354024786&updated=Topic_Hiren)
+
+
+---
+
+
+## Meeting: 8 Nov 2012 ##
+
+### Summary ###
+  * Good progress has been made
+  * Need to think more about the topic: the current one is technically too difficult
+  * The requirements are a good start but need to be more systematic and organised
+    * Think of different aspects of the requirements: functional and non-functional, different aspects within functional: product display, user browsing, order, website administration, etc.
+  * It will be better to use a CMS such as WordPress, which already has many functions available.
+    * Research on existing WordPress plug-in/extension for e-commerce websites.
+    * Think of how to improve some of them as the project topic.
+  * Research on latest industry practice for e-commerce website
+    * See if there is any interesting project topic there.
+  * Next meeting: 1pm, Wed, Nov 14
+
+
+---
+
+
+## Requirements Details ##
+
+[Requirements](https://code.google.com/p/social-analytics-visualisation/wiki/Requirements?ts=1354025031&updated=Requirements)
+
+
+---
+
+
+## Meeting 14 Nov 2012 ##
+  * Good progress have been made on requirements and CMS research.
+### What to do next ###
+  * Research on latest industry practice for e-commerce website
+  * ~~Finish IPP~~
+    * Include CMS research results
+    * Include industry research results
+  * ~~Draft a project plan: break down the tasks and set a deadline for each.~~
+**Next meeting: 2pm, Wed, Nov 21**
+
+
+---
+
+
+## Meeting 21 Nov 2012 ##
+
+### What to do next ###
+
+  * Move 'topic' and 'requirements' into separate wiki pages. Delete the contents on this page and only leave a link
+  * Email Kai a copy of IPP
+  * Revise project plan:
+    * Add time for literature review: 1 month
+    * Have two iterations of development cycle afterwards
+    * Each iteration should take about two months
+  * Email Kai the revised plan next week
+  * Literature review
+    * A list of existing work/technologies that are being used to build e-commerce website with CMS
+    * Their advantages and disadvantages
+  * The first version of literature review needs to be ready by the next meeting (two weeks)
+
+**Next meeting: 3pm, Tues, Dec 4**
+
+
+---
+
+
+## Literature Review ##
+
+[First Draft Of Literature Review](https://code.google.com/p/social-analytics-visualisation/wiki/LiteratureReviewDraft?ts=1354631775&updated=LiteratureReviewDraft)
+
+
+---
+
+
+## Meeting 4 Dec 2012 ##
+
+### What to do next ###
+
+  * Revise the iterations in the plan to include all of the: requirements, design, implementation, and test, for each iteration.
+  * Literature review
+    * Add some example (software) for different types of CMS.
+    * Ideally should focus on CMS for e-commerce.
+    * Only discuss CMS (already in the report) and e-commerce (not in the report yet) in general afterwards
+    * Upload the report Word file to google doc and put the link here.
+  * Add the plan to wiki page using just the list
+  * Start the design of the system for the first iteration.
+
+**Next meeting: 2pm, Tuesday, 18 Dec**
+
+## Link ##
+
+https://docs.google.com/open?id=0B_lEEKwJi5irUXRILUFqTnZSMG8
+
+
+---
+
+
+## Meeting 18 Dec 2012 ##
+
+### What to do next ###
+
+  * Revise plan
+    * Add start/end dates
+    * Add writing of final report
+  * Literature review
+    * Expand on the 'CMS Tools and Modules for E-commerce website'
+      * Brief description of each system: design purpose, etc.
+      * How they different from each other
+      * What are they good/bad at
+  * Add the plan to wiki page using just the list
+  * Start the design and implementation of the system for the first iteration.
+  * Write progress report for 2nd coursework
+    * Use the meeting minutes.
+
+**Next meeting: 2pm, Tuesday, 15 Jan**
+
+## Link ##
+
+https://docs.google.com/file/d/0B_lEEKwJi5irN2lGei1RYVBNQkU/edit
+
+
+---
+
+
+## Plan ##
+
+  * 01 Nov 2012, 2 weeks, problem definition
+  * 15 Nov 2012, 2 weeks, requirement analysis
+  * 29 Nov 2012, 2 months, literature review
+  * 28 Jan 2013, 5 weeks, first iteration
+    * 28 Jan 2013, 1 week, system design
+    * 04 Feb 2013, 3 weeks, implementation
+    * 25 Feb 2013, 1 week, testing and evaluation (questionnaire)
+  * 04 Mar 2013, 5 weeks, second iteration
+    * 04 Mar 2013, 1 week, system design
+    * 11 Mar 2013, 3 weeks, implementation
+    * 01 Apr 2013, 1 week, testing and evaluation
+  * 08 Apr 2013, 1.5 weeks, report writing
+
+
+## Meeting 15 Jan 2013 ##
+
+### What to do next ###
+
+  * Literature review: 'CMS Tools and Modules for E-commerce website'
+    * Brief description of each system: design purpose, etc.
+    * Describe why only comparing some (three) of them.
+    * For comparison, focus on features related to e-commerce, move the rest to appendix.

@@ -1,0 +1,1 @@
+![https://social-analytics-visualisation.googlecode.com/svn/trunk/Images/new-gui.png](https://social-analytics-visualisation.googlecode.com/svn/trunk/Images/new-gui.png)
